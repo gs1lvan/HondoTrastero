@@ -1,0 +1,14 @@
+HONDOTRASTERO - Primera versión Bootstrap 5
+
+1. En Supabase > Project Settings > API, copia Project URL y la clave PUBLICA (anon o publishable).
+2. Abre config.js y pega esos dos valores entre las comillas.
+   NUNCA pegues una clave secret ni service_role.
+3. Sube index.html, styles.css, app.js, config.js y manifest.webmanifest a la raíz de un repositorio de GitHub Pages.
+4. Accede a la página HTTPS e inicia sesión con los usuarios ya existentes en Supabase Auth.
+5. No hay formulario de registro de usuarios.
+
+FUNCIONES: inicio/cierre de sesión; consulta, creación, edición y eliminación de ubicaciones, cajas y objetos; búsqueda; cantidad; recordar última ubicación por usuario y dispositivo.
+
+IMPORTANTE: Las políticas actuales aíslan los datos de cada usuario. NO permiten un inventario compartido. Si quieres compartir un trastero entre ambos usuarios habrá que diseñar permisos de grupo y modificar la base de datos antes.
+
+REQUISITOS: conexión a Internet para Bootstrap, supabase-js y la API de Supabase. No es una PWA offline; el manifest solo configura su presentación al instalarla. La eliminación de ubicaciones/cajas con dependencias puede ser rechazada por PostgreSQL.
