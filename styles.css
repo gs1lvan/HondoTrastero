@@ -1,46 +1,16 @@
-/* HondoTrastero — estética de cartón y paquetería */
-:root{--bs-primary:#673819;--bs-primary-rgb:103,56,25;--bs-link-color:#673819;--ink:#3f2616;--kraft:#dfb477;--paper:#fff4dc}
-html{scroll-behavior:smooth}
-body{color:var(--ink);min-height:100vh;background-color:#d6a568;background-image:repeating-linear-gradient(0deg,transparent 0 3px,rgba(102,63,26,.025) 3px 4px),linear-gradient(110deg,rgba(255,255,255,.14),transparent 55%,rgba(80,44,15,.08))}
-.kraft-header{background:#e7bc80;border-bottom:4px solid #ab753e;box-shadow:0 4px 15px #61380f28}
-.navbar-brand{display:flex;align-items:center;color:var(--ink);font-weight:900;letter-spacing:-.04em;font-size:clamp(1.15rem,4.5vw,1.7rem);line-height:1.05}
-.brand-logo{width:60px;height:60px;object-fit:contain;filter:drop-shadow(1px 3px 1px #71461b44)}
-.brand-subtitle{display:block;letter-spacing:.07em;font-size:.51rem;font-weight:800;margin-top:5px;color:#82522d}
-.navbar-brand:hover{color:var(--ink)}
-.user-email{max-width:29vw}
-.btn-primary{--bs-btn-bg:#673819;--bs-btn-border-color:#673819;--bs-btn-hover-bg:#4a2712;--bs-btn-hover-border-color:#4a2712;--bs-btn-active-bg:#4a2712}
-.btn-outline-primary{--bs-btn-color:#673819;--bs-btn-border-color:#673819;--bs-btn-hover-bg:#673819;--bs-btn-hover-border-color:#673819}
-.nav-pills{--bs-nav-pills-link-active-bg:#673819}
-.nav-link{color:#673819;font-weight:700}
-.btn{border-radius:.7rem;font-weight:650;min-height:43px}
-.card{border-radius:1rem;background:var(--paper);border:1px solid #b8894e!important;box-shadow:2px 4px 0 #a4743e25,0 10px 18px #70441a1b!important}
-.metric{background:#f3d5a4}.metric .fs-3{color:#673819}
-.inventory-panel,.editor-panel{background:#f5dfb7}
-.inventory-panel>.card-body{background:transparent}
-#appView h1{font-weight:900;color:#47250f}
-.form-control,.form-select{min-height:46px;border-radius:.65rem;border:1px solid #c9a371;background:#fff9eb;color:#3f2616}
-.form-control:focus,.form-select:focus{border-color:#8b552d;box-shadow:0 0 0 .22rem #b7824936}
-.search-input{max-width:420px}
-.record{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1rem .6rem;background:#fff7e7;border:1px solid #e0c69d!important;border-radius:.75rem;margin-bottom:.7rem;box-shadow:0 3px 0 #b6885033}
-.record-main{min-width:0;flex:1;overflow-wrap:anywhere}
-.record-title{font-weight:800}.record-detail{font-size:.875rem;color:#725740}
-.record-actions{display:flex;gap:.4rem;flex-shrink:0}.record-actions .btn{min-height:38px}
-.record-photo{width:70px;height:70px;object-fit:cover;border-radius:.55rem;flex-shrink:0}
-.photo-preview{display:block;width:100%;max-height:200px;object-fit:contain;border-radius:.7rem;background:#ead4ae;margin-bottom:.75rem}
-.photo-field{padding-bottom:.7rem;border-bottom:2px dashed #c9a371}
-#editPage{min-height:60vh}
-#editPage .card-header,#editPage .card-footer{background:#edd0a1;border-color:#c9a371}
-#editPage .card-body{background:#fff1d5}
-#modalFields{display:flex;flex-direction:column;gap:1rem}
-#modalFields>div{flex-shrink:0}
-.form-label{font-weight:700}
-#editForm{display:block}
-@media(max-width:575.98px){
- .navbar{gap:.5rem}.brand-logo{width:45px;height:45px}.brand-subtitle{font-size:.42rem}
- .user-email{max-width:26vw;font-size:.7rem!important}
- .record{align-items:flex-start}.record-actions{flex-direction:column}.record-actions .btn{font-size:.8rem}
- .record-photo{width:58px;height:58px}.photo-preview{max-height:145px}
- #editPage{padding:0 12px 25px!important}
- #editPage .card{border-radius:.8rem}
- #editPage .card-body{padding:1rem!important}
-}
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Nunito+Sans:wght@400;500;600;700;800;900&display=swap');
+:root{--ink:#452411;--brown:#552a13;--dark:#3d1e0c;--kraft:#d7a163;--cream:#fff0ce;--bs-primary:#552a13;--bs-primary-rgb:85,42,19}
+*{box-sizing:border-box}html{min-height:100%;scroll-behavior:smooth}body{margin:0;background:#b8844c;color:var(--ink);font-family:'Nunito Sans',system-ui,sans-serif}
+.parcel-shell{max-width:1100px;min-height:100dvh;margin:auto;background:#dda967 url('kraft-textura.webp') repeat;box-shadow:0 0 38px #3b200e50;position:relative;border-left:3px solid #a87641;border-right:3px solid #a87641}
+.parcel-header{position:relative;padding:1.4rem 1.6rem 1rem;background:linear-gradient(120deg,#e5b57380,#dca25c60),url('kraft-textura.webp') repeat;border-bottom:4px solid #b17a42;box-shadow:0 4px 8px #5d310f30}
+.brand-row{display:flex;align-items:center;gap:1.1rem;min-height:135px}.brand-art{width:145px;height:145px;object-fit:cover;border-radius:50%;border:3px solid #eac891;box-shadow:0 5px 12px #70401e44;flex-shrink:0}.brand-copy{flex:1;min-width:0}.brand-title{font-family:'Barlow Condensed',Impact,sans-serif;font-size:clamp(2.2rem,6.5vw,4.5rem);font-weight:900;letter-spacing:-.03em;line-height:.98;color:#3b1c0c}.brand-copy p{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(1rem,2.6vw,1.65rem);margin:.55rem 0 0}.brand-rule{height:5px;background:#4d2815;max-width:360px;margin-top:.55rem;transform:rotate(-1deg);border-radius:90%}.brand-barcode,.footer-barcode{width:80px;height:74px;flex-shrink:0;background:repeating-linear-gradient(90deg,#41210f 0 3px,transparent 3px 6px,#41210f 6px 7px,transparent 7px 11px,#41210f 11px 15px,transparent 15px 18px);transform:rotate(9deg);opacity:.85}.packing-tape{position:absolute;width:110px;height:27px;background:#f8cf76a8;box-shadow:0 1px 2px #734b1a66;transform:rotate(-26deg);pointer-events:none}.tape-top{top:12px;left:-22px}.account-row{justify-content:flex-end;align-items:center;gap:.65rem;margin-top:.45rem;flex-wrap:wrap}.account-email{font-size:.75rem;overflow-wrap:anywhere;max-width:65vw}
+.parcel-main{padding:1.3rem 1.5rem 2rem}.parcel-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.65rem;margin-bottom:1.7rem}.parcel-tab{border:2px solid #b67f41;border-radius:1.2rem;background:linear-gradient(#f6d4a2,#e6b97d);box-shadow:0 5px 0 #a16d32,0 7px 12px #5e341d38;color:#3e200e;min-height:100px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.25rem;font-family:'Barlow Condensed',sans-serif;font-size:clamp(1.1rem,2.8vw,1.65rem);font-weight:800;cursor:pointer}.parcel-tab.active{background:linear-gradient(#5a3019,#3c1c0d);border-color:#48230f;color:#fff1d3}.nav-symbol{font-family:system-ui;font-size:2.25rem;line-height:1.1}.parcel-tab:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.section-heading{display:flex;align-items:center;justify-content:space-between;gap:.7rem;margin-bottom:1rem}.section-heading h1{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(2rem,5.5vw,3.1rem);margin:0;background:#f5d8a7;padding:.25rem .9rem;clip-path:polygon(0 3%,98% 0,100% 12%,99% 92%,2% 100%,0 90%);box-shadow:0 3px 4px #72462122}.btn{font-weight:800;border-radius:.65rem}.btn-primary{--bs-btn-bg:#542a12;--bs-btn-border-color:#542a12;--bs-btn-hover-bg:#3e1f0e;--bs-btn-hover-border-color:#3e1f0e;--bs-btn-active-bg:#3e1f0e;color:#fff0d5}.btn-outline-primary{--bs-btn-color:#4b2814;--bs-btn-border-color:#744622;--bs-btn-hover-bg:#4b2814;--bs-btn-hover-border-color:#4b2814}.add-button{padding:.65rem 1.1rem;font-size:1.08rem;box-shadow:0 3px 0 #32170b}
+.stats-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:.65rem;margin:0 0 1rem}.stat{display:flex;align-items:center;justify-content:space-between;background:#f5d4a0c9;border:1px solid #b88549;border-radius:.7rem;padding:.45rem .8rem;gap:.5rem}.stat span{font-family:'Barlow Condensed',sans-serif;letter-spacing:.04em;font-weight:800;font-size:.92rem}.stat strong{font-size:1.3rem}
+.inventory-toolbar{display:flex;gap:.6rem;margin-bottom:1rem}.search-field{background:#fff5e2;border:2px solid #c79559;border-radius:.8rem;display:flex;align-items:center;gap:.5rem;flex:1;min-width:0;padding:0 .8rem}.search-field span{font-size:2rem;line-height:1;color:#72502b}.search-field input{width:100%;min-width:0;border:0;background:transparent;outline:none;padding:.8rem 0;color:var(--ink)}.inventory-toolbar .btn{white-space:nowrap;background:#f8deb5}
+.records-list{display:flex;flex-direction:column;gap:.7rem}.record{position:relative;display:flex;align-items:center;gap:1rem;padding:1rem;background:linear-gradient(#fff8e9df,#fff1d6e6),url('papel-textura.webp') repeat;border:2px solid #e5c99b;border-radius:.65rem;box-shadow:0 4px 0 #9a6b3c70,0 6px 10px #70401828;clip-path:polygon(0 2%,2% 0,97% 1%,100% 3%,99% 97%,97% 100%,2% 99%,0 97%)}.record-photo{width:95px;height:95px;object-fit:cover;border-radius:.65rem;border:2px solid #ebd1a8;flex-shrink:0}.record-main{flex:1;min-width:0;overflow-wrap:anywhere}.record-title{font-family:'Barlow Condensed',sans-serif;font-size:1.6rem;font-weight:900;line-height:1.1}.record-detail{font-size:.94rem;color:#70523c;margin-top:.35rem}.record-actions{display:flex;gap:.4rem;flex-shrink:0}.record-actions .btn{font-size:.82rem}.empty-state{background:#fff1d3;padding:2rem;text-align:center;border-radius:.75rem;border:2px dashed #a5743b}
+.paper-card,.editor-paper{background:#fff0cf url('papel-textura.webp') repeat;border:3px solid #b17a42;border-radius:1rem;box-shadow:0 7px 0 #8a562c55;padding:1.5rem}.login-card h1{font-family:'Barlow Condensed',sans-serif;font-size:2.2rem;font-weight:900}
+.editor-page{min-height:60vh}.editor-paper{max-width:720px;margin:auto;padding:0;overflow:hidden}.editor-header{padding:1rem 1.2rem;background:#e6bd83;display:flex;align-items:center;justify-content:space-between;gap:1rem;border-bottom:2px dashed #a67340}.editor-header h2{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:2rem;margin:0}.editor-fields{padding:1.2rem;display:flex;flex-direction:column;gap:1rem}.editor-footer{padding:1rem 1.2rem;display:flex;justify-content:flex-end;gap:.6rem;background:#e6bd83;border-top:2px dashed #a67340}.form-label{font-weight:800}.form-control,.form-select{min-height:46px;background:#fffaf0;border:2px solid #d4b486;border-radius:.65rem;color:#422613}.form-control:focus,.form-select:focus{border-color:#8a5329;box-shadow:0 0 0 .2rem #a8773e33}.photo-field{padding-bottom:1rem;border-bottom:2px dashed #c39a63}.photo-preview{display:block;width:100%;max-height:210px;object-fit:contain;background:#e9d2a8;border-radius:.7rem;margin-bottom:.8rem}.photo-field .btn{min-height:45px}.alert{border-radius:.8rem}
+.parcel-footer{margin-top:2rem;border-top:3px solid #9f6936;display:flex;justify-content:space-between;align-items:center;padding:1.4rem 2rem;background:#cf9756 url('kraft-textura.webp') repeat}.handling-icons{display:flex;gap:.5rem}.handling-icons span{display:grid;place-items:center;border:3px solid #442410;border-radius:.3rem;width:46px;height:46px;font-size:1.7rem;font-weight:900}.footer-barcode{height:48px;width:110px;transform:none}
+@media(max-width:640px){.parcel-header{padding:.9rem .75rem}.brand-row{gap:.55rem;min-height:95px}.brand-art{width:94px;height:94px}.brand-title{font-size:clamp(1.85rem,8vw,3rem)}.brand-copy p{font-size:.9rem}.brand-barcode{display:none}.parcel-main{padding:1rem .7rem 1.5rem}.parcel-nav{gap:.35rem;margin-bottom:1.2rem}.parcel-tab{min-height:78px;border-radius:.75rem;font-size:clamp(.83rem,3.7vw,1.2rem);box-shadow:0 3px 0 #a16d32}.nav-symbol{font-size:1.6rem}.section-heading h1{font-size:2rem}.add-button{font-size:.88rem;padding:.6rem}.stat{padding:.4rem}.stat span{font-size:.78rem}.stat strong{font-size:1.1rem}.record{gap:.55rem;padding:.75rem}.record-photo{width:68px;height:76px}.record-title{font-size:1.32rem}.record-detail{font-size:.78rem}.record-actions{flex-direction:column}.record-actions .btn{font-size:.75rem;padding:.25rem .4rem}.editor-fields{padding:.85rem}.editor-header,.editor-footer{padding:.85rem}.editor-header h2{font-size:1.6rem}.photo-preview{max-height:160px}.parcel-footer{padding:1rem}.handling-icons span{width:35px;height:35px;font-size:1.3rem}.footer-barcode{width:70px}}
+@media(max-width:370px){.brand-art{width:75px;height:75px}.brand-title{font-size:1.7rem}.brand-copy p{font-size:.77rem}.parcel-tab{font-size:.76rem}.nav-symbol{font-size:1.3rem}.stats-strip{gap:.3rem}.stat{padding:.3rem}.stat span{font-size:.67rem}.record-photo{width:54px;height:62px}}

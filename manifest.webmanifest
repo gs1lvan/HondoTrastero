@@ -3,8 +3,8 @@
   "short_name": "Trastero",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#dfb477",
-  "theme_color": "#8a552e",
+  "background_color": "#d7a163",
+  "theme_color": "#9b612f",
   "lang": "es",
   "icons": [
     {
