@@ -4,7 +4,11 @@ const $=id=>document.getElementById(id);
 const config=window.HONDO_CONFIG||{};
 const ready=!!(config.supabaseUrl&&config.supabaseAnonKey);
 const client=ready?window.supabase.createClient(config.supabaseUrl,config.supabaseAnonKey):null;
-const modal=new bootstrap.Modal($('editModal'));
+const modal={
+ show(){ $('appView').classList.add('d-none');$('editPage').classList.remove('d-none');window.scrollTo(0,0); },
+ hide(){ $('editPage').classList.add('d-none');if(user)$('appView').classList.remove('d-none');window.scrollTo(0,0); }
+};
+document.querySelectorAll('[data-close-form]').forEach(b=>b.addEventListener('click',()=>modal.hide()));
 const names={objetos:'objeto',cajas:'caja',ubicaciones:'espacio'};
 const data={objetos:[],cajas:[],ubicaciones:[]};
 const BUCKET='objetos';
@@ -107,6 +111,6 @@ $('editForm').addEventListener('submit',async e=>{
 $('tabs').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return;tab=b.dataset.tab;$('search').value='';render()});$('search').addEventListener('input',render);$('addCurrent').addEventListener('click',()=>openForm());$('newItem').addEventListener('click',()=>openForm('objetos'));
 $('loginForm').addEventListener('submit',async e=>{e.preventDefault();clearMsg();const btn=e.target.querySelector('button');btn.disabled=true;const {error}=await client.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});btn.disabled=false;if(error)alertMsg('No se pudo iniciar sesión. Comprueba el correo y la contraseña.');$('password').value=''});
 $('logout').addEventListener('click',async()=>{if(!confirm('¿Quieres cerrar sesión?'))return;const {error}=await client.auth.signOut();if(error)alertMsg(error.message)});
-async function sessionChanged(session){user=session?.user||null;show('account',!!user);$('account').classList.toggle('d-flex',!!user);show('appView',!!user);show('loginView',!user&&ready);if(!user){$('userEmail').textContent='';return}$('userEmail').textContent=user.email||'';try{await load();clearMsg()}catch(e){alertMsg(`Error al cargar el inventario: ${e.message}`)}}
+async function sessionChanged(session){user=session?.user||null;show('account',!!user);$('account').classList.toggle('d-flex',!!user);show('appView',!!user && $('editPage').classList.contains('d-none'));show('loginView',!user&&ready);if(!user){$('userEmail').textContent='';return}$('userEmail').textContent=user.email||'';try{await load();clearMsg()}catch(e){alertMsg(`Error al cargar el inventario: ${e.message}`)}}
 if(!ready){show('setup',true);return}client.auth.onAuthStateChange((event,session)=>{setTimeout(()=>sessionChanged(session),0)});client.auth.getSession().then(({data:{session}})=>sessionChanged(session)).catch(e=>alertMsg(e.message));
 })();
