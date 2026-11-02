@@ -7,6 +7,34 @@ const client = ready ? window.supabase.createClient(config.supabaseUrl, config.s
 const data = {objetos: [], cajas: [], ubicaciones: []};
 const names = {objetos:'objeto', cajas:'caja', ubicaciones:'espacio'};
 const BUCKET = 'objetos';
+const CATEGORIES = Object.freeze([
+ {"id": "herramientas-bricolaje", "icon": "🔧", "name": "Herramientas y bricolaje"},
+ {"id": "ferreteria-repuestos", "icon": "🔩", "name": "Ferretería y repuestos"},
+ {"id": "electricidad-iluminacion", "icon": "💡", "name": "Electricidad e iluminación"},
+ {"id": "informatica-electronica", "icon": "💻", "name": "Informática y electrónica"},
+ {"id": "fotografia-video-sonido", "icon": "📷", "name": "Fotografía, vídeo y sonido"},
+ {"id": "electrodomesticos", "icon": "🔌", "name": "Electrodomésticos"},
+ {"id": "cocina-menaje", "icon": "🍽️", "name": "Cocina y menaje"},
+ {"id": "muebles-hogar", "icon": "🪑", "name": "Muebles y equipamiento del hogar"},
+ {"id": "decoracion", "icon": "🖼️", "name": "Decoración"},
+ {"id": "navidad-celebraciones", "icon": "🎄", "name": "Navidad y celebraciones"},
+ {"id": "ropa-calzado", "icon": "👕", "name": "Ropa y calzado"},
+ {"id": "textiles-hogar", "icon": "🛏️", "name": "Textiles del hogar"},
+ {"id": "deporte-ejercicio", "icon": "🏋️", "name": "Deporte y ejercicio"},
+ {"id": "playa-piscina-camping", "icon": "🏖️", "name": "Playa, piscina y camping"},
+ {"id": "viajes-equipaje", "icon": "🧳", "name": "Viajes y equipaje"},
+ {"id": "jardineria-exterior", "icon": "🌱", "name": "Jardinería y exterior"},
+ {"id": "vehiculos-accesorios", "icon": "🚗", "name": "Vehículos y accesorios"},
+ {"id": "juegos-juguetes-ocio", "icon": "🎮", "name": "Juegos, juguetes y ocio"},
+ {"id": "libros-publicaciones", "icon": "📚", "name": "Libros y publicaciones"},
+ {"id": "documentos-papeleria", "icon": "📁", "name": "Documentos y papelería"},
+ {"id": "arte-manualidades-modelismo", "icon": "🎨", "name": "Arte, manualidades y modelismo"},
+ {"id": "limpieza-mantenimiento", "icon": "🧹", "name": "Limpieza y mantenimiento"},
+ {"id": "mascotas", "icon": "🐕", "name": "Mascotas"},
+ {"id": "recuerdos-colecciones", "icon": "🏺", "name": "Recuerdos y colecciones"}
+]);
+const CATEGORIES_BY_ID = new Map(CATEGORIES.map(cat=>[cat.id,cat]));
+
 let tab='objetos', editing=null, user=null, selectedPhoto=null, photoPreviewUrl=null;
 
 function show(id,visible){$(id).classList.toggle('d-none',!visible)}
@@ -87,6 +115,47 @@ async function uploadPhoto(file){
  const {error}=await client.storage.from(BUCKET).upload(path,blob,{contentType:blob.type,upsert:false});
  if(error)throw error;return path;
 }
+function itemCategories(item){
+ // El campo nuevo es una lista de identificadores válidos; no se duplican objetos.
+ return Array.isArray(item?.categorias)
+  ? [...new Set(item.categorias.filter(id=>CATEGORIES_BY_ID.has(id)))]
+  : [];
+}
+function categoryField(item){
+ const selected=new Set(itemCategories(item));
+ const field=elem('fieldset','category-field');
+ const legend=elem('legend','form-label','Categorías (puedes seleccionar varias)');
+ field.append(legend);
+ const tip=elem('p','category-tip','Marca todas las categorías que correspondan al objeto.');field.append(tip);
+ const counter=elem('p','category-counter');counter.id='categoryCount';
+ const search=elem('input','form-control category-search');search.type='search';
+ search.id='categorySearch';search.placeholder='Buscar categoría…';search.setAttribute('aria-label','Buscar entre las categorías disponibles');
+ const list=elem('div','category-grid');list.id='categoryGrid';
+ const rows=[];
+ for(const cat of CATEGORIES){
+  const label=elem('label','category-choice');
+  const checkbox=elem('input','form-check-input');checkbox.type='checkbox';checkbox.name='fieldCategories';checkbox.value=cat.id;checkbox.checked=selected.has(cat.id);
+  label.append(checkbox,elem('span','category-choice-label',`${cat.icon} ${cat.name}`));
+  const refresh=()=>{label.classList.toggle('selected',checkbox.checked);updateCount()};
+  checkbox.addEventListener('change',refresh);
+  label.classList.toggle('selected',checkbox.checked);
+  rows.push({label,cat});list.append(label);
+ }
+ function updateCount(){
+  const n=list.querySelectorAll('input:checked').length;
+  counter.textContent=`${n} ${n===1?'categoría seleccionada':'categorías seleccionadas'}`;
+ }
+ search.addEventListener('input',()=>{
+  const query=search.value.trim().toLocaleLowerCase('es');
+  for(const {label,cat} of rows)label.hidden=!cat.name.toLocaleLowerCase('es').includes(query);
+ });
+ updateCount();field.append(counter,search,list);
+ if(item?.categoria?.trim()&&!selected.size){
+  const legacy=elem('p','category-legacy',`Categoría anterior: «${item.categoria.trim()}». Asígnale una o varias de las categorías actuales.`);
+  field.append(legacy);
+ }
+ return field;
+}
 function openForm(type=tab,item=null){
  clearMsg();editing={type,id:item?.id||null};selectedPhoto=null;
  if(photoPreviewUrl){URL.revokeObjectURL(photoPreviewUrl);photoPreviewUrl=null}
@@ -99,12 +168,7 @@ function openForm(type=tab,item=null){
  if(type==='cajas')root.append(selectField('fieldLocation','Espacio',data.ubicaciones,false,item?.ubicacion_id||localStorage.getItem(lastLocationKey())));
  if(type==='objetos'){
   root.append(inputField('fieldQty','Cantidad',item?.cantidad??1,'number'));
-  const categoryField=inputField('fieldCategory','Categoría (opcional)',item?.categoria||'','text',false);
-  const categoryInput=categoryField.querySelector('input');categoryInput.setAttribute('list','categorySuggestions');
-  const suggestions=elem('datalist');suggestions.id='categorySuggestions';
-  [...new Set(data.objetos.map(o=>(o.categoria||'').trim()).filter(Boolean))]
-    .sort((a,b)=>a.localeCompare(b,'es')).forEach(name=>{const opt=elem('option');opt.value=name;suggestions.append(opt)});
-  categoryField.append(suggestions);root.append(categoryField);
+  root.append(categoryField(item));
   const wrap=elem('div');
   wrap.append(selectField('fieldLocation','Espacio (si no está en caja)',data.ubicaciones,true,item?.ubicacion_id||(!item?.caja_id?localStorage.getItem(lastLocationKey()):'')));
   wrap.append(selectField('fieldBox','Caja (opcional)',data.cajas,true,item?.caja_id));root.append(wrap);
@@ -145,17 +209,16 @@ function refreshInventoryFilters(){
  const oldSpace=space.value,oldCategory=category.value;
  const total=data.objetos.length;
  const parents=spaceParents();
- const spaceCounts=new Map();
- const categoryCounts=new Map();
+ const spaceCounts=new Map(),categoryCounts=new Map();
+ let withoutCategories=0;
  for(const item of data.objetos){
-  const cat=(item.categoria||'').trim();
-  categoryCounts.set(cat,(categoryCounts.get(cat)||0)+1);
+  const cats=itemCategories(item);
+  if(!cats.length)withoutCategories++;
+  for(const id of cats)categoryCounts.set(id,(categoryCounts.get(id)||0)+1);
   let id=objectSpace(item);
   const visited=new Set();
   while(id&&!visited.has(id)&&parents.has(id)){
-   visited.add(id);
-   spaceCounts.set(id,(spaceCounts.get(id)||0)+1);
-   id=parents.get(id);
+   visited.add(id);spaceCounts.set(id,(spaceCounts.get(id)||0)+1);id=parents.get(id);
   }
  }
  space.replaceChildren(new Option(`Todos los espacios (${total})`,''));
@@ -164,9 +227,10 @@ function refreshInventoryFilters(){
  }
  space.value=[...space.options].some(o=>o.value===oldSpace)?oldSpace:'';
  category.replaceChildren(new Option(`Todas las categorías (${total})`,''));
- const available=[...categoryCounts.keys()].filter(Boolean).sort((a,b)=>a.localeCompare(b,'es'));
- for(const name of available)category.add(new Option(`${name} (${categoryCounts.get(name)})`,name));
- if(categoryCounts.has(''))category.add(new Option(`Sin categoría (${categoryCounts.get('')})`,'__sin_categoria__'));
+ for(const cat of CATEGORIES){
+  category.add(new Option(`${cat.icon} ${cat.name} (${categoryCounts.get(cat.id)||0})`,cat.id));
+ }
+ category.add(new Option(`Sin categoría (${withoutCategories})`,'__sin_categoria__'));
  category.value=[...category.options].some(o=>o.value===oldCategory)?oldCategory:'';
 }
 function render(){
@@ -183,8 +247,8 @@ function render(){
   if(!`${item.nombre} ${item.descripcion||''}`.toLocaleLowerCase('es').includes(q))return false;
   if(tab!=='objetos')return true;
   if(selectedSpace&&!belongsToSpace(item,selectedSpace,parents))return false;
-  const cat=(item.categoria||'').trim();
-  if(selectedCategory&&(selectedCategory==='__sin_categoria__'?!!cat:cat!==selectedCategory))return false;
+  const cats=itemCategories(item);
+  if(selectedCategory&&(selectedCategory==='__sin_categoria__'?cats.length>0:!cats.includes(selectedCategory)))return false;
   return true;
  });
  const root=$('records');root.replaceChildren();show('empty',rows.length===0);
@@ -196,7 +260,14 @@ function render(){
   }
   const main=elem('div','record-main');main.append(elem('div','record-title',item.nombre));
   let detail=item.descripcion||'';
-  if(tab==='objetos')detail=[`×${item.cantidad}`,item.categoria?.trim()||'',item.caja_id?`▣ Caja: ${boxLabel(item.caja_id)}`:`▤ Espacio: ${locationLabel(item.ubicacion_id)}`,detail].filter(Boolean).join(' · ');
+  if(tab==='objetos'){
+   const cats=itemCategories(item).map(id=>CATEGORIES_BY_ID.get(id)).map(cat=>`${cat.icon} ${cat.name}`);
+   detail=[`×${item.cantidad}`,item.caja_id?`▣ Caja: ${boxLabel(item.caja_id)}`:`▤ Espacio: ${locationLabel(item.ubicacion_id)}`,detail].filter(Boolean).join(' · ');
+   const group=elem('div','record-categories');
+   for(const name of cats)group.append(elem('span','record-category',name));
+   if(!cats.length&&item.categoria?.trim())group.append(elem('span','record-category-legacy',`Pendiente de clasificar (antes: ${item.categoria.trim()})`));
+   if(group.childElementCount)main.append(group);
+  }
   if(tab==='cajas')detail=[locationLabel(item.ubicacion_id),detail].filter(Boolean).join(' · ');
   if(tab==='ubicaciones'&&item.ubicacion_padre_id)detail=[`Dentro de ${locationLabel(item.ubicacion_padre_id)}`,detail].filter(Boolean).join(' · ');
   if(detail)main.append(elem('div','record-detail',detail));
@@ -227,8 +298,11 @@ $('editForm').addEventListener('submit',async e=>{
   payload.cantidad=Number($('fieldQty').value);
   payload.ubicacion_id=$('fieldLocation').value||null;
   payload.caja_id=$('fieldBox').value||null;
-  const category=$('fieldCategory').value.trim();
-  if(category||data.objetos.some(x=>Object.prototype.hasOwnProperty.call(x,'categoria')))payload.categoria=category||null;
+  // Se guarda una única ficha con todas sus categorías; no se crean copias.
+  payload.categorias=[...document.querySelectorAll('input[name="fieldCategories"]:checked')].map(el=>el.value);
+  if(payload.categorias.some(id=>!CATEGORIES_BY_ID.has(id)) || new Set(payload.categorias).size!==payload.categorias.length){
+   alertMsg('Hay una categoría no válida o duplicada.');return;
+  }
   if(Boolean(payload.ubicacion_id)===Boolean(payload.caja_id)){
    alertMsg('Selecciona un espacio o una caja, pero no ambas.');return;
   }
@@ -249,7 +323,7 @@ $('editForm').addEventListener('submit',async e=>{
  }catch(err){
   if(newPhotoPath)await client.storage.from(BUCKET).remove([newPhotoPath]);
   $('saveBtn').disabled=false;
-  alertMsg(err.message?.includes('categoria')?'Para guardar categorías, aplica primero migracion_categorias.sql en Supabase.':'No se pudo guardar: '+err.message);
+  alertMsg(err.message?.includes('categorias')?'Para usar categorías múltiples, ejecuta primero 01_categorias_multiples.sql en Supabase.':'No se pudo guardar: '+err.message);
   return;
  }
  $('saveBtn').disabled=false;

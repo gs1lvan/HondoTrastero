@@ -60,3 +60,22 @@
   -webkit-box-shadow: 0 0 0 1000px #92582c inset;
   caret-color: #fff8e6;
 }
+
+/* Catálogo cerrado de 24 categorías con selección múltiple. */
+.parcel-shell .category-field{min-width:0;margin:0;border:2px solid #b78146;border-radius:.9rem;padding:.8rem;background:#edc78b88}
+.parcel-shell .category-field legend{float:none;width:auto;margin:0 0 .15rem;padding:0 .35rem;font-size:1.05rem}
+.category-tip{font-size:.87rem;color:#573318;margin:0 0 .35rem}
+.category-counter{font-size:.88rem;font-weight:800;margin:0 0 .65rem;color:#563019}
+.parcel-shell .category-search{margin-bottom:.65rem}
+.category-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.5rem;max-height:350px;overflow-y:auto;overscroll-behavior:contain;padding:.25rem}
+.category-choice{display:flex;align-items:flex-start;gap:.5rem;min-width:0;min-height:52px;border:2px solid #a06a34;background:#f0d09f;color:#43240f;border-radius:.7rem;padding:.55rem;cursor:pointer;font-size:.9rem;line-height:1.25}
+.category-choice.selected{background:#75421e;border-color:#593014;color:#fff4dc}
+.category-choice-label{overflow-wrap:anywhere}
+.parcel-shell .category-choice .form-check-input{flex:0 0 auto;margin:.15rem 0 0;border-color:#73411e;cursor:pointer;background-color:#fff0cc}
+.parcel-shell .category-choice .form-check-input:checked{background-color:#d99b50;border-color:#f5d29b}
+.category-choice[hidden]{display:none!important}
+.category-legacy{font-size:.85rem;color:#61330b;background:#ffe7ac;padding:.5rem;border-radius:.45rem;margin:.5rem 0 0}
+.record-categories{display:flex;flex-wrap:wrap;gap:.3rem;margin:.45rem 0 .25rem}
+.record-category{display:inline-block;font-size:.75rem;font-weight:800;color:#fff1d8;background:#78421b;padding:.22rem .5rem;border-radius:.4rem}
+.record-category-legacy{font-size:.75rem;font-weight:700;color:#6a3b11;background:#f6d8a4;padding:.22rem .5rem;border-radius:.4rem}
+@media(max-width:640px){.category-grid{grid-template-columns:1fr;max-height:300px}.category-choice{min-height:45px}.parcel-shell .category-field{padding:.6rem}}
