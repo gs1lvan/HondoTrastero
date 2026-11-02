@@ -1,7 +1,10 @@
 {
+  "id": "/HondoTrastero/",
   "name": "HondoTrastero",
   "short_name": "Trastero",
+  "description": "Inventario compartido de objetos, cajas y espacios.",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#d7a163",
   "theme_color": "#9b612f",
