@@ -4,3 +4,59 @@
 .filter-field .form-select {width:100%;background-color:#fffaf0;min-height:44px;font-size:.95rem}
 .filter-clear {min-height:44px;white-space:nowrap;background:#f6d9ac}
 @media(max-width:640px){.inventory-filters{grid-template-columns:repeat(2,minmax(0,1fr));gap:.5rem;padding:.65rem}.filter-field{font-size:.83rem}.filter-field .form-select{font-size:.85rem;padding-left:.45rem;padding-right:1.4rem}.filter-clear{grid-column:1/-1}}
+
+/* Campos marrones de HondoTrastero.
+   Contraste alto sobre la estética de cartón, en móvil y escritorio. */
+.parcel-shell .form-control,
+.parcel-shell .form-select,
+.parcel-shell .inventory-filters .filter-field .form-select {
+  background-color: #92582c;
+  color: #fff8e6;
+  border: 2px solid #6b3c1f;
+  caret-color: #fff8e6;
+}
+.parcel-shell .form-control::placeholder,
+.parcel-shell .search-field input::placeholder {
+  color: #f0d5b5;
+  opacity: 1;
+}
+.parcel-shell .form-control:focus,
+.parcel-shell .form-select:focus,
+.parcel-shell .inventory-filters .filter-field .form-select:focus {
+  background-color: #875028;
+  color: #fff8e6;
+  border-color: #f8dca4;
+  box-shadow: 0 0 0 .2rem #6b3c1f66;
+}
+.parcel-shell .form-control option,
+.parcel-shell .form-select option {
+  background-color: #92582c;
+  color: #fff8e6;
+}
+/* El buscador tiene un contenedor propio: colorearlo también. */
+.parcel-shell .search-field {
+  background: #92582c;
+  border-color: #6b3c1f;
+}
+.parcel-shell .search-field:focus-within {
+  background: #875028;
+  border-color: #f8dca4;
+  box-shadow: 0 0 0 .2rem #6b3c1f66;
+}
+.parcel-shell .search-field input {
+  background: transparent;
+  color: #fff8e6;
+  caret-color: #fff8e6;
+}
+.parcel-shell .search-field span {
+  color: #fff8e6;
+}
+/* Impedir que el autocompletado de Chrome vuelva blancos los campos. */
+.parcel-shell input.form-control:-webkit-autofill,
+.parcel-shell input.form-control:-webkit-autofill:hover,
+.parcel-shell input.form-control:-webkit-autofill:focus,
+.parcel-shell .search-field input:-webkit-autofill {
+  -webkit-text-fill-color: #fff8e6;
+  -webkit-box-shadow: 0 0 0 1000px #92582c inset;
+  caret-color: #fff8e6;
+}
