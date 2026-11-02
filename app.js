@@ -20,11 +20,28 @@ function boxLabel(id){return data.cajas.find(x=>x.id===id)?.nombre||'Sin caja'}
 function lastLocationKey(){return `hondotrastero:last-location:${user.id}`}
 async function signedPhoto(path){const {data:result,error}=await client.storage.from(BUCKET).createSignedUrl(path,3600);if(error)throw error;return result.signedUrl}
 function photoField(item){
- const wrap=elem('div','photo-field');const lab=elem('label','form-label fw-semibold','Fotografía (opcional)');lab.htmlFor='fieldPhoto';
+ const wrap=elem('div','photo-field');
+ const lab=elem('label','form-label fw-semibold','Fotografía (opcional)');
  const preview=elem('img','photo-preview d-none');preview.id='photoPreview';preview.alt='Vista previa de la fotografía';
- const input=elem('input','form-control');input.type='file';input.id='fieldPhoto';input.accept='image/*';
- input.addEventListener('change',()=>{selectedPhoto=input.files?.[0]||null;if(photoPreviewUrl){URL.revokeObjectURL(photoPreviewUrl);photoPreviewUrl=null}if(selectedPhoto){photoPreviewUrl=URL.createObjectURL(selectedPhoto);preview.src=photoPreviewUrl;preview.classList.remove('d-none')}else{preview.removeAttribute('src');preview.classList.add('d-none')}});
- const help=elem('div','form-text','Haz una foto o selecciónala de la galería. Se comprimirá antes de subirla.');wrap.append(lab,preview,input,help);
+ const buttons=elem('div','d-flex flex-wrap gap-2');
+ const cameraButton=elem('button','btn btn-outline-primary flex-grow-1','📷 Hacer foto');cameraButton.type='button';
+ const attachButton=elem('button','btn btn-outline-primary flex-grow-1','🖼️ Adjuntar foto');attachButton.type='button';
+ const cameraInput=elem('input','visually-hidden');cameraInput.type='file';cameraInput.id='fieldCamera';cameraInput.accept='image/*';cameraInput.setAttribute('capture','environment');
+ const galleryInput=elem('input','visually-hidden');galleryInput.type='file';galleryInput.id='fieldPhoto';galleryInput.accept='image/*';
+ function choosePhoto(input){
+  const file=input.files?.[0];if(!file)return;
+  if(!file.type.startsWith('image/')){alertMsg('Selecciona un archivo de imagen.');return}
+  selectedPhoto=file;
+  if(photoPreviewUrl){URL.revokeObjectURL(photoPreviewUrl);photoPreviewUrl=null}
+  photoPreviewUrl=URL.createObjectURL(file);preview.src=photoPreviewUrl;preview.classList.remove('d-none');
+ }
+ cameraButton.addEventListener('click',()=>{cameraInput.value='';cameraInput.click()});
+ attachButton.addEventListener('click',()=>{galleryInput.value='';galleryInput.click()});
+ cameraInput.addEventListener('change',()=>choosePhoto(cameraInput));
+ galleryInput.addEventListener('change',()=>choosePhoto(galleryInput));
+ buttons.append(cameraButton,attachButton);
+ const help=elem('div','form-text','Puedes tomar una foto ahora o elegir una existente. Se comprimirá antes de subirla.');
+ wrap.append(lab,preview,buttons,cameraInput,galleryInput,help);
  if(item?.foto_path)signedPhoto(item.foto_path).then(url=>{if(!selectedPhoto){preview.src=url;preview.classList.remove('d-none')}}).catch(()=>{});
  return wrap;
 }
