@@ -1,9 +1,46 @@
-:root{--bs-primary:#1769aa;--bs-primary-rgb:23,105,170;--bs-link-color:#1769aa}body{background:#f4f7fa;color:#202b39;min-height:100vh}.brand-mark{display:inline-grid;place-items:center;background:#1769aa;color:#fff;border-radius:.6rem;width:2rem;height:2rem}.navbar-brand{letter-spacing:-.03em}.user-email{max-width:38vw}.btn-primary{--bs-btn-bg:#1769aa;--bs-btn-border-color:#1769aa;--bs-btn-hover-bg:#105486;--bs-btn-hover-border-color:#105486;--bs-btn-active-bg:#105486}.btn-outline-primary{--bs-btn-color:#1769aa;--bs-btn-border-color:#1769aa;--bs-btn-hover-bg:#1769aa;--bs-btn-hover-border-color:#1769aa}.nav-pills{--bs-nav-pills-link-active-bg:#1769aa}.nav-link{color:#1769aa}.card{border-radius:1rem}.metric{border:1px solid #e5eaf0}.form-control,.form-select{min-height:44px}.search-input{max-width:420px}.record{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1rem .25rem}.record-main{min-width:0;flex:1;overflow-wrap:anywhere}.record-title{font-weight:600}.record-detail{font-size:.875rem;color:#667486}.record-actions{display:flex;gap:.4rem;flex-shrink:0}.record-actions .btn{min-height:38px}.alert{border-radius:.75rem}.photo-preview{display:block;width:100%;max-height:220px;object-fit:contain;border-radius:.75rem;background:#edf3f8;margin-bottom:.75rem}.record-photo{width:70px;height:70px;object-fit:cover;border-radius:.65rem;flex-shrink:0}.photo-field{padding-bottom:.5rem;border-bottom:1px solid #e5eaf0}@media(max-width:575.98px){.record{align-items:flex-start}.record-actions{flex-direction:column}.record-actions .btn{font-size:.8rem}.user-email{max-width:42vw}.navbar-brand{font-size:1rem}.record-photo{width:58px;height:58px}}
-
-/* Formulario como página normal: desplazamiento del documento, sin modal */
-#editPage{min-height:calc(100dvh - 90px)}
-#editPage #editForm{display:block;height:auto;max-height:none;overflow:visible}
-#editPage #modalFields{display:flex;flex-direction:column;overflow:visible;height:auto;max-height:none;min-height:0}
-#editPage .card-footer{position:static}
-#editPage .photo-preview{max-height:190px}
-@media(max-width:575.98px){#editPage{padding-left:12px;padding-right:12px}#editPage .photo-preview{max-height:160px}}
+/* HondoTrastero — estética de cartón y paquetería */
+:root{--bs-primary:#673819;--bs-primary-rgb:103,56,25;--bs-link-color:#673819;--ink:#3f2616;--kraft:#dfb477;--paper:#fff4dc}
+html{scroll-behavior:smooth}
+body{color:var(--ink);min-height:100vh;background-color:#d6a568;background-image:repeating-linear-gradient(0deg,transparent 0 3px,rgba(102,63,26,.025) 3px 4px),linear-gradient(110deg,rgba(255,255,255,.14),transparent 55%,rgba(80,44,15,.08))}
+.kraft-header{background:#e7bc80;border-bottom:4px solid #ab753e;box-shadow:0 4px 15px #61380f28}
+.navbar-brand{display:flex;align-items:center;color:var(--ink);font-weight:900;letter-spacing:-.04em;font-size:clamp(1.15rem,4.5vw,1.7rem);line-height:1.05}
+.brand-logo{width:60px;height:60px;object-fit:contain;filter:drop-shadow(1px 3px 1px #71461b44)}
+.brand-subtitle{display:block;letter-spacing:.07em;font-size:.51rem;font-weight:800;margin-top:5px;color:#82522d}
+.navbar-brand:hover{color:var(--ink)}
+.user-email{max-width:29vw}
+.btn-primary{--bs-btn-bg:#673819;--bs-btn-border-color:#673819;--bs-btn-hover-bg:#4a2712;--bs-btn-hover-border-color:#4a2712;--bs-btn-active-bg:#4a2712}
+.btn-outline-primary{--bs-btn-color:#673819;--bs-btn-border-color:#673819;--bs-btn-hover-bg:#673819;--bs-btn-hover-border-color:#673819}
+.nav-pills{--bs-nav-pills-link-active-bg:#673819}
+.nav-link{color:#673819;font-weight:700}
+.btn{border-radius:.7rem;font-weight:650;min-height:43px}
+.card{border-radius:1rem;background:var(--paper);border:1px solid #b8894e!important;box-shadow:2px 4px 0 #a4743e25,0 10px 18px #70441a1b!important}
+.metric{background:#f3d5a4}.metric .fs-3{color:#673819}
+.inventory-panel,.editor-panel{background:#f5dfb7}
+.inventory-panel>.card-body{background:transparent}
+#appView h1{font-weight:900;color:#47250f}
+.form-control,.form-select{min-height:46px;border-radius:.65rem;border:1px solid #c9a371;background:#fff9eb;color:#3f2616}
+.form-control:focus,.form-select:focus{border-color:#8b552d;box-shadow:0 0 0 .22rem #b7824936}
+.search-input{max-width:420px}
+.record{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1rem .6rem;background:#fff7e7;border:1px solid #e0c69d!important;border-radius:.75rem;margin-bottom:.7rem;box-shadow:0 3px 0 #b6885033}
+.record-main{min-width:0;flex:1;overflow-wrap:anywhere}
+.record-title{font-weight:800}.record-detail{font-size:.875rem;color:#725740}
+.record-actions{display:flex;gap:.4rem;flex-shrink:0}.record-actions .btn{min-height:38px}
+.record-photo{width:70px;height:70px;object-fit:cover;border-radius:.55rem;flex-shrink:0}
+.photo-preview{display:block;width:100%;max-height:200px;object-fit:contain;border-radius:.7rem;background:#ead4ae;margin-bottom:.75rem}
+.photo-field{padding-bottom:.7rem;border-bottom:2px dashed #c9a371}
+#editPage{min-height:60vh}
+#editPage .card-header,#editPage .card-footer{background:#edd0a1;border-color:#c9a371}
+#editPage .card-body{background:#fff1d5}
+#modalFields{display:flex;flex-direction:column;gap:1rem}
+#modalFields>div{flex-shrink:0}
+.form-label{font-weight:700}
+#editForm{display:block}
+@media(max-width:575.98px){
+ .navbar{gap:.5rem}.brand-logo{width:45px;height:45px}.brand-subtitle{font-size:.42rem}
+ .user-email{max-width:26vw;font-size:.7rem!important}
+ .record{align-items:flex-start}.record-actions{flex-direction:column}.record-actions .btn{font-size:.8rem}
+ .record-photo{width:58px;height:58px}.photo-preview{max-height:145px}
+ #editPage{padding:0 12px 25px!important}
+ #editPage .card{border-radius:.8rem}
+ #editPage .card-body{padding:1rem!important}
+}
