@@ -413,7 +413,6 @@ $('manageSpaces').addEventListener('click',()=>{
  spacesTab.click();
  spacesTab.focus();
 });
-$('searchTab').addEventListener('click',()=>{if(tab==='ubicaciones')document.querySelector('[data-tab="objetos"]').click();$('search').focus();$('search').scrollIntoView({behavior:'smooth',block:'center'})});
 $('search').addEventListener('input',render);
 $('filterSpace').addEventListener('change',render);
 $('filterCategoryButton').addEventListener('click',toggleCategoryFilter);
