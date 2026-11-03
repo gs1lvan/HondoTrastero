@@ -299,6 +299,9 @@ function refreshInventoryFilters(){
  filterCategoryOptions();
 }
 function render(){
+ const managingSpaces=tab==='ubicaciones';
+ show('inventoryToolbar',!managingSpaces);
+ $('newItem').lastChild.textContent=managingSpaces?' Añadir espacio':' Añadir objeto';
  refreshInventoryFilters();
  $('countObjects').textContent=data.objetos.length;
  $('countBoxes').textContent=data.cajas.length;
@@ -410,7 +413,7 @@ $('manageSpaces').addEventListener('click',()=>{
  spacesTab.click();
  spacesTab.focus();
 });
-$('searchTab').addEventListener('click',()=>{$('search').focus();$('search').scrollIntoView({behavior:'smooth',block:'center'})});
+$('searchTab').addEventListener('click',()=>{if(tab==='ubicaciones')document.querySelector('[data-tab="objetos"]').click();$('search').focus();$('search').scrollIntoView({behavior:'smooth',block:'center'})});
 $('search').addEventListener('input',render);
 $('filterSpace').addEventListener('change',render);
 $('filterCategoryButton').addEventListener('click',toggleCategoryFilter);
@@ -437,7 +440,7 @@ document.addEventListener('pointerdown',event=>{
  closeCategoryFilter();
 });
 $('clearFilters').addEventListener('click',()=>{closeCategoryFilter();$('search').value='';$('filterSpace').value='';selectedCategoryFilter='';render()});
-$('newItem').addEventListener('click',()=>openForm('objetos'));
+$('newItem').addEventListener('click',()=>openForm(tab==='ubicaciones'?'ubicaciones':'objetos'));
 $('loginForm').addEventListener('submit',async e=>{
  e.preventDefault();clearMsg();
  const btn=e.target.querySelector('button');btn.disabled=true;
