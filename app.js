@@ -404,6 +404,12 @@ document.querySelector('.parcel-nav').addEventListener('click',e=>{
  const b=e.target.closest('[data-tab]');if(!b)return;
  closeCategoryFilter();tab=b.dataset.tab;$('search').value='';render();
 });
+$('manageSpaces').addEventListener('click',()=>{
+ $('adminMenu').open=false;
+ const spacesTab=document.querySelector('[data-tab="ubicaciones"]');
+ spacesTab.click();
+ spacesTab.focus();
+});
 $('searchTab').addEventListener('click',()=>{$('search').focus();$('search').scrollIntoView({behavior:'smooth',block:'center'})});
 $('search').addEventListener('input',render);
 $('filterSpace').addEventListener('change',render);
