@@ -408,7 +408,6 @@ document.querySelector('.parcel-nav').addEventListener('click',e=>{
  closeCategoryFilter();tab=b.dataset.tab;$('search').value='';render();
 });
 $('manageSpaces').addEventListener('click',()=>{
- $('adminMenu').open=false;
  const spacesTab=document.querySelector('[data-tab="ubicaciones"]');
  spacesTab.click();
  spacesTab.focus();
