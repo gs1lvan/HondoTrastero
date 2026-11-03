@@ -26,7 +26,7 @@
  <nav class="parcel-nav" aria-label="Secciones"><button type="button" class="parcel-tab active" data-tab="objetos"><span class="nav-symbol">▣</span><span>Inventario</span></button><button type="button" class="parcel-tab" data-tab="cajas"><span class="nav-symbol">▤</span><span>Cajas</span></button><button type="button" class="parcel-tab" data-tab="ubicaciones"><span class="nav-symbol">▥</span><span>Espacios</span></button><button type="button" class="parcel-tab" id="searchTab"><span class="nav-symbol">⌕</span><span>Buscar</span></button></nav>
  <div class="section-heading"><h1 id="sectionTitle">📦 Inventario</h1><button id="newItem" type="button" class="btn btn-primary add-button"><span aria-hidden="true">＋</span> Añadir objeto</button></div>
  <div class="stats-strip"><div class="stat"><span>OBJETOS</span><strong id="countObjects">0</strong></div><div class="stat"><span>CAJAS</span><strong id="countBoxes">0</strong></div><div class="stat"><span>ESPACIOS</span><strong id="countLocations">0</strong></div></div>
- <div class="inventory-toolbar"><label class="search-field"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Buscar en el inventario…" aria-label="Buscar por nombre o descripción"></label><button id="addCurrent" type="button" class="btn btn-outline-primary">＋ Añadir</button></div>
+ <div class="inventory-toolbar"><label class="search-field"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Buscar en el inventario…" aria-label="Buscar por nombre o descripción"></label></div>
  <div id="inventoryFilters" class="inventory-filters" role="group" aria-label="Filtros del inventario">
   <label class="filter-field" for="filterSpace"><span>Espacios</span><select id="filterSpace" class="form-select"><option value="">Todos los espacios</option></select></label>
   <div class="filter-field category-filter-wrap" id="filterCategoryWrap">
@@ -56,7 +56,7 @@
 </main>
 <footer class="parcel-footer"><div class="handling-icons" aria-hidden="true"><span>↑↑</span><span>♜</span><span>☂</span><span>♻</span></div><div class="footer-barcode" aria-hidden="true"></div></footer>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script><script src="config.js?v=kraft3"></script><script src="app.js?v=selector-carton-sin-teclado-20261103"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script><script src="config.js?v=kraft3"></script><script src="app.js?v=boton-unico-20261103"></script>
 <script>
 // Registro necesario para que Chrome Android reconozca HondoTrastero como PWA.
 // No se almacenan contraseñas ni respuestas de Supabase en caché.

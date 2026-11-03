@@ -431,7 +431,6 @@ document.addEventListener('pointerdown',event=>{
  closeCategoryFilter();
 });
 $('clearFilters').addEventListener('click',()=>{closeCategoryFilter();$('search').value='';$('filterSpace').value='';selectedCategoryFilter='';render()});
-$('addCurrent').addEventListener('click',()=>openForm());
 $('newItem').addEventListener('click',()=>openForm('objetos'));
 $('loginForm').addEventListener('submit',async e=>{
  e.preventDefault();clearMsg();
