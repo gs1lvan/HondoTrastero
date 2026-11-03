@@ -211,6 +211,7 @@ function normalizarCategoria(texto){
 function closeCategoryFilter(focusTrigger=false){
  const panel=$('filterCategoryPanel'),trigger=$('filterCategoryButton');
  if(panel.hidden)return;
+ if(document.activeElement===$('categoryFilterSearch'))$('categoryFilterSearch').blur();
  panel.hidden=true;
  trigger.setAttribute('aria-expanded','false');
  $('categoryFilterSearch').value='';
@@ -224,7 +225,7 @@ function toggleCategoryFilter(){
  $('categoryFilterSearch').value='';
  $('categoryFilterOptions').scrollTop=0;
  filterCategoryOptions();
- $('categoryFilterSearch').focus({preventScroll:true});
+ // No enfocamos la búsqueda: Android mostrará el teclado solamente cuando el usuario toque Buscar categoría.
 }
 function filterCategoryOptions(){
  const term=normalizarCategoria($('categoryFilterSearch').value.trim());
