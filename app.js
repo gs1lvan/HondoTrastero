@@ -36,6 +36,7 @@ const CATEGORIES = Object.freeze([
 const CATEGORIES_BY_ID = new Map(CATEGORIES.map(cat=>[cat.id,cat]));
 
 let tab='objetos', editing=null, user=null, selectedPhoto=null, photoPreviewUrl=null;
+let selectedCategoryFilter = ''; // Filtro visual: no modifica las categorías de los objetos.
 
 function show(id,visible){$(id).classList.toggle('d-none',!visible)}
 function clearMsg(){show('notice',false)}
@@ -157,6 +158,7 @@ function categoryField(item){
  return field;
 }
 function openForm(type=tab,item=null){
+ closeCategoryFilter();
  clearMsg();editing={type,id:item?.id||null};selectedPhoto=null;
  if(photoPreviewUrl){URL.revokeObjectURL(photoPreviewUrl);photoPreviewUrl=null}
  const root=$('modalFields');root.replaceChildren();
@@ -202,11 +204,51 @@ function belongsToSpace(item,spaceId,parents){
  }
  return false;
 }
+// Selector integrado en la página: nunca invoca el menú blanco nativo de Android.
+function normalizarCategoria(texto){
+ return String(texto||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('es');
+}
+function closeCategoryFilter(focusTrigger=false){
+ const panel=$('filterCategoryPanel'),trigger=$('filterCategoryButton');
+ if(panel.hidden)return;
+ panel.hidden=true;
+ trigger.setAttribute('aria-expanded','false');
+ $('categoryFilterSearch').value='';
+ if(focusTrigger)trigger.focus({preventScroll:true});
+}
+function toggleCategoryFilter(){
+ const panel=$('filterCategoryPanel'),trigger=$('filterCategoryButton');
+ if(!panel.hidden){closeCategoryFilter(true);return}
+ panel.hidden=false;
+ trigger.setAttribute('aria-expanded','true');
+ $('categoryFilterSearch').value='';
+ $('categoryFilterOptions').scrollTop=0;
+ filterCategoryOptions();
+ $('categoryFilterSearch').focus({preventScroll:true});
+}
+function filterCategoryOptions(){
+ const term=normalizarCategoria($('categoryFilterSearch').value.trim());
+ let count=0;
+ for(const row of $('categoryFilterOptions').querySelectorAll('.category-filter-option')){
+  row.hidden=!normalizarCategoria(row.dataset.categoryName).includes(term);
+  if(!row.hidden)count++;
+ }
+ $('categoryFilterNoMatch').hidden=count!==0;
+}
+function chooseCategoryFilter(value){
+ selectedCategoryFilter=value;
+ closeCategoryFilter();
+ render();
+ $('filterCategoryButton').focus({preventScroll:true});
+}
 function refreshInventoryFilters(){
  show('inventoryFilters',tab==='objetos');
- if(tab!=='objetos')return;
- const space=$('filterSpace'),category=$('filterCategory');
- const oldSpace=space.value,oldCategory=category.value;
+ if(tab!=='objetos'){
+  closeCategoryFilter();
+  return;
+ }
+ const space=$('filterSpace');
+ const oldSpace=space.value;
  const total=data.objetos.length;
  const parents=spaceParents();
  const spaceCounts=new Map(),categoryCounts=new Map();
@@ -226,12 +268,34 @@ function refreshInventoryFilters(){
   space.add(new Option(`${item.nombre} (${spaceCounts.get(item.id)||0})`,item.id));
  }
  space.value=[...space.options].some(o=>o.value===oldSpace)?oldSpace:'';
- category.replaceChildren(new Option(`Todas las categorías (${total})`,''));
- for(const cat of CATEGORIES){
-  category.add(new Option(`${cat.icon} ${cat.name} (${categoryCounts.get(cat.id)||0})`,cat.id));
+ // El catálogo es fijo: todas las opciones se muestran, incluso con cero objetos.
+ const categoryOptions=[
+  {value:'',name:'Todas las categorías',icon:'📦',count:total},
+  ...CATEGORIES.map(cat=>({value:cat.id,name:cat.name,icon:cat.icon,count:categoryCounts.get(cat.id)||0})),
+  {value:'__sin_categoria__',name:'Sin categoría',icon:'🏷️',count:withoutCategories}
+ ];
+ const chosen=categoryOptions.find(option=>option.value===selectedCategoryFilter)||categoryOptions[0];
+ selectedCategoryFilter=chosen.value;
+ $('categoryFilterButtonText').textContent=`${chosen.name} (${chosen.count})`;
+ $('filterCategoryButton').setAttribute('aria-label',`Categoría: ${chosen.name}. ${chosen.count} ${chosen.count===1?'objeto':'objetos'}. Abrir lista`);
+ const list=$('categoryFilterOptions'),oldScroll=list.scrollTop;
+ list.replaceChildren();
+ for(const option of categoryOptions){
+  const row=elem('button','category-filter-option');row.type='button';
+  row.dataset.categoryName=option.name;
+  row.dataset.value=option.value;
+  row.setAttribute('aria-pressed',String(option.value===selectedCategoryFilter));
+  if(option.value===selectedCategoryFilter)row.classList.add('selected');
+  const icon=elem('span','category-option-icon',option.icon);icon.setAttribute('aria-hidden','true');
+  const name=elem('span','category-option-name',option.name);
+  const count=elem('span','category-option-count',String(option.count));
+  const tick=elem('span','category-option-check',option.value===selectedCategoryFilter?'✓':'');tick.setAttribute('aria-hidden','true');
+  row.append(icon,name,count,tick);
+  row.addEventListener('click',()=>chooseCategoryFilter(option.value));
+  list.append(row);
  }
- category.add(new Option(`Sin categoría (${withoutCategories})`,'__sin_categoria__'));
- category.value=[...category.options].some(o=>o.value===oldCategory)?oldCategory:'';
+ list.scrollTop=oldScroll;
+ filterCategoryOptions();
 }
 function render(){
  refreshInventoryFilters();
@@ -241,7 +305,7 @@ function render(){
  document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
  const heading=$('sectionTitle');heading.textContent=tab==='objetos'?'📦 Inventario':tab==='cajas'?'▤ Cajas':'▥ Espacios';
  const q=$('search').value.trim().toLocaleLowerCase('es');
- const selectedSpace=$('filterSpace').value,selectedCategory=$('filterCategory').value;
+ const selectedSpace=$('filterSpace').value,selectedCategory=selectedCategoryFilter;
  const parents=spaceParents();
  const rows=data[tab].filter(item=>{
   if(!`${item.nombre} ${item.descripcion||''}`.toLocaleLowerCase('es').includes(q))return false;
@@ -337,13 +401,35 @@ $('editForm').addEventListener('submit',async e=>{
 });
 document.querySelector('.parcel-nav').addEventListener('click',e=>{
  const b=e.target.closest('[data-tab]');if(!b)return;
- tab=b.dataset.tab;$('search').value='';render();
+ closeCategoryFilter();tab=b.dataset.tab;$('search').value='';render();
 });
 $('searchTab').addEventListener('click',()=>{$('search').focus();$('search').scrollIntoView({behavior:'smooth',block:'center'})});
 $('search').addEventListener('input',render);
 $('filterSpace').addEventListener('change',render);
-$('filterCategory').addEventListener('change',render);
-$('clearFilters').addEventListener('click',()=>{$('search').value='';$('filterSpace').value='';$('filterCategory').value='';render()});
+$('filterCategoryButton').addEventListener('click',toggleCategoryFilter);
+$('closeCategoryFilter').addEventListener('click',()=>closeCategoryFilter(true));
+$('categoryFilterSearch').addEventListener('input',filterCategoryOptions);
+$('filterCategoryPanel').addEventListener('keydown',event=>{
+ if(event.key==='Escape'){event.preventDefault();closeCategoryFilter(true);return}
+ if(!['ArrowDown','ArrowUp','Home','End'].includes(event.key))return;
+ // Desde el buscador, Flecha abajo entra en la lista.
+ if(event.target===$('categoryFilterSearch')&&event.key!=='ArrowDown')return;
+ const options=[...$('categoryFilterOptions').querySelectorAll('.category-filter-option:not([hidden])')];
+ if(!options.length)return;
+ const current=options.indexOf(document.activeElement);
+ let next;
+ if(event.key==='Home')next=0;
+ else if(event.key==='End')next=options.length-1;
+ else if(event.key==='ArrowDown')next=Math.min(current+1,options.length-1);
+ else next=Math.max(current-1,0);
+ event.preventDefault();options[next].focus();
+});
+document.addEventListener('pointerdown',event=>{
+ if($('filterCategoryPanel').hidden)return;
+ if($('filterCategoryPanel').contains(event.target)||$('filterCategoryWrap').contains(event.target))return;
+ closeCategoryFilter();
+});
+$('clearFilters').addEventListener('click',()=>{closeCategoryFilter();$('search').value='';$('filterSpace').value='';selectedCategoryFilter='';render()});
 $('addCurrent').addEventListener('click',()=>openForm());
 $('newItem').addEventListener('click',()=>openForm('objetos'));
 $('loginForm').addEventListener('submit',async e=>{
