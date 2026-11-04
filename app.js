@@ -35,6 +35,7 @@ const CATEGORIES = Object.freeze([
 ]);
 const CATEGORIES_BY_ID = new Map(CATEGORIES.map(cat=>[cat.id,cat]));
 
+let administrationOpen=false;
 let tab='objetos', editing=null, user=null, selectedPhoto=null, photoPreviewUrl=null;
 let selectedCategoryFilter = ''; // Filtro visual: no modifica las categorías de los objetos.
 
@@ -299,6 +300,7 @@ function refreshInventoryFilters(){
  filterCategoryOptions();
 }
 function render(){
+ show('adminStyleTools',administrationOpen);
  const managingSpaces=tab==='ubicaciones';
  show('inventoryToolbar',!managingSpaces);
  $('newItem').lastChild.textContent=managingSpaces?' Añadir espacio':' Añadir objeto';
@@ -405,11 +407,14 @@ $('editForm').addEventListener('submit',async e=>{
 });
 document.querySelector('.parcel-nav').addEventListener('click',e=>{
  const b=e.target.closest('[data-tab]');if(!b)return;
+ administrationOpen=false;
  closeCategoryFilter();tab=b.dataset.tab;$('search').value='';render();
 });
 $('manageSpaces').addEventListener('click',()=>{
  const spacesTab=document.querySelector('[data-tab="ubicaciones"]');
  spacesTab.click();
+ administrationOpen=true;
+ render();
  spacesTab.focus();
 });
 $('search').addEventListener('input',render);
@@ -456,7 +461,7 @@ async function sessionChanged(session){
  show('account',!!user);$('account').style.display=user?'flex':'none';
  show('appView',!!user&&$('editPage').classList.contains('d-none'));
  show('loginView',!user&&ready);
- if(!user){$('userEmail').textContent='';return}
+ if(!user){administrationOpen=false;show('adminStyleTools',false);$('userEmail').textContent='';return}
  $('userEmail').textContent=user.email||'';
  try{await load();clearMsg()}catch(e){alertMsg(`Error al cargar el inventario: ${e.message}`)}
 }
