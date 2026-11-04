@@ -68,7 +68,7 @@ html[data-style="terminal"] .btn-outline-primary{--bs-btn-color:#76ff91;--bs-btn
 html[data-style="terminal"] .handling-icons span{border-color:#288541}
 html[data-style="terminal"] :is(.style-dialog,.style-choice){background:#07110d;color:#76ff91;border-color:#288541}
 html[data-style="terminal"] .style-choice[aria-pressed="true"]{border-color:#39ff65;outline-color:#39ff65}
-:focus-visible{outline:3px solid #39ff65;outline-offset:3px}
+html[data-style="terminal"] :focus-visible{outline:3px solid #39ff65;outline-offset:3px}
 
 html[data-style="terminal"] .parcel-shell .inventory-filters .filter-field .form-select,
 html[data-style="terminal"] .parcel-shell :is(.form-control,.form-select) option{background-color:#040d08;color:#9affab;border-color:#288541}
