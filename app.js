@@ -441,6 +441,7 @@ function refreshBoxSpaces(){
 }
 function render(){
  $('records').classList.toggle('records-reduced',listMode==='reducido');
+ $('appView').classList.toggle('listing-compact',listMode==='reducido');
  refreshBoxSpaces();
  show('adminStyleTools',administrationOpen);
  const managingSpaces=tab==='ubicaciones';
