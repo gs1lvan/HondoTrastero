@@ -684,7 +684,10 @@ function render(){
   const edit=elem('button','btn btn-sm btn-outline-primary','Editar');edit.type='button';edit.addEventListener('click',()=>openForm(tab,item));
   const del=elem('button','btn btn-sm btn-outline-danger','Eliminar');del.type='button';del.addEventListener('click',()=>removeItem(tab,item));
   if(tab==='ubicaciones'){
+   line.classList.add('space-record');
    actions.classList.add('space-order-actions');
+   const arrows=elem('div','space-move-controls');
+   actions.append(arrows);
    const all=orderedSpaces(),index=all.findIndex(space=>space.id===item.id);
    for(const [direction,symbol,label] of [[-1,'↑','Subir'],[1,'↓','Bajar']]){
     const move=elem('button','btn btn-sm btn-outline-primary space-order-button',symbol);
@@ -692,7 +695,7 @@ function render(){
     move.setAttribute('aria-label',label+' '+item.nombre);move.title=label+' '+item.nombre;
     move.disabled=direction<0?index===0:index===all.length-1;
     move.addEventListener('click',()=>moveSpace(item.id,direction));
-    actions.append(move);
+    arrows.append(move);
    }
   }
   if(listMode==='reducido'){
@@ -700,6 +703,9 @@ function render(){
    del.title='Eliminar '+item.nombre;
    del.setAttribute('aria-label','Eliminar '+item.nombre);
    if(tab!=='objetos')actions.append(del);
+  }else if(tab==='ubicaciones'){
+   const buttons=elem('div','space-edit-controls');
+   buttons.append(edit,del);actions.append(buttons);
   }else actions.append(edit,del);
   line.append(main,actions);root.append(line);
  }
