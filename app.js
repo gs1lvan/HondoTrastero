@@ -81,7 +81,7 @@ async function signedPhoto(path){
  if(error)throw error;return result.signedUrl;
 }
 function photoField(item,onSelected=null){
- const wrap=elem('div','photo-field'),lab=elem('label','form-label fw-semibold','Fotografía (opcional)');
+ const wrap=elem('div','photo-field'),lab=elem('label','form-label fw-semibold','Fotografía');
  const preview=elem('img','photo-preview d-none');preview.id='photoPreview';preview.alt='Vista previa de la fotografía';
  const buttons=elem('div','d-flex flex-wrap gap-2');
  const cameraButton=elem('button','btn btn-outline-primary flex-grow-1','📷 Hacer foto');cameraButton.type='button';
@@ -275,14 +275,14 @@ function openForm(type=tab,item=null){
  if(type==='objetos')root.append(photoField(item));
  $('modalTitle').textContent=(item?'Editar ':'Añadir ')+names[type];
  root.append(inputField('fieldName','Nombre',item?.nombre));
- if(type==='cajas')root.append(inputField('fieldDesc','Descripción (opcional)',item?.descripcion||'','text',false));
+ if(type==='cajas')root.append(inputField('fieldDesc','Descripción',item?.descripcion||'','text',false));
  if(type==='ubicaciones'){
   const extra=elem('details','space-extra-fields');
   const summary=elem('summary','form-label','Descripción | Espacio superior');
   summary.style.cursor='pointer';
   const fields=elem('div','vstack gap-3 mt-3');
-  fields.append(inputField('fieldDesc','Descripción (opcional)',item?.descripcion||'','text',false));
-  fields.append(selectField('fieldParent','Espacio superior (opcional)',data.ubicaciones.filter(x=>x.id!==item?.id),true,item?.ubicacion_padre_id));
+  fields.append(inputField('fieldDesc','Descripción',item?.descripcion||'','text',false));
+  fields.append(selectField('fieldParent','Espacio superior',data.ubicaciones.filter(x=>x.id!==item?.id),true,item?.ubicacion_padre_id));
   fields.addEventListener('invalid',()=>{extra.open=true},true);
   extra.append(summary,fields);root.append(extra);
  }
@@ -302,8 +302,8 @@ function openForm(type=tab,item=null){
   const summary=elem('summary','form-label','Descripción | Cantidad');
   summary.style.cursor='pointer';
   const fields=elem('div','vstack gap-3 mt-3');
-  fields.append(inputField('fieldDesc','Descripción (opcional)',item?.descripcion||'','text',false));
-  fields.append(inputField('fieldQty','Cantidad',item?.cantidad??1,'number'));
+  fields.append(inputField('fieldDesc','Descripción',item?.descripcion||'','text',false));
+  fields.append(inputField('fieldQty','Cantidad',item?.cantidad??1,'number',false));
   extra.append(summary,fields);
   // Abrir el panel si la validación necesita mostrar un campo oculto.
   fields.addEventListener('invalid',()=>{extra.open=true},true);
@@ -332,7 +332,7 @@ function openForm(type=tab,item=null){
   const initialBox=data.cajas.find(b=>b.id===item?.caja_id);
   const initialSpace=initialBox?.ubicacion_id||item?.ubicacion_id||localStorage.getItem(lastLocationKey())||'';
   wrap.append(selectField('fieldLocation','Espacio',data.ubicaciones,false,initialSpace));
-  wrap.append(selectField('fieldBox','Subespacio (opcional)',[],true));
+  wrap.append(selectField('fieldBox','Subespacio',[],true));
   wrap.className='vstack gap-2 object-location-fields';
   $('fieldName').parentElement.after(wrap);
   const loc=$('fieldLocation'),box=$('fieldBox');
@@ -704,7 +704,7 @@ $('editForm').addEventListener('submit',async e=>{
  if(type==='ubicaciones')payload.ubicacion_padre_id=$('fieldParent').value||null;
  if(type==='cajas')payload.ubicacion_id=$('fieldLocation').value||null;
  if(type==='objetos'){
-  payload.cantidad=Number($('fieldQty').value);
+  payload.cantidad=$('fieldQty').value.trim()===''?1:Number($('fieldQty').value);
   payload.ubicacion_id=$('fieldLocation').value||null;
   payload.caja_id=$('fieldBox').value||null;
   // Se guarda una única ficha con todas sus categorías; no se crean copias.
