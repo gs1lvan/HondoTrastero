@@ -781,3 +781,10 @@ html[data-style="terminal"] .parcel-shell #appView.listing-compact .record:has(.
 }
 html[data-style="terminal"] .parcel-shell #appView.listing-compact .object-record-main > :first-child{margin-top:0}
 html[data-style="terminal"] .parcel-shell #appView.listing-compact .object-record-main > :last-child{margin-bottom:0}
+
+/* Márgenes interiores equilibrados en las fichas compactas de objetos. */
+html .parcel-shell #appView.listing-compact .record:has(.object-record-main){
+ padding:.4rem;
+}
+html .parcel-shell #appView.listing-compact .object-record-main > :first-child{margin-top:0}
+html .parcel-shell #appView.listing-compact .object-record-main > :last-child{margin-bottom:0}
