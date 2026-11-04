@@ -71,6 +71,15 @@ function inputField(id,label,value='',type='text',required=true){
 }
 function locationLabel(id){return data.ubicaciones.find(x=>x.id===id)?.nombre||'Sin espacio'}
 function boxLabel(id){return data.cajas.find(x=>x.id===id)?.nombre||'Sin subespacio'}
+function defaultSpaceKey(){return 'hondotrastero:espacio-defecto:'+user.id}
+function defaultObjectSpace(){
+ try{const id=localStorage.getItem(defaultSpaceKey());return data.ubicaciones.some(space=>space.id===id)?id:''}catch{return ''}
+}
+function refreshDefaultSpace(){
+ const select=$('defaultObjectSpace');select.replaceChildren(new Option('Sin espacio por defecto',''));
+ for(const space of [...data.ubicaciones].sort((a,b)=>a.nombre.localeCompare(b.nombre,'es')))select.add(new Option(space.nombre,space.id));
+ select.value=defaultObjectSpace();
+}
 function lastLocationKey(){return `hondotrastero:last-location:${user.id}`}
 function objectSpace(item){
  if(item.ubicacion_id)return item.ubicacion_id;
@@ -330,7 +339,7 @@ function openForm(type=tab,item=null){
   root.append(categoriesPanel);
   const wrap=elem('div');
   const initialBox=data.cajas.find(b=>b.id===item?.caja_id);
-  const initialSpace=initialBox?.ubicacion_id||item?.ubicacion_id||localStorage.getItem(lastLocationKey())||'';
+  const initialSpace=initialBox?.ubicacion_id||item?.ubicacion_id||(!item?defaultObjectSpace():'')||localStorage.getItem(lastLocationKey())||'';
   wrap.append(selectField('fieldLocation','Espacio',data.ubicaciones,false,initialSpace));
   wrap.append(selectField('fieldBox','Subespacio',[],true));
   wrap.className='vstack gap-2 object-location-fields';
@@ -517,6 +526,7 @@ function render(){
  $('appView').classList.toggle('listing-compact',listMode==='reducido');
  refreshBoxSpaces();
  show('adminStyleTools',administrationOpen);
+ if(administrationOpen)refreshDefaultSpace();
  const managingSpaces=tab==='ubicaciones';
  show('inventoryToolbar',tab==='objetos'||tab==='cajas');
  $('newItem').lastChild.textContent=' Añadir '+names[tab];
@@ -763,16 +773,16 @@ $('manageSpaces').addEventListener('click',()=>{
  clearMsg();
  render();
 });
-const listDialog=$('listMenu');
-$('openList').addEventListener('click',()=>listDialog.showModal());
-$('closeList').addEventListener('click',()=>listDialog.close());
+$('defaultObjectSpace').addEventListener('change',()=>{
+ try{localStorage.setItem(defaultSpaceKey(),$('defaultObjectSpace').value)}catch{alertMsg('No se pudo recordar el espacio por defecto en este dispositivo.')}
+});
 function syncListChoices(){
  document.querySelectorAll('[data-list-mode]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.listMode===listMode)));
 }
 document.querySelectorAll('[data-list-mode]').forEach(button=>button.addEventListener('click',()=>{
  listMode=button.dataset.listMode;
  try{localStorage.setItem('hondotrastero:listado',listMode)}catch{}
- syncListChoices();render();listDialog.close();
+ syncListChoices();render();
 }));
 syncListChoices();
 $('inventoryOrder').addEventListener('change',()=>{
