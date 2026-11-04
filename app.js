@@ -5,7 +5,7 @@ const config = window.HONDO_CONFIG || {};
 const ready = !!(config.supabaseUrl && config.supabaseAnonKey);
 const client = ready ? window.supabase.createClient(config.supabaseUrl, config.supabaseAnonKey) : null;
 const data = {objetos: [], cajas: [], ubicaciones: []};
-const names = {objetos:'objeto', cajas:'caja', ubicaciones:'espacio'};
+const names = {objetos:'objeto', cajas:'subespacio', ubicaciones:'espacio'};
 const BUCKET = 'objetos';
 const CATEGORIES = Object.freeze([
  {"id": "herramientas-bricolaje", "icon": "🔧", "name": "Herramientas y bricolaje"},
@@ -70,7 +70,7 @@ function inputField(id,label,value='',type='text',required=true){
  if(type==='number')input.min='1';wrap.append(lab,input);return wrap;
 }
 function locationLabel(id){return data.ubicaciones.find(x=>x.id===id)?.nombre||'Sin espacio'}
-function boxLabel(id){return data.cajas.find(x=>x.id===id)?.nombre||'Sin caja'}
+function boxLabel(id){return data.cajas.find(x=>x.id===id)?.nombre||'Sin subespacio'}
 function lastLocationKey(){return `hondotrastero:last-location:${user.id}`}
 function objectSpace(item){
  if(item.ubicacion_id)return item.ubicacion_id;
@@ -181,9 +181,9 @@ function categoryField(item){
 function spaceBoxesField(space){
  const panel=elem('section','space-boxes');
  const list=elem('div','vstack gap-2');
- const label=elem('label','form-label','Nueva caja');label.htmlFor='spaceNewBox';
- const input=elem('input','form-control');input.id='spaceNewBox';input.type='text';input.placeholder='Nombre de la caja';input.maxLength=150;
- const add=elem('button','btn btn-primary','Añadir caja');add.type='button';add.id='spaceAddBoxBtn';
+ const label=elem('label','form-label','Nuevo subespacio');label.htmlFor='spaceNewBox';
+ const input=elem('input','form-control');input.id='spaceNewBox';input.type='text';input.placeholder='Nombre del subespacio';input.maxLength=150;
+ const add=elem('button','btn btn-primary','Añadir subespacio');add.type='button';add.id='spaceAddBoxBtn';
  const message=elem('p','form-text');message.setAttribute('role','status');
  let busy=false;
  async function run(action){
@@ -203,23 +203,23 @@ function spaceBoxesField(space){
  function paint(){
   list.replaceChildren();
   const boxes=data.cajas.filter(box=>box.ubicacion_id===space.id).sort((a,b)=>a.nombre.localeCompare(b.nombre,'es'));
-  if(!boxes.length)list.append(elem('p','form-text','Este espacio todavía no tiene cajas.'));
+  if(!boxes.length)list.append(elem('p','form-text','Este espacio todavía no tiene subespacios.'));
   for(const box of boxes){
    const row=elem('div','d-flex align-items-center justify-content-between gap-2');
    row.append(elem('span','',box.nombre));
    const remove=elem('button','btn btn-sm btn-outline-danger','Eliminar');remove.type='button';
-   remove.setAttribute('aria-label','Eliminar caja '+box.nombre);
+   remove.setAttribute('aria-label','Eliminar subespacio '+box.nombre);
    remove.addEventListener('click',()=>{
     if(busy)return;
     run(async()=>{
      // Consultar el contenido actual antes de permitir el borrado.
      const contents=await client.from('objetos').select('id').eq('caja_id',box.id).limit(1);
      if(contents.error)throw contents.error;
-     if(contents.data?.length){message.textContent='Esta caja contiene objetos. Muévelos antes de eliminarla.';return}
-     if(!confirm('¿Eliminar la caja «'+box.nombre+'»?'))return;
+     if(contents.data?.length){message.textContent='Este subespacio contiene objetos. Muévelos antes de eliminarlo.';return}
+     if(!confirm('¿Eliminar el subespacio «'+box.nombre+'»?'))return;
      const result=await client.from('cajas').delete().eq('id',box.id);
      if(result.error)throw result.error;
-     message.textContent='Caja eliminada.';
+     message.textContent='Subespacio eliminado.';
     });
    });
    row.append(remove);list.append(row);
@@ -227,11 +227,11 @@ function spaceBoxesField(space){
  }
  add.addEventListener('click',()=>{
   const name=input.value.trim();
-  if(!name){message.textContent='Escribe el nombre de la caja.';input.focus();return}
+  if(!name){message.textContent='Escribe el nombre del subespacio.';input.focus();return}
   run(async()=>{
    const result=await client.from('cajas').insert({nombre:name,ubicacion_id:space.id,descripcion:null});
    if(result.error)throw result.error;
-   input.value='';message.textContent='Caja añadida.';
+   input.value='';message.textContent='Subespacio añadido.';
   });
  });
  input.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();add.click()}});
@@ -332,12 +332,12 @@ function openForm(type=tab,item=null){
   const initialBox=data.cajas.find(b=>b.id===item?.caja_id);
   const initialSpace=initialBox?.ubicacion_id||item?.ubicacion_id||localStorage.getItem(lastLocationKey())||'';
   wrap.append(selectField('fieldLocation','Espacio',data.ubicaciones,false,initialSpace));
-  wrap.append(selectField('fieldBox','Caja (opcional)',[],true));
+  wrap.append(selectField('fieldBox','Subespacio (opcional)',[],true));
   wrap.className='vstack gap-2 object-location-fields';
   $('fieldName').parentElement.after(wrap);
   const loc=$('fieldLocation'),box=$('fieldBox');
   function refreshBoxes(selected=''){
-   box.replaceChildren(new Option('Sin caja', ''));
+   box.replaceChildren(new Option('Sin subespacio', ''));
    for(const entry of data.cajas.filter(b=>b.ubicacion_id===loc.value).sort((a,b)=>a.nombre.localeCompare(b.nombre,'es'))){
     box.add(new Option(entry.nombre,entry.id));
    }
@@ -537,7 +537,7 @@ function render(){
   closeCategoryFilter();
   return;
  }
- const heading=$('sectionTitle');heading.textContent=tab==='objetos'?'📦 Inventario':tab==='cajas'?'▤ Cajas':'▥ Espacios';
+ const heading=$('sectionTitle');heading.textContent=tab==='objetos'?'📦 Inventario':tab==='cajas'?'▤ Subespacios':'▥ Espacios';
  const q=$('search').value.trim().toLocaleLowerCase('es');
  const selectedSpace=$('filterSpace').value,selectedCategory=selectedCategoryFilter;
  const parents=spaceParents();
@@ -552,7 +552,7 @@ function render(){
   return true;
  });
  const root=$('records');root.replaceChildren();show('empty',rows.length===0);
- $('empty').textContent=tab==='cajas'?(!boxSpace?'Selecciona un espacio para ver sus cajas.':'Este espacio no tiene cajas. Pulsa Añadir caja para crear la primera.'):'Todavía no hay registros en esta sección.';
+ $('empty').textContent=tab==='cajas'?(!boxSpace?'Selecciona un espacio para ver sus subespacios.':'Este espacio no tiene subespacios. Pulsa Añadir subespacio para crear el primero.'):'Todavía no hay registros en esta sección.';
  const entries=tab==='objetos'?inventoryEntries(rows,inventoryOrder):rows.map(item=>({item}));
  for(const entry of entries){
   if(entry.heading){
@@ -679,7 +679,7 @@ function render(){
  }
 }
 async function removeItem(type,item){
- if(type==='cajas'&&data.objetos.some(obj=>obj.caja_id===item.id)){alertMsg('Esta caja contiene objetos. Muévelos a otro espacio o caja antes de eliminarla.','warning');return}
+ if(type==='cajas'&&data.objetos.some(obj=>obj.caja_id===item.id)){alertMsg('Este subespacio contiene objetos. Muévelos a otro espacio o subespacio antes de eliminarlo.','warning');return}
  if(!confirm(`¿Eliminar ${names[type]} «${item.nombre}»?`))return;
  const {error}=await client.from(type).delete().eq('id',item.id);
  if(error){alertMsg(`No se pudo eliminar: ${error.message}`);return}
@@ -716,7 +716,7 @@ $('editForm').addEventListener('submit',async e=>{
   if(payload.caja_id){
    const selectedBox=data.cajas.find(box=>box.id===payload.caja_id);
    if(!selectedBox||selectedBox.ubicacion_id!==payload.ubicacion_id){
-    alertMsg('La caja seleccionada no pertenece a este espacio.');return;
+    alertMsg('El subespacio seleccionado no pertenece a este espacio.');return;
    }
    // El espacio se obtiene de la caja: conserva el modelo exclusivo de la base de datos.
    payload.ubicacion_id=null;
