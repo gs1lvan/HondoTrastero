@@ -114,3 +114,13 @@ html[data-style="terminal"] :is(.btn,.parcel-tab,.style-choice):focus-visible{ou
  html[data-style="terminal"] .add-button{font-size:.78rem}
  html[data-style="terminal"] .record-title{font-size:1.1rem}
 }
+
+/* Veladura de papel crema para facilitar la lectura del editor Cartón. */
+html:not([data-style]) .editor-paper,
+html[data-style="carton"] .editor-paper{
+ background-image:linear-gradient(rgba(255,240,207,.94),rgba(255,240,207,.94)),url('papel-textura.webp');
+ background-color:#fff0cf;
+ color:#452411;
+}
+html:not([data-style]) .editor-paper .form-text,
+html[data-style="carton"] .editor-paper .form-text{color:#634326}
