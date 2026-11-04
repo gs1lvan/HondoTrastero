@@ -109,8 +109,7 @@ function photoField(item,onSelected=null){
  });
  buttons.append(cameraButton,attachButton,removeButton);
  if(item?.foto_path)removeButton.classList.remove('d-none');
- const help=elem('div','form-text','Puedes tomar una foto ahora o elegir una existente. Se comprimirá antes de subirla.');
- wrap.append(lab,preview,buttons,cameraInput,galleryInput,help);
+ wrap.append(lab,preview,buttons,cameraInput,galleryInput);
  if(item?.foto_path)signedPhoto(item.foto_path).then(url=>{
   if(!selectedPhoto&&!removePhoto){preview.src=url;preview.classList.remove('d-none')}
  }).catch(()=>{});
@@ -260,7 +259,6 @@ function startObjectPhoto(){
  });
  // Primer paso: cámara, galería o continuar sin foto.
  field.querySelector('label').remove();
- field.querySelector('.form-text').remove();
  const skip=elem('button','btn btn-outline-primary','Omitir este paso');skip.type='button';
  skip.addEventListener('click',()=>openForm('objetos'));
  root.append(field,skip);page.show();
