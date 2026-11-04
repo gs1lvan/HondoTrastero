@@ -284,3 +284,18 @@ html .parcel-shell #appView #inventoryOrderPanel > summary{
 }
 html .parcel-shell #appView #inventoryOrderPanel[open] > summary{list-style-type:disclosure-open}
 html .parcel-shell #appView #inventoryOrderPanel > summary::-webkit-details-marker{display:inline}
+
+/* En listado compacto, reducir el espacio entre controles y resultados. */
+html .parcel-shell #appView.listing-compact #inventoryFilters,
+html .parcel-shell #appView.listing-compact #inventoryOrderPanel{
+ margin-top:0!important;margin-bottom:.2rem!important;
+}
+html .parcel-shell #appView.listing-compact #inventoryFilters > summary,
+html .parcel-shell #appView.listing-compact #inventoryOrderPanel > summary{
+ margin:0!important;padding:.2rem 0!important;min-height:32px;line-height:1.5;
+}
+html .parcel-shell #appView.listing-compact #records{margin-top:0}
+html .parcel-shell #appView.listing-compact #records > h2{
+ margin-top:.65rem!important;margin-bottom:.25rem!important;font-size:.95rem;line-height:1.3;
+}
+html .parcel-shell #appView.listing-compact #records > h2:first-child{margin-top:.25rem!important}
