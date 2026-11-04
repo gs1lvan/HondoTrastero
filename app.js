@@ -460,17 +460,18 @@ function render(){
  $('empty').textContent=tab==='cajas'?(!boxSpace?'Selecciona un espacio para ver sus cajas.':'Este espacio no tiene cajas. Pulsa Añadir caja para crear la primera.'):'Todavía no hay registros en esta sección.';
  for(const item of rows){
   const line=elem('div','list-group-item record');
-  if(tab==='objetos'){
+  if(tab==='objetos'||tab==='ubicaciones'){
+   const recordType=tab;
    line.style.cursor='pointer';
    line.tabIndex=0;
-   line.setAttribute('aria-label','Editar objeto '+item.nombre);
+   line.setAttribute('aria-label','Editar '+names[recordType]+' '+item.nombre);
    line.addEventListener('click',event=>{
     if(event.target.closest('button,a,input,select,textarea,summary'))return;
-    openForm('objetos',item);
+    openForm(recordType,item);
    });
    line.addEventListener('keydown',event=>{
     if(event.target!==line||!['Enter',' '].includes(event.key))return;
-    event.preventDefault();openForm('objetos',item);
+    event.preventDefault();openForm(recordType,item);
    });
   }
   if(tab==='objetos'&&item.foto_path){
