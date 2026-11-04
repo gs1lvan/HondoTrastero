@@ -595,3 +595,16 @@ html .parcel-shell #appView:not(.listing-compact) .space-record .space-move-cont
  min-width:36px;min-height:36px;
 }
 html .parcel-shell #appView:not(.listing-compact) .space-record .space-edit-controls{margin-left:auto}
+
+/* Acciones de espacios juntas y alineadas a la derecha. */
+html .parcel-shell #appView:not(.listing-compact) .space-record{gap:.4rem}
+html .parcel-shell #appView:not(.listing-compact) .space-record > .space-order-actions{
+ justify-content:flex-end;gap:.35rem;padding-top:0;
+}
+html .parcel-shell #appView:not(.listing-compact) .space-record .space-edit-controls{
+ margin-left:0;gap:.3rem;
+}
+html .parcel-shell #appView:not(.listing-compact) .space-record .space-move-controls{gap:.1rem}
+html .parcel-shell #appView:not(.listing-compact) .space-record .space-move-controls .space-order-button{
+ width:30px;min-width:30px;min-height:32px;padding:0;
+}
