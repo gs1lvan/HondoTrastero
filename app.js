@@ -174,11 +174,24 @@ function openForm(type=tab,item=null){
   root.append(inputField('fieldQty','Cantidad',item?.cantidad??1,'number'));
   root.append(categoryField(item));
   const wrap=elem('div');
-  wrap.append(selectField('fieldLocation','Espacio (si no está en caja)',data.ubicaciones,true,item?.ubicacion_id||(!item?.caja_id?localStorage.getItem(lastLocationKey()):'')));
-  wrap.append(selectField('fieldBox','Caja (opcional)',data.cajas,true,item?.caja_id));root.append(wrap);
+  const initialBox=data.cajas.find(b=>b.id===item?.caja_id);
+  const initialSpace=initialBox?.ubicacion_id||item?.ubicacion_id||localStorage.getItem(lastLocationKey())||'';
+  wrap.append(selectField('fieldLocation','Espacio',data.ubicaciones,false,initialSpace));
+  wrap.append(selectField('fieldBox','Caja (opcional)',[],true));root.append(wrap);
   const loc=$('fieldLocation'),box=$('fieldBox');
-  loc.addEventListener('change',()=>{if(loc.value)box.value=''});
-  box.addEventListener('change',()=>{if(box.value)loc.value=''});
+  function refreshBoxes(selected=''){
+   box.replaceChildren(new Option('Sin caja', ''));
+   for(const entry of data.cajas.filter(b=>b.ubicacion_id===loc.value).sort((a,b)=>a.nombre.localeCompare(b.nombre,'es'))){
+    box.add(new Option(entry.nombre,entry.id));
+   }
+   box.value=[...box.options].some(o=>o.value===selected)?selected:'';
+  }
+  refreshBoxes(item?.caja_id||'');
+  loc.addEventListener('change',()=>refreshBoxes(box.value));
+  box.addEventListener('change',()=>{
+   const selected=data.cajas.find(b=>b.id===box.value);
+   if(selected)loc.value=selected.ubicacion_id;
+  });
  }
  page.show();
 }
@@ -391,8 +404,14 @@ $('editForm').addEventListener('submit',async e=>{
   if(payload.categorias.some(id=>!CATEGORIES_BY_ID.has(id)) || new Set(payload.categorias).size!==payload.categorias.length){
    alertMsg('Hay una categoría no válida o duplicada.');return;
   }
-  if(Boolean(payload.ubicacion_id)===Boolean(payload.caja_id)){
-   alertMsg('Selecciona un espacio o una caja, pero no ambas.');return;
+  if(!payload.ubicacion_id){alertMsg('Selecciona un espacio.');return}
+  if(payload.caja_id){
+   const selectedBox=data.cajas.find(box=>box.id===payload.caja_id);
+   if(!selectedBox||selectedBox.ubicacion_id!==payload.ubicacion_id){
+    alertMsg('La caja seleccionada no pertenece a este espacio.');return;
+   }
+   // El espacio se obtiene de la caja: conserva el modelo exclusivo de la base de datos.
+   payload.ubicacion_id=null;
   }
  }
  if(type==='cajas'&&!payload.ubicacion_id){alertMsg('Selecciona un espacio.');return}
