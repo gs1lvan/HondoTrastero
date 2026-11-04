@@ -167,12 +167,10 @@ function categoryField(item){
 }
 function spaceBoxesField(space){
  const panel=elem('section','space-boxes');
- panel.append(elem('h3','h5','Cajas de este espacio'));
- panel.append(elem('p','form-text','Añadir o eliminar cajas se guarda al momento.'));
  const list=elem('div','vstack gap-2');
  const label=elem('label','form-label','Nueva caja');label.htmlFor='spaceNewBox';
  const input=elem('input','form-control');input.id='spaceNewBox';input.type='text';input.placeholder='Nombre de la caja';input.maxLength=150;
- const add=elem('button','btn btn-outline-primary','Añadir caja');add.type='button';
+ const add=elem('button','btn btn-outline-primary mt-2','Añadir caja');add.type='button';
  const message=elem('p','form-text');message.setAttribute('role','status');
  let busy=false;
  async function run(action){
