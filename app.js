@@ -461,7 +461,7 @@ function render(){
  $('empty').textContent=tab==='cajas'?(!boxSpace?'Selecciona un espacio para ver sus cajas.':'Este espacio no tiene cajas. Pulsa Añadir caja para crear la primera.'):'Todavía no hay registros en esta sección.';
  for(const item of rows){
   const line=elem('div','list-group-item record');
-  if(tab==='objetos'||tab==='ubicaciones'){
+  if(tab==='objetos'||tab==='ubicaciones'||listMode==='reducido'){
    const recordType=tab;
    line.style.cursor='pointer';
    line.tabIndex=0;
@@ -522,7 +522,13 @@ function render(){
   const actions=elem('div','record-actions');
   const edit=elem('button','btn btn-sm btn-outline-primary','Editar');edit.type='button';edit.addEventListener('click',()=>openForm(tab,item));
   const del=elem('button','btn btn-sm btn-outline-danger','Eliminar');del.type='button';del.addEventListener('click',()=>removeItem(tab,item));
-  actions.append(edit,del);line.append(main,actions);root.append(line);
+  if(listMode==='reducido'){
+   del.textContent='×';
+   del.title='Eliminar '+item.nombre;
+   del.setAttribute('aria-label','Eliminar '+item.nombre);
+   actions.append(del);
+  }else actions.append(edit,del);
+  line.append(main,actions);root.append(line);
  }
 }
 async function removeItem(type,item){
