@@ -748,3 +748,8 @@ html .parcel-shell .terminal-font-badge{
 }
 html .parcel-shell .terminal-font-badge[aria-pressed="true"]{border-color:var(--terminal-accent);outline:1px solid var(--terminal-accent);outline-offset:1px}
 .terminal-font-sample{font-size:.72rem;color:var(--terminal-muted)}
+
+/* Transparencia configurable del fondo, independiente del texto. */
+html[data-style="terminal"] .parcel-shell #appView .record-main .object-name-badge{
+ background:color-mix(in srgb,var(--terminal-fill) var(--terminal-badge-opacity,65%),transparent)!important;
+}
