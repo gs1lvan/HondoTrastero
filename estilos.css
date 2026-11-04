@@ -203,3 +203,29 @@ html .parcel-shell #appView.listing-compact #inventoryFilters .filter-field::aft
  content:"⌄";position:absolute;right:.6rem;bottom:.3rem;font:700 1rem/1 sans-serif;color:inherit;pointer-events:none;
 }
 html .parcel-shell #appView.listing-compact #inventoryFilters .category-filter-chevron{display:none}
+
+/* Navegación y encabezado mínimos del listado compacto, en todos los temas. */
+html .parcel-shell #appView.listing-compact .parcel-nav{
+ gap:.35rem;margin-bottom:.85rem;
+}
+html .parcel-shell #appView.listing-compact .parcel-tab{
+ min-height:38px;padding:.35rem .2rem;gap:.15rem;
+ background:transparent;box-shadow:none;border:1px solid currentColor;border-radius:6px;
+ color:inherit;font-family:inherit;font-size:clamp(.6rem,2.65vw,.85rem);font-weight:400;line-height:1.25;
+}
+html .parcel-shell #appView.listing-compact .parcel-tab .nav-symbol{display:none}
+html .parcel-shell #appView.listing-compact .parcel-tab.active{
+ background:transparent;border-bottom-width:3px;font-weight:800;
+}
+html .parcel-shell #appView.listing-compact .section-heading{
+ margin-bottom:.6rem;gap:.5rem;align-items:center;
+}
+html .parcel-shell #appView.listing-compact .section-heading h1{
+ background:transparent;clip-path:none;box-shadow:none;border:0;border-radius:0;
+ padding:0;margin:0;font-family:inherit;font-size:1rem;font-weight:700;line-height:1.3;color:inherit;
+}
+html .parcel-shell #appView.listing-compact .section-heading .add-button{
+ background:transparent;box-shadow:none;border:1px solid currentColor;border-radius:6px;
+ color:inherit;padding:.35rem .55rem;font-family:inherit;font-size:.78rem;line-height:1.3;font-weight:400;white-space:nowrap;
+}
+html .parcel-shell #appView.listing-compact .section-heading .add-button:hover{background:transparent;opacity:.8}
