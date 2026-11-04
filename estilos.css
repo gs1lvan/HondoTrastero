@@ -426,3 +426,13 @@ html .parcel-shell #account{font-size:.75rem}
 html .parcel-shell #account :is(.account-email,.account-separator,#logout){
  font-family:inherit;font-size:inherit;font-weight:400;line-height:1.4;
 }
+
+/* Preferencias visibles en Administración. */
+html .parcel-shell .admin-settings{display:grid;gap:1.5rem;padding:.5rem 0}
+html .parcel-shell .admin-settings h2{font-family:inherit;font-size:1.1rem;font-weight:700;line-height:1.3;margin:0 0 .65rem;color:inherit}
+html .parcel-shell .admin-settings .style-options{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+html .parcel-shell #appView.listing-compact .admin-settings{gap:1rem}
+html .parcel-shell #appView.listing-compact .admin-settings h2{font-size:.9rem;margin-bottom:.4rem}
+html .parcel-shell #appView.listing-compact .admin-settings .style-choice{padding:.45rem;background:transparent;color:inherit;border:1px solid currentColor;border-radius:4px;font:inherit;font-size:.8rem;gap:.4rem}
+html .parcel-shell #appView.listing-compact .admin-settings .style-preview{width:32px;height:24px;border-radius:3px}
+html .parcel-shell #appView.listing-compact .admin-settings .form-select{min-height:34px;padding:.3rem .5rem;background-color:transparent;color:inherit;border:1px solid currentColor;border-radius:4px;font-size:.82rem;box-shadow:none}
