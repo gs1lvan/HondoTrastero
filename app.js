@@ -253,7 +253,12 @@ function openForm(type=tab,item=null){
   // Abrir el panel si la validación necesita mostrar un campo oculto.
   fields.addEventListener('invalid',()=>{extra.open=true},true);
   root.append(extra);
-  root.append(categoryField(item));
+  const categoriesPanel=elem('details','object-category-panel');
+  categoriesPanel.open=!item;
+  const categoriesSummary=elem('summary','form-label','Categorías');
+  categoriesSummary.style.cursor='pointer';
+  categoriesPanel.append(categoriesSummary,categoryField(item));
+  root.append(categoriesPanel);
   const wrap=elem('div');
   const initialBox=data.cajas.find(b=>b.id===item?.caja_id);
   const initialSpace=initialBox?.ubicacion_id||item?.ubicacion_id||localStorage.getItem(lastLocationKey())||'';
