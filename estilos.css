@@ -626,3 +626,54 @@ html[data-style="terminal"] .parcel-shell .parcel-tab.active,
 html[data-style="terminal"] .parcel-shell .category-filter-option.selected .category-option-count{color:#031006}
 html[data-style="terminal"] .parcel-shell #appView.listing-compact .parcel-tab.active{color:var(--terminal-text)}
 html[data-style="terminal"] .parcel-shell #editPage.editor-compact .category-choice.selected{color:var(--terminal-bright)}
+
+/* Terminal: sin adornos de Cartón y sin colores marrones heredados. */
+html[data-style="terminal"]{--bs-primary:#39ff65;--bs-primary-rgb:57,255,101}
+html[data-style="terminal"] .parcel-shell .packing-tape,
+html[data-style="terminal"] .parcel-shell :is(.record,.paper-card,.editor-paper)::before,
+html[data-style="terminal"] .parcel-shell :is(.record,.paper-card,.editor-paper)::after{
+ display:none!important;background:none!important;box-shadow:none!important;
+}
+html[data-style="terminal"] .parcel-shell :is(.record-photo,.photo-preview){
+ border-color:#288541;background-color:#040d08;
+}
+html[data-style="terminal"] .parcel-shell :is(.photo-field,.category-field){border-color:#288541}
+html[data-style="terminal"] .parcel-shell .category-field{background:#08160d;color:var(--terminal-text)}
+html[data-style="terminal"] .parcel-shell :is(.category-filter-heading,.category-tip,.category-counter,.category-legacy,.record-category-legacy){color:var(--terminal-muted)}
+html[data-style="terminal"] .parcel-shell :is(.category-legacy,.record-category-legacy,.category-option-count){
+ background:#133e20;color:var(--terminal-bright);
+}
+html[data-style="terminal"] .parcel-shell .category-filter-close{background:#08160d;color:var(--terminal-text);border-color:#288541}
+html[data-style="terminal"] .parcel-shell .category-filter-option:nth-child(even){background:#08160d}
+html[data-style="terminal"] .parcel-shell .category-filter-option:hover{
+ background:#133e20;color:var(--terminal-bright);border-color:#39ff65;
+}
+html[data-style="terminal"] .parcel-shell .category-filter-option.selected,
+html[data-style="terminal"] .parcel-shell .category-filter-option.selected:hover{
+ background:#133e20;color:var(--terminal-bright);border-color:#39ff65;box-shadow:none;
+}
+html[data-style="terminal"] .parcel-shell .category-filter-option.selected .category-option-count{background:#39ff65;color:#031006}
+html[data-style="terminal"] .parcel-shell .category-filter-options{scrollbar-color:#288541 #040d08}
+html[data-style="terminal"] .parcel-shell .category-filter-search-wrap:focus-within,
+html[data-style="terminal"] .parcel-shell .search-field:focus-within{
+ background:#040d08;border-color:#39ff65;box-shadow:0 0 0 .2rem #39ff6533;
+}
+html[data-style="terminal"] .parcel-shell .category-filter-search-wrap input::placeholder{color:var(--terminal-muted)}
+html[data-style="terminal"] .parcel-shell :is(.filter-clear,.inventory-toolbar .btn){background:#08160d;color:var(--terminal-text);border-color:#288541}
+html[data-style="terminal"] .parcel-shell .btn-outline-primary{
+ --bs-btn-active-bg:#133e20;--bs-btn-active-border-color:#39ff65;--bs-btn-active-color:#b8ffc6;--bs-btn-hover-color:#b8ffc6;
+}
+html[data-style="terminal"] .parcel-shell .stat{background:#08160d;border-color:#288541}
+html[data-style="terminal"] .parcel-shell .records-reduced .object-name-badge{background:rgba(22,115,51,.35);color:var(--terminal-bright)}
+html[data-style="terminal"] .parcel-shell #appView.listing-compact #inventoryFilters :is(.form-select,.category-filter-trigger){border-color:#288541}
+html[data-style="terminal"] .parcel-shell #appView.listing-compact #boxSpacePanel .form-select{
+ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='m2 2 4 4 4-4' fill='none' stroke='%2376ff91' stroke-width='1.5'/%3E%3C/svg%3E");
+}
+html[data-style="terminal"] .parcel-shell #editPage.editor-compact .category-choice.selected{background:rgba(35,145,65,.2)}
+html[data-style="terminal"] .parcel-shell #appView.listing-compact .search-field:focus-within{background:transparent;box-shadow:none;border-color:currentColor}
+html[data-style="terminal"] .parcel-shell :is(input.form-control,.search-field input):-webkit-autofill,
+html[data-style="terminal"] .parcel-shell :is(input.form-control,.search-field input):-webkit-autofill:hover,
+html[data-style="terminal"] .parcel-shell :is(input.form-control,.search-field input):-webkit-autofill:focus{
+ -webkit-text-fill-color:var(--terminal-text);-webkit-box-shadow:0 0 0 1000px #040d08 inset;caret-color:#39ff65;
+}
+html[data-style="terminal"] .parcel-shell :is(.category-filter-trigger,.category-filter-option,.category-filter-close):focus-visible{outline-color:#39ff65}
