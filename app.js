@@ -41,6 +41,7 @@ let inventoryOrder='az';
 try{const saved=localStorage.getItem('hondotrastero:orden');if(['az','za','categorias','fecha-desc','fecha-asc'].includes(saved))inventoryOrder=saved}catch{}
 let administrationOpen=false;
 let boxSpace='';
+let sessionObjectSpace='';
 let tab='objetos', editing=null, user=null, selectedPhoto=null, photoPreviewUrl=null;
 let removePhoto=false;
 let selectedCategoryFilter = ''; // Filtro visual: no modifica las categorías de los objetos.
@@ -349,7 +350,7 @@ function openForm(type=tab,item=null){
   root.append(categoriesPanel);
   const wrap=elem('div');
   const initialBox=data.cajas.find(b=>b.id===item?.caja_id);
-  const initialSpace=initialBox?.ubicacion_id||item?.ubicacion_id||(!item?defaultObjectSpace():'')||localStorage.getItem(lastLocationKey())||'';
+  const initialSpace=initialBox?.ubicacion_id||item?.ubicacion_id||(!item?(data.ubicaciones.some(space=>space.id===sessionObjectSpace)?sessionObjectSpace:defaultObjectSpace()):'')||localStorage.getItem(lastLocationKey())||'';
   wrap.append(selectField('fieldLocation','Espacio',data.ubicaciones,false,initialSpace));
   wrap.append(selectField('fieldBox','Subespacio',[],true));
   wrap.className='vstack gap-2 object-location-fields';
@@ -363,7 +364,10 @@ function openForm(type=tab,item=null){
    box.value=[...box.options].some(o=>o.value===selected)?selected:'';
   }
   refreshBoxes(item?.caja_id||'');
-  loc.addEventListener('change',()=>refreshBoxes(box.value));
+  loc.addEventListener('change',()=>{
+   if(!item)sessionObjectSpace=loc.value;
+   refreshBoxes(box.value);
+  });
   box.addEventListener('change',()=>{
    const selected=data.cajas.find(b=>b.id===box.value);
    if(selected)loc.value=selected.ubicacion_id;
@@ -779,6 +783,7 @@ $('editForm').addEventListener('submit',async e=>{
  }
  $('saveBtn').disabled=false;
  if(type==='cajas')boxSpace=payload.ubicacion_id;
+ if(type==='objetos'&&!id)sessionObjectSpace=$('fieldLocation').value;
  if(payload.ubicacion_id)localStorage.setItem(lastLocationKey(),payload.ubicacion_id);
  if(type==='objetos'&&payload.caja_id){
   const box=data.cajas.find(x=>x.id===payload.caja_id);
@@ -858,6 +863,7 @@ $('logout').addEventListener('click',async()=>{
  const {error}=await client.auth.signOut();if(error)alertMsg(error.message);
 });
 async function sessionChanged(session){
+ if(user?.id!==session?.user?.id)sessionObjectSpace='';
  user=session?.user||null;
  show('account',!!user);$('account').style.display=user?'flex':'none';
  show('appView',!!user&&$('editPage').classList.contains('d-none'));
