@@ -774,3 +774,10 @@ html[data-style="terminal"] .parcel-shell #appView .record-main .object-name-bad
 }
 
 html[data-style="terminal"] .parcel-shell .photo-button-icon{display:none}
+
+/* Terminal compacto: aire simétrico entre las líneas separadoras y el objeto. */
+html[data-style="terminal"] .parcel-shell #appView.listing-compact .record:has(.object-record-main){
+ padding-top:.4rem;padding-bottom:.4rem;
+}
+html[data-style="terminal"] .parcel-shell #appView.listing-compact .object-record-main > :first-child{margin-top:0}
+html[data-style="terminal"] .parcel-shell #appView.listing-compact .object-record-main > :last-child{margin-bottom:0}
