@@ -735,3 +735,16 @@ html[data-style="terminal"] .terminal-brightness #terminalTone::-moz-range-track
  background:linear-gradient(to right,#713e3e,#71713e,#3e713e,#3e7171,#3e3e71,#713e71,#713e3e);
 }
 html[data-style="terminal"] .terminal-brightness #terminalTone::-moz-range-progress{background:transparent}
+
+/* Selector de seis fuentes de Terminal con muestra individual. */
+.terminal-typography{margin-top:1.25rem}
+html .parcel-shell .terminal-typography h3{font:inherit;font-size:.95rem;font-weight:700;margin:0 0 .6rem;color:inherit}
+.terminal-font-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.5rem}
+html .parcel-shell .terminal-font-badge{
+ display:flex;flex-direction:column;align-items:flex-start;gap:.25rem;min-width:0;
+ padding:.55rem .65rem;border:1px solid var(--terminal-edge);border-radius:4px;
+ background:var(--terminal-fill);color:var(--terminal-text);font-size:.78rem;cursor:pointer;
+ text-align:left;overflow-wrap:anywhere;
+}
+html .parcel-shell .terminal-font-badge[aria-pressed="true"]{border-color:var(--terminal-accent);outline:1px solid var(--terminal-accent);outline-offset:1px}
+.terminal-font-sample{font-size:.72rem;color:var(--terminal-muted)}
