@@ -230,6 +230,7 @@ function spaceBoxesField(space){
 function openForm(type=tab,item=null){
  closeCategoryFilter();
  clearMsg();editing={type,id:item?.id||null};selectedPhoto=null;
+ show('deleteObjectBtn',type==='objetos'&&!!item?.id);
  if(photoPreviewUrl){URL.revokeObjectURL(photoPreviewUrl);photoPreviewUrl=null}
  const root=$('modalFields');root.replaceChildren();
  if(type==='objetos')root.append(photoField(item));
@@ -533,7 +534,7 @@ function render(){
    del.textContent='×';
    del.title='Eliminar '+item.nombre;
    del.setAttribute('aria-label','Eliminar '+item.nombre);
-   actions.append(del);
+   if(tab!=='objetos')actions.append(del);
   }else actions.append(edit,del);
   line.append(main,actions);root.append(line);
  }
@@ -547,8 +548,15 @@ async function removeItem(type,item){
   const result=await client.storage.from(BUCKET).remove([item.foto_path]);
   if(result.error)alertMsg('Objeto eliminado, pero no se pudo borrar su fotografía: '+result.error.message,'warning');
  }
+ if(type==='objetos'&&editing?.type===type&&editing.id===item.id){editing=null;page.hide()}
  try{await load()}catch(e){alertMsg(e.message)}
 }
+$('deleteObjectBtn').addEventListener('click',async()=>{
+ if(editing?.type!=='objetos'||!editing.id)return;
+ const item=data.objetos.find(obj=>obj.id===editing.id);if(!item)return;
+ const button=$('deleteObjectBtn');button.disabled=true;
+ try{await removeItem('objetos',item)}finally{button.disabled=false}
+});
 $('editForm').addEventListener('submit',async e=>{
  e.preventDefault();if(!editing)return;
  const {type,id}=editing,name=$('fieldName').value.trim();
