@@ -436,3 +436,13 @@ html .parcel-shell #appView.listing-compact .admin-settings h2{font-size:.9rem;m
 html .parcel-shell #appView.listing-compact .admin-settings .style-choice{padding:.45rem;background:transparent;color:inherit;border:1px solid currentColor;border-radius:4px;font:inherit;font-size:.8rem;gap:.4rem}
 html .parcel-shell #appView.listing-compact .admin-settings .style-preview{width:32px;height:24px;border-radius:3px}
 html .parcel-shell #appView.listing-compact .admin-settings .form-select{min-height:34px;padding:.3rem .5rem;background-color:transparent;color:inherit;border:1px solid currentColor;border-radius:4px;font-size:.82rem;box-shadow:none}
+
+/* Tres secciones y administración integrada en la cuenta. */
+html .parcel-shell .parcel-nav{grid-template-columns:repeat(3,minmax(0,1fr))}
+html .parcel-shell #account #manageSpaces{
+ appearance:none;-webkit-appearance:none;display:inline-flex;align-items:center;justify-content:center;
+ background:transparent;border:0;border-radius:0;box-shadow:none;color:inherit;
+ font:inherit;line-height:1.4;padding:0;margin:0;min-width:1.2em;flex-shrink:0;cursor:pointer;
+}
+html .parcel-shell #account #manageSpaces.active{background:transparent;color:inherit}
+html .parcel-shell #account #manageSpaces:hover{opacity:.75}
