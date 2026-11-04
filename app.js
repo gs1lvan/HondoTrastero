@@ -232,6 +232,7 @@ function spaceBoxesField(space){
 }
 
 function openForm(type=tab,item=null){
+ $('editPage').classList.toggle('editor-compact',listMode==='reducido'&&type==='ubicaciones');
  closeCategoryFilter();
  $('spaceAddBoxBtn')?.remove();
  show('saveBtn',true);
