@@ -313,6 +313,6 @@ html .parcel-shell #appView:not(.listing-compact) #inventoryOrderPanel > summary
 /* Nombre destacado sin alterar los datos de la fila compacta. */
 html .parcel-shell .records-reduced .object-name-badge{
  display:inline-block;vertical-align:baseline;padding:.12rem .35rem;
- border-radius:3px;background:rgba(65,32,12,.65);color:#fff3df;
+ border-radius:3px;background:rgba(65,32,12,.35);color:#fff3df;
  font:inherit;line-height:1.25;
 }
