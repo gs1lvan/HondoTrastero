@@ -430,7 +430,7 @@ function render(){
   let detail=item.descripcion||'';
   if(tab==='objetos'){
    const cats=itemCategories(item).map(id=>CATEGORIES_BY_ID.get(id)).map(cat=>`${cat.icon} ${cat.name}`);
-   detail=[`×${item.cantidad}`,item.caja_id?`▣ Caja: ${boxLabel(item.caja_id)}`:`▤ Espacio: ${locationLabel(item.ubicacion_id)}`,detail].filter(Boolean).join(' · ');
+   detail=[`×${item.cantidad}`,item.caja_id?`${locationLabel(objectSpace(item))} | ${boxLabel(item.caja_id)}`:locationLabel(item.ubicacion_id),detail].filter(Boolean).join(' · ');
    const group=elem('div','record-categories');
    for(const name of cats)group.append(elem('span','record-category',name));
    if(!cats.length&&item.categoria?.trim())group.append(elem('span','record-category-legacy',`Pendiente de clasificar (antes: ${item.categoria.trim()})`));
