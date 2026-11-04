@@ -145,6 +145,12 @@ function categoryField(item){
   rows.push({label,cat});list.append(label);
  }
  function updateCount(){
+  const ordered=[...rows].sort((a,b)=>{
+   const selectedA=a.label.querySelector('input').checked;
+   const selectedB=b.label.querySelector('input').checked;
+   return Number(selectedB)-Number(selectedA)||a.cat.name.localeCompare(b.cat.name,'es');
+  });
+  for(const row of ordered)list.append(row.label);
   const n=list.querySelectorAll('input:checked').length;
   counter.textContent=`${n} ${n===1?'categoría seleccionada':'categorías seleccionadas'}`;
  }
