@@ -22,8 +22,6 @@ function apply(id, persist=false){
 apply(saved());
 window.addEventListener('storage',e=>{if(e.key===key)apply(e.newValue)});
 document.addEventListener('DOMContentLoaded',()=>{
- const opener=document.getElementById('openStyles');
- const dialog=document.getElementById('styleMenu');
  const options=document.getElementById('styleOptions');
  for(const theme of themes){
   const b=document.createElement('button');b.type='button';b.className='style-choice';b.dataset.styleChoice=theme.id;
@@ -33,9 +31,5 @@ document.addEventListener('DOMContentLoaded',()=>{
   b.append(preview,label,tick);b.addEventListener('click',()=>apply(theme.id,true));options.append(b);
  }
  apply(saved());
- opener.addEventListener('click',()=>{dialog.showModal();opener.setAttribute('aria-expanded','true')});
- document.getElementById('closeStyles').addEventListener('click',()=>dialog.close());
- dialog.addEventListener('close',()=>{opener.setAttribute('aria-expanded','false');opener.focus({preventScroll:true})});
- dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close()}});
 });
 })();
