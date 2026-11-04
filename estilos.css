@@ -336,3 +336,35 @@ html .parcel-shell .space-order-actions .space-order-button{
  color:inherit;background:transparent;border:0;box-shadow:none;font:inherit;font-size:1.1rem;
 }
 html .parcel-shell .space-order-actions .space-order-button:disabled{opacity:.3}
+
+/* Editor de espacios acorde con el listado compacto, en todos los temas. */
+html .parcel-shell #editPage.editor-compact .editor-paper{
+ background:transparent;color:inherit;border:0;border-radius:0;box-shadow:none;overflow:visible;
+}
+html .parcel-shell #editPage.editor-compact .editor-paper::before{display:none}
+html .parcel-shell #editPage.editor-compact :is(.editor-header,.editor-footer){
+ padding:.5rem 0;background:transparent;color:inherit;border:0;gap:.5rem;
+}
+html .parcel-shell #editPage.editor-compact .editor-header h2{
+ font-family:inherit;font-size:1rem;line-height:1.3;font-weight:700;color:inherit;
+}
+html .parcel-shell #editPage.editor-compact .editor-fields{padding:.5rem 0;gap:.65rem}
+html .parcel-shell #editPage.editor-compact .form-label{
+ font-size:.78rem;font-weight:700;line-height:1.3;margin-bottom:.25rem;color:inherit;
+}
+html .parcel-shell #editPage.editor-compact :is(.form-control,.form-select){
+ min-height:34px;padding:.3rem .55rem;background-color:transparent;color:inherit;
+ border:1px solid currentColor;border-radius:4px;box-shadow:none;font-family:inherit;font-size:.82rem;
+}
+html .parcel-shell #editPage.editor-compact .form-control::placeholder{color:inherit;opacity:.65}
+html .parcel-shell #editPage.editor-compact .btn{
+ min-height:34px;padding:.3rem .55rem;background:transparent;color:inherit;
+ border:1px solid currentColor;border-radius:4px;box-shadow:none;font-family:inherit;font-size:.78rem;line-height:1.3;
+}
+html .parcel-shell #editPage.editor-compact .btn-outline-danger{color:#a82935}
+html[data-style="terminal"] .parcel-shell #editPage.editor-compact .btn-outline-danger,
+html[data-style="azul-oscuro"] .parcel-shell #editPage.editor-compact .btn-outline-danger{color:#ff9292}
+html .parcel-shell #editPage.editor-compact .space-boxes{font-size:.82rem}
+html .parcel-shell #editPage.editor-compact .space-boxes .form-text{font-size:.75rem;margin:.25rem 0;color:inherit}
+html .parcel-shell #editPage.editor-compact .space-boxes .vstack{gap:.25rem!important}
+html .parcel-shell #editPage.editor-compact .space-extra-fields .mt-3{margin-top:.5rem!important}
