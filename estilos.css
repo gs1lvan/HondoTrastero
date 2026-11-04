@@ -396,3 +396,16 @@ html .parcel-shell #editPage.editor-compact :is(.object-extra-fields,.object-cat
  margin-top:.5rem!important;
 }
 html .parcel-shell #editPage.editor-compact .object-move-panel .gap-3{gap:.5rem!important}
+
+/* Objetos: nombre e iconos en la primera línea, espacio y caja debajo. */
+html .parcel-shell .object-title-line{display:flex;align-items:center;flex-wrap:wrap;gap:.25rem}
+html .parcel-shell .object-title-line .record-title{margin:0}
+html .parcel-shell .object-category-icons{display:inline-flex;align-items:center;flex-wrap:wrap;gap:.3rem}
+html .parcel-shell .object-category-icons .record-category{
+ display:inline;min-width:0;min-height:0;margin:0;padding:0;background:transparent;
+ border:0;border-radius:0;box-shadow:none;line-height:1.25;font-size:1rem;
+}
+html .parcel-shell .object-place-line{margin-top:.2rem}
+html .parcel-shell .records-reduced .object-record-main{white-space:normal;overflow-x:visible;font-size:.78rem}
+html .parcel-shell .records-reduced .object-record-main .record-detail{font-size:.78rem;white-space:normal;overflow-wrap:anywhere}
+html .parcel-shell .records-reduced .object-category-icons .record-category{font-size:.85rem}
