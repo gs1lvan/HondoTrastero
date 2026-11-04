@@ -368,3 +368,31 @@ html .parcel-shell #editPage.editor-compact .space-boxes{font-size:.82rem}
 html .parcel-shell #editPage.editor-compact .space-boxes .form-text{font-size:.75rem;margin:.25rem 0;color:inherit}
 html .parcel-shell #editPage.editor-compact .space-boxes .vstack{gap:.25rem!important}
 html .parcel-shell #editPage.editor-compact .space-extra-fields .mt-3{margin-top:.5rem!important}
+
+/* Foto y categorías del formulario de objetos en modo compacto. */
+html .parcel-shell #editPage.editor-compact .photo-field{
+ padding-bottom:.5rem;border-bottom:1px solid currentColor;
+}
+html .parcel-shell #editPage.editor-compact .photo-preview{
+ width:auto;max-width:100%;max-height:110px;margin:0 0 .4rem;
+ border-radius:3px;background:transparent;box-shadow:none;object-fit:contain;
+}
+html .parcel-shell #editPage.editor-compact :is(.form-text,.category-tip,.category-counter,.category-legacy){
+ font-size:.75rem;line-height:1.35;margin:.25rem 0;color:inherit;
+}
+html .parcel-shell #editPage.editor-compact .category-field{
+ padding:.4rem 0;background:transparent;border:0;border-radius:0;box-shadow:none;color:inherit;
+}
+html .parcel-shell #editPage.editor-compact .category-grid{gap:.3rem}
+html .parcel-shell #editPage.editor-compact .category-choice{
+ min-height:34px;padding:.3rem .4rem;border:1px solid currentColor;border-radius:3px;
+ background:transparent;color:inherit;font-size:.78rem;box-shadow:none;
+}
+html .parcel-shell #editPage.editor-compact .category-choice.selected{
+ background:rgba(128,80,43,.15);font-weight:700;
+}
+html .parcel-shell #editPage.editor-compact .category-search{margin:.4rem 0}
+html .parcel-shell #editPage.editor-compact :is(.object-extra-fields,.object-category-panel,.object-move-panel) .mt-3{
+ margin-top:.5rem!important;
+}
+html .parcel-shell #editPage.editor-compact .object-move-panel .gap-3{gap:.5rem!important}
