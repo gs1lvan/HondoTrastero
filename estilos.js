@@ -4,7 +4,7 @@
 const themes = [
  {id:'carton', name:'Cartón', preview:'', color:'#9b612f'},
  {id:'azul-oscuro', name:'Azul oscuro', preview:'style-preview-blue', color:'#14253b'},
- {id:'terminal', name:'Terminal', preview:'style-preview-terminal', color:'#07110d'}
+ {id:'terminal', name:'>_', preview:'style-preview-terminal', color:'#07110d'}
 ];
 const key='hondotrastero:estilo';
 function saved(){try{return localStorage.getItem(key)}catch{return null}}
