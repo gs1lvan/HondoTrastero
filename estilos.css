@@ -677,3 +677,11 @@ html[data-style="terminal"] .parcel-shell :is(input.form-control,.search-field i
  -webkit-text-fill-color:var(--terminal-text);-webkit-box-shadow:0 0 0 1000px #040d08 inset;caret-color:#39ff65;
 }
 html[data-style="terminal"] .parcel-shell :is(.category-filter-trigger,.category-filter-option,.category-filter-close):focus-visible{outline-color:#39ff65}
+
+/* El badge del nombre nunca debe heredar el acabado marrón de Cartón. */
+html[data-style="terminal"] .parcel-shell #appView .record-main .object-name-badge{
+ background:rgba(19,62,32,.65)!important;
+ background-image:none!important;
+ color:var(--terminal-text,#76ff91)!important;
+ border-color:#288541!important;box-shadow:none!important;
+}
