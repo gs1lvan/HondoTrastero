@@ -6,6 +6,23 @@ const themes = [
  {id:'azul-oscuro', name:'Azul oscuro', preview:'style-preview-blue', color:'#14253b'},
  {id:'terminal', name:'>_', preview:'style-preview-terminal', color:'#07110d'}
 ];
+const terminalFonts=['Geist Mono','JetBrains Mono','Fira Code','IBM Plex Mono','Space Mono','Google Sans Code'];
+const fontKey='hondotrastero:terminal-tipografia';
+let terminalFont='Geist Mono';
+try{const savedFont=localStorage.getItem(fontKey);if(terminalFonts.includes(savedFont))terminalFont=savedFont}catch{}
+function applyTerminalFont(name,persist=false){
+ terminalFont=terminalFonts.includes(name)?name:terminalFonts[0];
+ document.documentElement.style.setProperty('--terminal-font','"'+terminalFont+'",monospace');
+ document.querySelectorAll('[data-terminal-font]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.terminalFont===terminalFont)));
+ if(persist)try{localStorage.setItem(fontKey,terminalFont)}catch{}
+}
+function loadTerminalFonts(){
+ if(document.getElementById('terminalFontStylesheet'))return;
+ const link=document.createElement('link');link.id='terminalFontStylesheet';link.rel='stylesheet';
+ link.href='https://fonts.googleapis.com/css2?'+terminalFonts.map(name=>'family='+name.replace(/ /g,'+')+':wght@400;700').join('&')+'&display=swap';
+ document.head.append(link);
+}
+applyTerminalFont(terminalFont);
 const key='hondotrastero:estilo';
 function saved(){try{return localStorage.getItem(key)}catch{return null}}
 const brightnessKey='hondotrastero:terminal-brillo';
@@ -58,6 +75,7 @@ setBrightness(brightness);
 function apply(id, persist=false){
  const theme=themes.find(t=>t.id===id)||themes[0];
  document.documentElement.dataset.style=theme.id;
+ if(theme.id==='terminal')loadTerminalFonts();
  const settings=document.getElementById('terminalBrightnessSettings');if(settings)settings.hidden=theme.id!=='terminal';
  document.querySelector('meta[name="theme-color"]')?.setAttribute('content',theme.color);
  if(persist)try{localStorage.setItem(key,theme.id)}catch{}
@@ -68,9 +86,17 @@ function apply(id, persist=false){
  });
 }
 apply(saved());
-window.addEventListener('storage',e=>{if(e.key===key)apply(e.newValue);if(e.key===brightnessKey)setBrightness(e.newValue===null?75:e.newValue);if(e.key===toneKey)setTone(e.newValue===null?132:e.newValue);if(e.key===saturationKey)setSaturation(e.newValue===null?100:e.newValue)});
+window.addEventListener('storage',e=>{if(e.key===key)apply(e.newValue);if(e.key===fontKey)applyTerminalFont(e.newValue);if(e.key===brightnessKey)setBrightness(e.newValue===null?75:e.newValue);if(e.key===toneKey)setTone(e.newValue===null?132:e.newValue);if(e.key===saturationKey)setSaturation(e.newValue===null?100:e.newValue)});
 document.addEventListener('DOMContentLoaded',()=>{
  const options=document.getElementById('styleOptions');
+ const fontOptions=document.getElementById('terminalFontOptions');
+ for(const font of terminalFonts){
+  const button=document.createElement('button');button.type='button';button.className='terminal-font-badge';button.dataset.terminalFont=font;button.style.fontFamily='"'+font+'",monospace';
+  const name=document.createElement('span');name.textContent=font;
+  const sample=document.createElement('span');sample.className='terminal-font-sample';sample.textContent='>_ Aa 0123';
+  button.append(name,sample);button.addEventListener('click',()=>applyTerminalFont(font,true));fontOptions.append(button);
+ }
+ applyTerminalFont(terminalFont);
  document.getElementById('terminalSaturation').addEventListener('input',e=>setSaturation(e.target.value,true));
  setSaturation(saturation);
  document.getElementById('terminalTone').addEventListener('input',e=>setTone(e.target.value,true));
