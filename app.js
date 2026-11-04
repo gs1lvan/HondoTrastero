@@ -262,7 +262,12 @@ function openForm(type=tab,item=null){
    const selected=[...categoryFields.querySelectorAll('input[name="fieldCategories"]:checked')]
     .map(input=>CATEGORIES_BY_ID.get(input.value)?.name).filter(Boolean)
     .sort((a,b)=>a.localeCompare(b,'es'));
-   categoriesSummary.textContent='Categorías'+(selected.length?' | '+selected.join(', '):'');
+   categoriesSummary.replaceChildren(document.createTextNode('Categorías'));
+   if(selected.length){
+    const names=elem('span','', ' | '+selected.join(', '));
+    names.style.fontWeight='400';
+    categoriesSummary.append(names);
+   }
   }
   categoryFields.addEventListener('change',refreshCategorySummary);
   refreshCategorySummary();
