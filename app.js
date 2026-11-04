@@ -277,7 +277,7 @@ function openForm(type=tab,item=null){
   fields.addEventListener('invalid',()=>{extra.open=true},true);
   root.append(extra);
   const categoriesPanel=elem('details','object-category-panel');
-  categoriesPanel.open=!item;
+  categoriesPanel.open=false;
   const categoriesSummary=elem('summary','form-label','Categorías');
   categoriesSummary.style.cursor='pointer';
   const categoryFields=categoryField(item);
@@ -301,13 +301,8 @@ function openForm(type=tab,item=null){
   const initialSpace=initialBox?.ubicacion_id||item?.ubicacion_id||localStorage.getItem(lastLocationKey())||'';
   wrap.append(selectField('fieldLocation','Espacio',data.ubicaciones,false,initialSpace));
   wrap.append(selectField('fieldBox','Caja (opcional)',[],true));
-  wrap.className='vstack gap-3 mt-3';
-  const movePanel=elem('details','object-move-panel');
-  const moveSummary=elem('summary','form-label','Mover objeto');
-  moveSummary.style.cursor='pointer';
-  movePanel.append(moveSummary,wrap);
-  wrap.addEventListener('invalid',()=>{movePanel.open=true},true);
-  root.append(movePanel);
+  wrap.className='vstack gap-2 object-location-fields';
+  $('fieldName').parentElement.after(wrap);
   const loc=$('fieldLocation'),box=$('fieldBox');
   function refreshBoxes(selected=''){
    box.replaceChildren(new Option('Sin caja', ''));
