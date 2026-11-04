@@ -570,3 +570,28 @@ html[data-style="azul-oscuro"] .parcel-shell :is(input.form-control,.search-fiel
 html[data-style="azul-oscuro"] .parcel-shell :is(.category-filter-trigger,.category-filter-option,.category-filter-close):focus-visible{
  outline-color:#85caff;
 }
+
+/* Espacios: contenido ancho y acciones independientes al pie. */
+html .parcel-shell .space-move-controls,
+html .parcel-shell .space-edit-controls{display:flex;align-items:center;gap:.4rem}
+html .parcel-shell #appView:not(.listing-compact) .space-record{
+ display:flex;flex-direction:column;align-items:stretch;gap:.75rem;
+ padding:1rem;
+}
+html .parcel-shell #appView:not(.listing-compact) .space-record > .record-main{
+ width:100%;min-width:0;padding-right:1.75rem;
+}
+html .parcel-shell #appView:not(.listing-compact) .space-record .record-title{
+ overflow-wrap:normal;word-break:normal;font-weight:800;
+}
+html .parcel-shell #appView:not(.listing-compact) .space-record .space-box-list{
+ white-space:normal;overflow-wrap:break-word;margin-top:.4rem;
+}
+html .parcel-shell #appView:not(.listing-compact) .space-record > .space-order-actions{
+ width:100%;display:flex;flex-direction:row;justify-content:space-between;
+ align-items:center;flex-wrap:wrap;gap:.5rem;padding-top:.4rem;
+}
+html .parcel-shell #appView:not(.listing-compact) .space-record .space-move-controls .space-order-button{
+ min-width:36px;min-height:36px;
+}
+html .parcel-shell #appView:not(.listing-compact) .space-record .space-edit-controls{margin-left:auto}
