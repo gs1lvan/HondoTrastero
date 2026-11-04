@@ -140,3 +140,27 @@ html[data-style="carton"] .editor-paper .form-text{color:#634326}
 .parcel-shell .records-reduced .record{min-height:36px;padding:.15rem .4rem;border-radius:0;border-width:0 0 1px;box-shadow:none;background-image:none}
 .parcel-shell .records-reduced .record-compact-text{font-size:.78rem;line-height:1.25}
 .parcel-shell .records-reduced .record-actions .btn{display:grid;place-items:center;width:32px;min-height:32px;padding:0;font-size:1.25rem;border:0;background:transparent}
+
+/* Líneas de corte del listado reducido en Cartón. */
+html[data-style="carton"] .parcel-shell .records-reduced .record{
+ border-bottom:2px dashed #80502b;
+ margin-bottom:3px;
+}
+html[data-style="carton"] .parcel-shell .records-reduced .record::after{
+ display:block;
+ content:"✂";
+ position:absolute;
+ right:8px;
+ bottom:-9px;
+ width:20px;
+ height:16px;
+ font-family:Arial,sans-serif;
+ font-size:18px;
+ line-height:16px;
+ color:#80502b;
+ background:#dda967;
+ transform:none;
+ box-shadow:none;
+ pointer-events:none;
+ z-index:1;
+}
