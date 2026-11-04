@@ -308,11 +308,18 @@ function openForm(type=tab,item=null){
  if(type==='cajas')root.append(selectField('fieldLocation','Espacio',data.ubicaciones,false,item?.ubicacion_id||boxSpace||localStorage.getItem(lastLocationKey())));
  if(type==='objetos'){
   const extra=elem('details','object-extra-fields');
-  const summary=elem('summary','form-label','Descripción | Cantidad');
+  const summary=elem('summary','form-label','Descripción | Cantidad | Fecha');
   summary.style.cursor='pointer';
   const fields=elem('div','vstack gap-3 mt-3');
   fields.append(inputField('fieldDesc','Descripción',item?.descripcion||'','text',false));
   fields.append(inputField('fieldQty','Cantidad',item?.cantidad??1,'number',false));
+  const createdDate=item?.creado_en?new Date(item.creado_en):null;
+  const createdLabel=createdDate&&Number.isFinite(createdDate.getTime())
+   ?new Intl.DateTimeFormat('es-ES',{dateStyle:'short',timeStyle:'short',timeZone:'Europe/Madrid'}).format(createdDate)
+   :item?'Sin fecha registrada':'Se asignará al guardar';
+  const dateField=inputField('fieldCreatedAt','Fecha de alta',createdLabel,'text',false);
+  dateField.querySelector('input').readOnly=true;
+  fields.append(dateField);
   extra.append(summary,fields);
   // Abrir el panel si la validación necesita mostrar un campo oculto.
   fields.addEventListener('invalid',()=>{extra.open=true},true);
