@@ -35,6 +35,8 @@ const CATEGORIES = Object.freeze([
 ]);
 const CATEGORIES_BY_ID = new Map(CATEGORIES.map(cat=>[cat.id,cat]));
 
+let listMode='ampliado';
+try{if(localStorage.getItem('hondotrastero:listado')==='reducido')listMode='reducido'}catch{}
 let administrationOpen=false;
 let boxSpace='';
 let tab='objetos', editing=null, user=null, selectedPhoto=null, photoPreviewUrl=null;
@@ -430,6 +432,7 @@ function refreshBoxSpaces(){
  select.value=boxSpace;
 }
 function render(){
+ $('records').classList.toggle('records-reduced',listMode==='reducido');
  refreshBoxSpaces();
  show('adminStyleTools',administrationOpen);
  const managingSpaces=tab==='ubicaciones';
@@ -472,7 +475,7 @@ function render(){
     event.preventDefault();openForm(recordType,item);
    });
   }
-  if(tab==='objetos'&&item.foto_path){
+  if(listMode!=='reducido'&&tab==='objetos'&&item.foto_path){
    const img=elem('img','record-photo');img.alt='Foto de '+item.nombre;img.loading='lazy';
    signedPhoto(item.foto_path).then(url=>{img.src=url}).catch(()=>img.remove());line.append(img);
   }
@@ -500,6 +503,22 @@ function render(){
   if(tab==='cajas')detail=[locationLabel(item.ubicacion_id),detail].filter(Boolean).join(' · ');
   if(tab==='ubicaciones'&&item.ubicacion_padre_id)detail=[`Dentro de ${locationLabel(item.ubicacion_padre_id)}`,detail].filter(Boolean).join(' · ');
   if(detail)main.append(elem('div','record-detail',detail));
+  if(listMode==='reducido'){
+   const concepts=[item.nombre];
+   if(tab==='objetos'){
+    concepts.push('×'+item.cantidad,locationLabel(objectSpace(item)));
+    if(item.caja_id)concepts.push(boxLabel(item.caja_id));
+    const icons=itemCategories(item).map(id=>CATEGORIES_BY_ID.get(id).icon).join(' ');
+    if(icons)concepts.push(icons);
+   }
+   if(tab==='cajas')concepts.push(locationLabel(item.ubicacion_id));
+   if(tab==='ubicaciones'){
+    concepts.push(...data.cajas.filter(box=>box.ubicacion_id===item.id).sort((a,b)=>a.nombre.localeCompare(b.nombre,'es')).map(box=>box.nombre));
+    if(item.ubicacion_padre_id)concepts.push(locationLabel(item.ubicacion_padre_id));
+   }
+   if(item.descripcion)concepts.push(item.descripcion);
+   main.replaceChildren(elem('span','record-compact-text',concepts.join(' | ')));
+  }
   const actions=elem('div','record-actions');
   const edit=elem('button','btn btn-sm btn-outline-primary','Editar');edit.type='button';edit.addEventListener('click',()=>openForm(tab,item));
   const del=elem('button','btn btn-sm btn-outline-danger','Eliminar');del.type='button';del.addEventListener('click',()=>removeItem(tab,item));
@@ -584,6 +603,18 @@ $('manageSpaces').addEventListener('click',()=>{
  render();
  spacesTab.focus();
 });
+const listDialog=$('listMenu');
+$('openList').addEventListener('click',()=>listDialog.showModal());
+$('closeList').addEventListener('click',()=>listDialog.close());
+function syncListChoices(){
+ document.querySelectorAll('[data-list-mode]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.listMode===listMode)));
+}
+document.querySelectorAll('[data-list-mode]').forEach(button=>button.addEventListener('click',()=>{
+ listMode=button.dataset.listMode;
+ try{localStorage.setItem('hondotrastero:listado',listMode)}catch{}
+ syncListChoices();render();listDialog.close();
+}));
+syncListChoices();
 $('search').addEventListener('input',render);
 $('filterSpace').addEventListener('change',render);
 $('filterCategoryButton').addEventListener('click',toggleCategoryFilter);
