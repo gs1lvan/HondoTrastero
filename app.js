@@ -229,12 +229,21 @@ function openForm(type=tab,item=null){
  if(type==='objetos')root.append(photoField(item));
  $('modalTitle').textContent=(item?'Editar ':'Añadir ')+names[type];
  root.append(inputField('fieldName','Nombre',item?.nombre));
- root.append(inputField('fieldDesc','Descripción (opcional)',item?.descripcion||'','text',false));
+ if(type!=='objetos')root.append(inputField('fieldDesc','Descripción (opcional)',item?.descripcion||'','text',false));
  if(type==='ubicaciones')root.append(selectField('fieldParent','Espacio superior (opcional)',data.ubicaciones.filter(x=>x.id!==item?.id),true,item?.ubicacion_padre_id));
  if(type==='ubicaciones'&&item?.id)root.append(spaceBoxesField(item));
  if(type==='cajas')root.append(selectField('fieldLocation','Espacio',data.ubicaciones,false,item?.ubicacion_id||boxSpace||localStorage.getItem(lastLocationKey())));
  if(type==='objetos'){
-  root.append(inputField('fieldQty','Cantidad',item?.cantidad??1,'number'));
+  const extra=elem('details','object-extra-fields');
+  const summary=elem('summary','form-label','Descripción | Cantidad');
+  summary.style.cursor='pointer';
+  const fields=elem('div','vstack gap-3 mt-3');
+  fields.append(inputField('fieldDesc','Descripción (opcional)',item?.descripcion||'','text',false));
+  fields.append(inputField('fieldQty','Cantidad',item?.cantidad??1,'number'));
+  extra.append(summary,fields);
+  // Abrir el panel si la validación necesita mostrar un campo oculto.
+  fields.addEventListener('invalid',()=>{extra.open=true},true);
+  root.append(extra);
   root.append(categoryField(item));
   const wrap=elem('div');
   const initialBox=data.cajas.find(b=>b.id===item?.caja_id);
