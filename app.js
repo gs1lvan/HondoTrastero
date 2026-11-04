@@ -229,8 +229,17 @@ function openForm(type=tab,item=null){
  if(type==='objetos')root.append(photoField(item));
  $('modalTitle').textContent=(item?'Editar ':'Añadir ')+names[type];
  root.append(inputField('fieldName','Nombre',item?.nombre));
- if(type!=='objetos')root.append(inputField('fieldDesc','Descripción (opcional)',item?.descripcion||'','text',false));
- if(type==='ubicaciones')root.append(selectField('fieldParent','Espacio superior (opcional)',data.ubicaciones.filter(x=>x.id!==item?.id),true,item?.ubicacion_padre_id));
+ if(type==='cajas')root.append(inputField('fieldDesc','Descripción (opcional)',item?.descripcion||'','text',false));
+ if(type==='ubicaciones'){
+  const extra=elem('details','space-extra-fields');
+  const summary=elem('summary','form-label','Descripción | Espacio superior');
+  summary.style.cursor='pointer';
+  const fields=elem('div','vstack gap-3 mt-3');
+  fields.append(inputField('fieldDesc','Descripción (opcional)',item?.descripcion||'','text',false));
+  fields.append(selectField('fieldParent','Espacio superior (opcional)',data.ubicaciones.filter(x=>x.id!==item?.id),true,item?.ubicacion_padre_id));
+  fields.addEventListener('invalid',()=>{extra.open=true},true);
+  extra.append(summary,fields);root.append(extra);
+ }
  if(type==='ubicaciones'&&item?.id)root.append(spaceBoxesField(item));
  if(type==='cajas')root.append(selectField('fieldLocation','Espacio',data.ubicaciones,false,item?.ubicacion_id||boxSpace||localStorage.getItem(lastLocationKey())));
  if(type==='objetos'){
