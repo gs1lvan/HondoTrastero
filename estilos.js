@@ -37,6 +37,17 @@ function setBadgeTransparency(value,persist=false){
  if(persist)try{localStorage.setItem(badgeTransparencyKey,String(badgeTransparency))}catch{}
 }
 setBadgeTransparency(badgeTransparency);
+const badgeIntensityKey='hondotrastero:terminal-intensidad-fondo';
+let badgeIntensity=25;
+try{const raw=localStorage.getItem(badgeIntensityKey);if(raw!==null&&Number.isFinite(Number(raw)))badgeIntensity=Math.min(100,Math.max(0,Number(raw)))}catch{}
+function setBadgeIntensity(value,persist=false){
+ badgeIntensity=Math.min(100,Math.max(0,Math.round(Number(value)||0)));
+ document.documentElement.style.setProperty('--terminal-badge-color','hsl('+tone+' '+saturation+'% '+(4+badgeIntensity*.5)+'%)');
+ const input=document.getElementById('terminalBadgeIntensity'),output=document.getElementById('terminalBadgeIntensityValue');
+ if(input){input.value=badgeIntensity;input.setAttribute('aria-valuetext',badgeIntensity+' %')}
+ if(output)output.textContent=badgeIntensity+' %';
+ if(persist)try{localStorage.setItem(badgeIntensityKey,String(badgeIntensity))}catch{}
+}
 const brightnessKey='hondotrastero:terminal-brillo';
 const toneKey='hondotrastero:terminal-tono';
 const saturationKey='hondotrastero:terminal-saturacion';
@@ -58,6 +69,7 @@ function setBrightness(value,persist=false){
  document.documentElement.style.setProperty('--terminal-edge','color-mix(in srgb, hsl('+tone+' '+(52*saturation/100)+'% 28%) '+brightness+'%, hsl('+tone+' '+(40*saturation/100)+'% 4%))');
  document.documentElement.style.setProperty('--terminal-fill','color-mix(in srgb, hsl('+tone+' '+(53*saturation/100)+'% 10%) '+brightness+'%, hsl('+tone+' '+(40*saturation/100)+'% 4%))');
  document.documentElement.style.setProperty('--terminal-surface','hsl('+tone+' '+(40*saturation/100)+'% 4%)');
+ setBadgeIntensity(badgeIntensity);
  document.documentElement.style.setProperty('--terminal-text',blend('76ff91'));
  document.documentElement.style.setProperty('--terminal-muted',blend('8ccea0'));
  document.documentElement.style.setProperty('--terminal-bright',blend('b8ffc6'));
@@ -98,9 +110,11 @@ function apply(id, persist=false){
  });
 }
 apply(saved());
-window.addEventListener('storage',e=>{if(e.key===key)apply(e.newValue);if(e.key===badgeTransparencyKey)setBadgeTransparency(e.newValue===null?35:e.newValue);if(e.key===fontKey)applyTerminalFont(e.newValue);if(e.key===brightnessKey)setBrightness(e.newValue===null?75:e.newValue);if(e.key===toneKey)setTone(e.newValue===null?132:e.newValue);if(e.key===saturationKey)setSaturation(e.newValue===null?100:e.newValue)});
+window.addEventListener('storage',e=>{if(e.key===key)apply(e.newValue);if(e.key===badgeIntensityKey)setBadgeIntensity(e.newValue===null?25:e.newValue);if(e.key===badgeTransparencyKey)setBadgeTransparency(e.newValue===null?35:e.newValue);if(e.key===fontKey)applyTerminalFont(e.newValue);if(e.key===brightnessKey)setBrightness(e.newValue===null?75:e.newValue);if(e.key===toneKey)setTone(e.newValue===null?132:e.newValue);if(e.key===saturationKey)setSaturation(e.newValue===null?100:e.newValue)});
 document.addEventListener('DOMContentLoaded',()=>{
  const options=document.getElementById('styleOptions');
+ document.getElementById('terminalBadgeIntensity').addEventListener('input',e=>setBadgeIntensity(e.target.value,true));
+ setBadgeIntensity(badgeIntensity);
  document.getElementById('terminalBadgeTransparency').addEventListener('input',e=>setBadgeTransparency(e.target.value,true));
  setBadgeTransparency(badgeTransparency);
  const fontOptions=document.getElementById('terminalFontOptions');
@@ -116,7 +130,7 @@ document.addEventListener('DOMContentLoaded',()=>{
  document.getElementById('terminalTone').addEventListener('input',e=>setTone(e.target.value,true));
  setTone(tone);
  document.getElementById('terminalBrightness').addEventListener('input',e=>setBrightness(e.target.value,true));
- document.getElementById('resetTerminalBrightness').addEventListener('click',()=>{setBadgeTransparency(35,true);setSaturation(100,true);setTone(132,true);setBrightness(75,true)});
+ document.getElementById('resetTerminalBrightness').addEventListener('click',()=>{setBadgeIntensity(25,true);setBadgeTransparency(35,true);setSaturation(100,true);setTone(132,true);setBrightness(75,true)});
  setBrightness(brightness);
  for(const theme of themes){
   const b=document.createElement('button');b.type='button';b.className='style-choice';b.dataset.styleChoice=theme.id;
