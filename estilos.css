@@ -707,3 +707,31 @@ html[data-style="terminal"] .parcel-shell #appView.listing-compact #boxSpacePane
 
 /* Terminal compacto: nombre sin iconos ni separador de categorías. */
 html[data-style="terminal"] .parcel-shell #appView.listing-compact .object-title-line :is(.object-category-icons,.object-category-separator){display:none}
+
+/* Deslizadores de Terminal sin la pista blanca del navegador. */
+html[data-style="terminal"] .parcel-shell .terminal-brightness input[type="range"]{
+ appearance:none;-webkit-appearance:none;width:100%;height:28px;min-height:28px!important;
+ margin:.5rem 0 .85rem!important;padding:0;background:transparent;border:0;box-shadow:none;
+}
+html[data-style="terminal"] .terminal-brightness input[type="range"]::-webkit-slider-runnable-track{
+ height:6px;border-radius:99px;background:#202522;border:1px solid #3c443f;
+}
+html[data-style="terminal"] .terminal-brightness input[type="range"]::-moz-range-track{
+ height:6px;border-radius:99px;background:#202522;border:1px solid #3c443f;
+}
+html[data-style="terminal"] .terminal-brightness input[type="range"]::-moz-range-progress{height:6px;background:var(--terminal-edge);border-radius:99px}
+html[data-style="terminal"] .terminal-brightness input[type="range"]::-webkit-slider-thumb{
+ appearance:none;-webkit-appearance:none;width:18px;height:18px;margin-top:-7px;
+ border:1px solid #68736b;border-radius:50%;background:color-mix(in srgb,var(--terminal-accent) 45%,#4c5550);box-shadow:none;cursor:pointer;
+}
+html[data-style="terminal"] .terminal-brightness input[type="range"]::-moz-range-thumb{
+ width:18px;height:18px;border:1px solid #68736b;border-radius:50%;
+ background:color-mix(in srgb,var(--terminal-accent) 45%,#4c5550);box-shadow:none;cursor:pointer;
+}
+html[data-style="terminal"] .terminal-brightness #terminalTone::-webkit-slider-runnable-track{
+ background:linear-gradient(to right,#713e3e,#71713e,#3e713e,#3e7171,#3e3e71,#713e71,#713e3e);
+}
+html[data-style="terminal"] .terminal-brightness #terminalTone::-moz-range-track{
+ background:linear-gradient(to right,#713e3e,#71713e,#3e713e,#3e7171,#3e3e71,#713e71,#713e3e);
+}
+html[data-style="terminal"] .terminal-brightness #terminalTone::-moz-range-progress{background:transparent}
