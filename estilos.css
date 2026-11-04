@@ -753,3 +753,17 @@ html .parcel-shell .terminal-font-badge[aria-pressed="true"]{border-color:var(--
 html[data-style="terminal"] .parcel-shell #appView .record-main .object-name-badge{
  background:color-mix(in srgb,var(--terminal-fill) var(--terminal-badge-opacity,65%),transparent)!important;
 }
+
+/* Muestra en directo: usa las mismas variables que el inventario. */
+html[data-style="terminal"] .parcel-shell .terminal-live-preview{
+ margin:.5rem 0 .85rem;padding:.65rem .75rem;
+ background:var(--terminal-surface);border:1px solid var(--terminal-edge);border-radius:3px;
+ font-family:var(--terminal-font);color:var(--terminal-text);
+}
+html[data-style="terminal"] .terminal-preview-label{font-size:.7rem;color:var(--terminal-muted);margin-bottom:.5rem}
+html[data-style="terminal"] .parcel-shell #appView .terminal-live-preview .object-name-badge{
+ display:inline-block;padding:.12rem .35rem;border-radius:3px;font:inherit;font-size:.82rem;line-height:1.25;
+}
+html[data-style="terminal"] .terminal-live-preview .record-detail{
+ font-family:inherit;font-size:.78rem;color:var(--terminal-muted);margin-top:.3rem;
+}
