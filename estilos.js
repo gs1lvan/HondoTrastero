@@ -25,14 +25,14 @@ function setBrightness(value,persist=false){
   const colorSaturation=high===low?0:(high-low)/(1-Math.abs(2*light-1));
   return 'color-mix(in srgb, hsl('+tone+' '+(colorSaturation*saturation)+'% '+(light*100)+'%) '+brightness+'%, hsl('+tone+' '+(42*saturation/100)+'% 4.7%))';
  };
- document.documentElement.style.setProperty('--terminal-accent','hsl('+tone+' '+saturation+'% 61%)');
- document.documentElement.style.setProperty('--terminal-edge','hsl('+tone+' '+(52*saturation/100)+'% 28%)');
- document.documentElement.style.setProperty('--terminal-fill','hsl('+tone+' '+(53*saturation/100)+'% 10%)');
+ document.documentElement.style.setProperty('--terminal-accent','color-mix(in srgb, hsl('+tone+' '+saturation+'% 61%) '+brightness+'%, hsl('+tone+' '+(40*saturation/100)+'% 4%))');
+ document.documentElement.style.setProperty('--terminal-edge','color-mix(in srgb, hsl('+tone+' '+(52*saturation/100)+'% 28%) '+brightness+'%, hsl('+tone+' '+(40*saturation/100)+'% 4%))');
+ document.documentElement.style.setProperty('--terminal-fill','color-mix(in srgb, hsl('+tone+' '+(53*saturation/100)+'% 10%) '+brightness+'%, hsl('+tone+' '+(40*saturation/100)+'% 4%))');
  document.documentElement.style.setProperty('--terminal-surface','hsl('+tone+' '+(40*saturation/100)+'% 4%)');
  document.documentElement.style.setProperty('--terminal-text',blend('76ff91'));
  document.documentElement.style.setProperty('--terminal-muted',blend('8ccea0'));
  document.documentElement.style.setProperty('--terminal-bright',blend('b8ffc6'));
- document.documentElement.style.setProperty('--terminal-glow',brightness===100?'0 0 12px #39ff6526':'none');
+ document.documentElement.style.setProperty('--terminal-glow',brightness===100?'0 0 12px color-mix(in srgb,var(--terminal-accent) 15%,transparent)':'none');
  const input=document.getElementById('terminalBrightness'),output=document.getElementById('terminalBrightnessValue');
  if(input){input.value=brightness;input.setAttribute('aria-valuetext',brightness+' %')}
  if(output)output.textContent=brightness+' %';
