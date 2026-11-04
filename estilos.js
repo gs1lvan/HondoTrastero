@@ -9,14 +9,19 @@ const themes = [
 const key='hondotrastero:estilo';
 function saved(){try{return localStorage.getItem(key)}catch{return null}}
 const brightnessKey='hondotrastero:terminal-brillo';
+const toneKey='hondotrastero:terminal-tono';
+let tone=132;
+try{const raw=localStorage.getItem(toneKey);if(raw!==null&&Number.isFinite(Number(raw)))tone=Math.min(360,Math.max(0,Number(raw)))}catch{}
 let brightness=75;
 try{const value=Number(localStorage.getItem(brightnessKey));if(value>=50&&value<=100)brightness=Math.round(value)}catch{}
 function setBrightness(value,persist=false){
  brightness=Math.min(100,Math.max(50,Math.round(Number(value)||75)));
- const blend=(hex)=>'#'+[0,2,4].map((offset,index)=>{
-  const base=[7,17,13][index],channel=parseInt(hex.slice(offset,offset+2),16);
-  return Math.round(base+(channel-base)*brightness/100).toString(16).padStart(2,'0');
- }).join('');
+ const blend=hex=>{
+  const rgb=[0,2,4].map(offset=>parseInt(hex.slice(offset,offset+2),16)/255);
+  const high=Math.max(...rgb),low=Math.min(...rgb),light=(high+low)/2;
+  const saturation=high===low?0:(high-low)/(1-Math.abs(2*light-1));
+  return 'color-mix(in srgb, hsl('+tone+' '+(saturation*100)+'% '+(light*100)+'%) '+brightness+'%, #07110d)';
+ };
  document.documentElement.style.setProperty('--terminal-text',blend('76ff91'));
  document.documentElement.style.setProperty('--terminal-muted',blend('8ccea0'));
  document.documentElement.style.setProperty('--terminal-bright',blend('b8ffc6'));
@@ -25,6 +30,14 @@ function setBrightness(value,persist=false){
  if(input){input.value=brightness;input.setAttribute('aria-valuetext',brightness+' %')}
  if(output)output.textContent=brightness+' %';
  if(persist)try{localStorage.setItem(brightnessKey,String(brightness))}catch{}
+}
+function setTone(value,persist=false){
+ tone=Math.min(360,Math.max(0,Math.round(Number(value)||0)));
+ const input=document.getElementById('terminalTone'),output=document.getElementById('terminalToneValue');
+ if(input){input.value=tone;input.setAttribute('aria-valuetext',tone+' grados')}
+ if(output)output.textContent=tone+'°';
+ setBrightness(brightness);
+ if(persist)try{localStorage.setItem(toneKey,String(tone))}catch{}
 }
 setBrightness(brightness);
 function apply(id, persist=false){
@@ -40,11 +53,13 @@ function apply(id, persist=false){
  });
 }
 apply(saved());
-window.addEventListener('storage',e=>{if(e.key===key)apply(e.newValue);if(e.key===brightnessKey)setBrightness(e.newValue===null?75:e.newValue)});
+window.addEventListener('storage',e=>{if(e.key===key)apply(e.newValue);if(e.key===brightnessKey)setBrightness(e.newValue===null?75:e.newValue);if(e.key===toneKey)setTone(e.newValue===null?132:e.newValue)});
 document.addEventListener('DOMContentLoaded',()=>{
  const options=document.getElementById('styleOptions');
+ document.getElementById('terminalTone').addEventListener('input',e=>setTone(e.target.value,true));
+ setTone(tone);
  document.getElementById('terminalBrightness').addEventListener('input',e=>setBrightness(e.target.value,true));
- document.getElementById('resetTerminalBrightness').addEventListener('click',()=>setBrightness(75,true));
+ document.getElementById('resetTerminalBrightness').addEventListener('click',()=>{setTone(132,true);setBrightness(75,true)});
  setBrightness(brightness);
  for(const theme of themes){
   const b=document.createElement('button');b.type='button';b.className='style-choice';b.dataset.styleChoice=theme.id;
