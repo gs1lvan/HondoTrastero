@@ -38,7 +38,7 @@ const CATEGORIES_BY_ID = new Map(CATEGORIES.map(cat=>[cat.id,cat]));
 let listMode='ampliado';
 try{if(localStorage.getItem('hondotrastero:listado')==='reducido')listMode='reducido'}catch{}
 let inventoryOrder='az';
-try{const saved=localStorage.getItem('hondotrastero:orden');if(['az','za','categorias'].includes(saved))inventoryOrder=saved}catch{}
+try{const saved=localStorage.getItem('hondotrastero:orden');if(['az','za','categorias','fecha-desc','fecha-asc'].includes(saved))inventoryOrder=saved}catch{}
 let administrationOpen=false;
 let boxSpace='';
 let tab='objetos', editing=null, user=null, selectedPhoto=null, photoPreviewUrl=null;
@@ -493,6 +493,14 @@ function refreshBoxSpaces(){
 }
 function inventoryEntries(rows,order){
  const compare=(a,b)=>(a.nombre||'').localeCompare(b.nombre||'','es',{sensitivity:'base',numeric:true})||String(a.id).localeCompare(String(b.id));
+ if(order==='fecha-desc'||order==='fecha-asc'){
+  return [...rows].sort((a,b)=>{
+   const first=Date.parse(a.creado_en),second=Date.parse(b.creado_en);
+   if(!Number.isFinite(first))return Number.isFinite(second)?1:compare(a,b);
+   if(!Number.isFinite(second))return -1;
+   return (order==='fecha-desc'?second-first:first-second)||compare(a,b);
+  }).map(item=>({item}));
+ }
  const sorted=[...rows].sort(compare);
  if(order!=='categorias')return (order==='za'?sorted.reverse():sorted).map(item=>({item}));
  const groups=[...CATEGORIES].sort((a,b)=>a.name.localeCompare(b.name,'es',{sensitivity:'base'}));
