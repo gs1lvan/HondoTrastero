@@ -30,7 +30,9 @@
  <div class="section-heading"><h1 id="sectionTitle">📦 Inventario</h1><button id="newItem" type="button" class="btn btn-primary add-button"><span aria-hidden="true">＋</span> Añadir objeto</button></div>
  <div id="boxSpacePanel" class="paper-card mb-3 d-none"><label for="boxSpace" class="form-label">Espacio</label><select id="boxSpace" class="form-select"><option value="">Selecciona un espacio</option></select></div>
  <div id="inventoryToolbar" class="inventory-toolbar"><label class="search-field"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Buscar en el inventario…" aria-label="Buscar por nombre o descripción"></label></div>
- <div id="inventoryFilters" class="inventory-filters" role="group" aria-label="Filtros del inventario">
+ <details id="inventoryFilters" class="inventory-filter-fold mb-3">
+  <summary class="form-label" style="cursor:pointer;padding:.5rem 0">Filtros</summary>
+  <div class="inventory-filters" role="group" aria-label="Filtros del inventario">
   <label class="filter-field" for="filterSpace"><span>Espacios</span><select id="filterSpace" class="form-select"><option value="">Todos los espacios</option></select></label>
   <div class="filter-field category-filter-wrap" id="filterCategoryWrap">
    <span id="categoryFilterLabel">Categoría</span>
@@ -46,7 +48,8 @@
    <div id="categoryFilterOptions" class="category-filter-options" role="group" aria-label="Opciones de categoría"></div>
    <p id="categoryFilterNoMatch" class="category-filter-no-match" hidden>No hay categorías con ese nombre.</p>
   </section>
- </div>
+  </div>
+ </details>
  <div id="records" class="records-list"></div><p id="empty" class="empty-state d-none">Todavía no hay registros en esta sección.</p>
 </section>
 <section id="editPage" class="d-none editor-page" aria-labelledby="modalTitle">
