@@ -810,3 +810,10 @@ html[data-style="azul-oscuro"] .parcel-shell #appView:not(.listing-compact) .rec
 html[data-style="azul-oscuro"] .parcel-shell :is(.paper-card,.editor-paper)::before{
  top:calc(-18px - var(--clip-card-border));
 }
+
+/* Logotipo exclusivo del tema Azul oscuro, sin marco circular. */
+.brand-art-blue{display:none}
+html[data-style="azul-oscuro"] .parcel-shell .brand-art:not(.brand-art-blue){display:none}
+html[data-style="azul-oscuro"] .parcel-shell .brand-art-blue{
+ display:block;object-fit:contain;border:0;border-radius:0;box-shadow:none;background:transparent;
+}
