@@ -16,9 +16,9 @@ try{const raw=localStorage.getItem(saturationKey);if(raw!==null&&Number.isFinite
 let tone=132;
 try{const raw=localStorage.getItem(toneKey);if(raw!==null&&Number.isFinite(Number(raw)))tone=Math.min(360,Math.max(0,Number(raw)))}catch{}
 let brightness=75;
-try{const value=Number(localStorage.getItem(brightnessKey));if(value>=50&&value<=100)brightness=Math.round(value)}catch{}
+try{const value=Number(localStorage.getItem(brightnessKey));if(value>=0&&value<=100)brightness=Math.round(value)}catch{}
 function setBrightness(value,persist=false){
- brightness=Math.min(100,Math.max(50,Math.round(Number(value)||75)));
+ brightness=Math.min(100,Math.max(0,Math.round(Number.isFinite(Number(value))?Number(value):75)));
  const blend=hex=>{
   const rgb=[0,2,4].map(offset=>parseInt(hex.slice(offset,offset+2),16)/255);
   const high=Math.max(...rgb),low=Math.min(...rgb),light=(high+low)/2;
