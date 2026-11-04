@@ -79,7 +79,7 @@ async function signedPhoto(path){
  const {data:result,error}=await client.storage.from(BUCKET).createSignedUrl(path,3600);
  if(error)throw error;return result.signedUrl;
 }
-function photoField(item){
+function photoField(item,onSelected=null){
  const wrap=elem('div','photo-field'),lab=elem('label','form-label fw-semibold','Fotografía (opcional)');
  const preview=elem('img','photo-preview d-none');preview.id='photoPreview';preview.alt='Vista previa de la fotografía';
  const buttons=elem('div','d-flex flex-wrap gap-2');
@@ -90,6 +90,7 @@ function photoField(item){
  function choosePhoto(input){
   const file=input.files?.[0];if(!file)return;
   if(!file.type.startsWith('image/')){alertMsg('Selecciona un archivo de imagen.');return}
+  if(onSelected){onSelected(file);return}
   selectedPhoto=file;
   if(photoPreviewUrl){URL.revokeObjectURL(photoPreviewUrl);photoPreviewUrl=null}
   photoPreviewUrl=URL.createObjectURL(file);preview.src=photoPreviewUrl;preview.classList.remove('d-none');
@@ -231,6 +232,27 @@ function spaceBoxesField(space){
  return panel;
 }
 
+function startObjectPhoto(){
+ closeCategoryFilter();clearMsg();
+ editing=null;selectedPhoto=null;
+ if(photoPreviewUrl){URL.revokeObjectURL(photoPreviewUrl);photoPreviewUrl=null}
+ $('spaceAddBoxBtn')?.remove();
+ $('editPage').classList.toggle('editor-compact',listMode==='reducido');
+ $('modalTitle').textContent='Añadir objeto · Fotografía';
+ show('saveBtn',false);show('deleteObjectBtn',false);
+ const root=$('modalFields');root.replaceChildren();
+ const field=photoField(null,file=>{
+  openForm('objetos');
+  selectedPhoto=file;
+  photoPreviewUrl=URL.createObjectURL(file);
+  const preview=$('photoPreview');
+  preview.src=photoPreviewUrl;preview.classList.remove('d-none');
+ });
+ // El primer paso ofrece únicamente cámara y galería.
+ field.querySelector('label').remove();
+ field.querySelector('.form-text').remove();
+ root.append(field);page.show();
+}
 function openForm(type=tab,item=null){
  $('editPage').classList.toggle('editor-compact',listMode==='reducido');
  closeCategoryFilter();
@@ -774,7 +796,7 @@ document.addEventListener('pointerdown',event=>{
 });
 $('clearFilters').addEventListener('click',()=>{closeCategoryFilter();$('search').value='';$('filterSpace').value='';selectedCategoryFilter='';render()});
 $('boxSpace').addEventListener('change',()=>{boxSpace=$('boxSpace').value;$('search').value='';render()});
-$('newItem').addEventListener('click',()=>openForm(tab));
+$('newItem').addEventListener('click',()=>{if(tab==='objetos')startObjectPhoto();else openForm(tab)});
 $('loginForm').addEventListener('submit',async e=>{
  e.preventDefault();clearMsg();
  const btn=e.target.querySelector('button');btn.disabled=true;
