@@ -270,3 +270,10 @@ html .parcel-shell #appView.listing-compact #inventoryOrderPanel::after{
  font:700 1rem/1 sans-serif;color:inherit;pointer-events:none;
 }
 html[data-style="terminal"] .parcel-shell #appView.listing-compact #inventoryOrderPanel .form-select{border-radius:2px}
+
+/* Ordenación desplegable, con la misma cabecera que Filtros. */
+html .parcel-shell #appView #inventoryOrderPanel:not([open])::after{display:none}
+html .parcel-shell #appView #inventoryOrderPanel summary{display:list-item;color:inherit;font-weight:inherit}
+html .parcel-shell #appView.listing-compact #inventoryOrderPanel summary{
+ font-size:.82rem;font-weight:600;line-height:inherit;padding:.25rem 0!important;margin-bottom:.5rem;
+}
