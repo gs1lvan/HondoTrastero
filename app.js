@@ -283,7 +283,14 @@ function openForm(type=tab,item=null){
   const initialBox=data.cajas.find(b=>b.id===item?.caja_id);
   const initialSpace=initialBox?.ubicacion_id||item?.ubicacion_id||localStorage.getItem(lastLocationKey())||'';
   wrap.append(selectField('fieldLocation','Espacio',data.ubicaciones,false,initialSpace));
-  wrap.append(selectField('fieldBox','Caja (opcional)',[],true));root.append(wrap);
+  wrap.append(selectField('fieldBox','Caja (opcional)',[],true));
+  wrap.className='vstack gap-3 mt-3';
+  const movePanel=elem('details','object-move-panel');
+  const moveSummary=elem('summary','form-label','Mover objeto');
+  moveSummary.style.cursor='pointer';
+  movePanel.append(moveSummary,wrap);
+  wrap.addEventListener('invalid',()=>{movePanel.open=true},true);
+  root.append(movePanel);
   const loc=$('fieldLocation'),box=$('fieldBox');
   function refreshBoxes(selected=''){
    box.replaceChildren(new Option('Sin caja', ''));
