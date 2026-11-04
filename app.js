@@ -560,6 +560,10 @@ function render(){
    if(item.descripcion)concepts.push(item.descripcion);
    main.replaceChildren(elem('span','record-compact-text',concepts.join(' | ')));
   }
+  if(tab==='objetos'){
+   line.append(main);root.append(line);
+   continue;
+  }
   const actions=elem('div','record-actions');
   const edit=elem('button','btn btn-sm btn-outline-primary','Editar');edit.type='button';edit.addEventListener('click',()=>openForm(tab,item));
   const del=elem('button','btn btn-sm btn-outline-danger','Eliminar');del.type='button';del.addEventListener('click',()=>removeItem(tab,item));
