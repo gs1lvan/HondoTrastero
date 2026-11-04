@@ -558,7 +558,12 @@ function render(){
     if(item.ubicacion_padre_id)concepts.push(locationLabel(item.ubicacion_padre_id));
    }
    if(item.descripcion)concepts.push(item.descripcion);
-   main.replaceChildren(elem('span','record-compact-text',concepts.join(' | ')));
+   if(tab==='objetos'){
+    const text=elem('span','record-compact-text');
+    text.append(elem('span','object-name-badge',item.nombre));
+    if(concepts.length>1)text.append(document.createTextNode(' | '+concepts.slice(1).join(' | ')));
+    main.replaceChildren(text);
+   }else main.replaceChildren(elem('span','record-compact-text',concepts.join(' | ')));
   }
   if(tab==='objetos'){
    line.append(main);root.append(line);
