@@ -461,3 +461,18 @@ html[data-style="azul-oscuro"] .parcel-shell #appView:not(.listing-compact) .rec
 }
 html[data-style="azul-oscuro"] .parcel-shell .record::after,
 html[data-style="azul-oscuro"] .parcel-shell .packing-tape{display:none!important}
+
+/* El mismo clip en paneles y formularios del tema Azul oscuro. */
+html[data-style="azul-oscuro"] .parcel-shell :is(.paper-card,.editor-paper){
+ position:relative;overflow:visible;background:#1a3049;
+}
+html[data-style="azul-oscuro"] .parcel-shell :is(.paper-card,.editor-paper)::before{
+ display:block;content:"";position:absolute;left:auto;right:14px;top:-18px;bottom:auto;
+ width:30px;height:52px;transform:rotate(9deg);transform-origin:center 18px;
+ background:transparent url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2230%22%20height%3D%2252%22%20viewBox%3D%220%200%2030%2052%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22metal%22%20x1%3D%220%22%20x2%3D%221%22%3E%3Cstop%20stop-color%3D%22%23687b8f%22%2F%3E%3Cstop%20offset%3D%22.35%22%20stop-color%3D%22%23f5faff%22%2F%3E%3Cstop%20offset%3D%22.65%22%20stop-color%3D%22%23aabccc%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23e7f1fa%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Cpath%20d%3D%22M9%2034V12a8%208%200%200%201%2016%200v22%22%20fill%3D%22none%22%20stroke%3D%22%23111c2a%22%20stroke-width%3D%225%22%2F%3E%3Cpath%20d%3D%22M9%2034V12a8%208%200%200%201%2016%200v22%22%20fill%3D%22none%22%20stroke%3D%22url(%23metal)%22%20stroke-width%3D%223%22%2F%3E%3Cpath%20d%3D%22M3%2018h27v34H3z%22%20fill%3D%22%231a3049%22%2F%3E%3Cpath%20d%3D%22M6%2014v25a7%207%200%200%200%2014%200V15a4%204%200%200%200-8%200v22%22%20fill%3D%22none%22%20stroke%3D%22%2307111f%22%20stroke-width%3D%225%22%20stroke-linecap%3D%22round%22%2F%3E%3Cpath%20d%3D%22M6%2014v25a7%207%200%200%200%2014%200V15a4%204%200%200%200-8%200v22%22%20fill%3D%22none%22%20stroke%3D%22url(%23metal)%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fsvg%3E") center/contain no-repeat;
+ border:0;border-radius:0;box-shadow:none;filter:drop-shadow(1px 2px 1px #0005);
+ pointer-events:none;z-index:2;
+}
+html[data-style="azul-oscuro"] .parcel-shell :is(.paper-card,.editor-paper)::after{display:none!important}
+html[data-style="azul-oscuro"] .parcel-shell #appView.listing-compact .paper-card::before,
+html[data-style="azul-oscuro"] .parcel-shell #editPage.editor-compact .editor-paper::before{display:none}
