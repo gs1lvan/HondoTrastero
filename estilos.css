@@ -326,3 +326,13 @@ html .parcel-shell .records-reduced .space-record-main .record-compact-text{
 }
 html .parcel-shell .records-reduced .space-record-name{display:block;font-weight:800}
 html .parcel-shell .records-reduced .space-record-boxes{margin-top:.15rem}
+
+/* Reordenación de espacios junto a las acciones de cada fila. */
+html .parcel-shell .record-actions.space-order-actions{
+ flex-direction:row;align-items:center;flex-wrap:wrap;justify-content:flex-end;gap:.15rem;
+}
+html .parcel-shell .space-order-actions .space-order-button{
+ display:grid;place-items:center;min-width:32px;min-height:32px;padding:.15rem;
+ color:inherit;background:transparent;border:0;box-shadow:none;font:inherit;font-size:1.1rem;
+}
+html .parcel-shell .space-order-actions .space-order-button:disabled{opacity:.3}
