@@ -517,8 +517,7 @@ function render(){
    if(tab==='objetos'){
     concepts.push('×'+item.cantidad,locationLabel(objectSpace(item)));
     if(item.caja_id)concepts.push(boxLabel(item.caja_id));
-    const icons=itemCategories(item).map(id=>CATEGORIES_BY_ID.get(id).icon).join(' ');
-    if(icons)concepts.push(icons);
+
    }
    if(tab==='cajas')concepts.push(locationLabel(item.ubicacion_id));
    if(tab==='ubicaciones'){
