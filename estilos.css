@@ -685,3 +685,11 @@ html[data-style="terminal"] .parcel-shell #appView .record-main .object-name-bad
  color:var(--terminal-text,#76ff91)!important;
  border-color:#288541!important;box-shadow:none!important;
 }
+
+.terminal-brightness .terminal-tone{
+ appearance:none;-webkit-appearance:none;height:8px;min-height:8px!important;
+ margin:.9rem 0 1.2rem!important;border-radius:99px;
+ background:linear-gradient(to right,#f55,#ff5,#5f5,#5ff,#55f,#f5f,#f55);
+}
+.terminal-tone::-webkit-slider-thumb{appearance:none;width:20px;height:20px;border:2px solid #e6effa;border-radius:50%;background:#14253b;cursor:pointer}
+.terminal-tone::-moz-range-thumb{width:18px;height:18px;border:2px solid #e6effa;border-radius:50%;background:#14253b;cursor:pointer}
