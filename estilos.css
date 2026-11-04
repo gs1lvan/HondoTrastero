@@ -124,3 +124,13 @@ html[data-style="carton"] .editor-paper{
 }
 html:not([data-style]) .editor-paper .form-text,
 html[data-style="carton"] .editor-paper .form-text{color:#634326}
+
+.list-style-tools{display:flex;justify-content:flex-end;align-items:center;gap:.5rem;flex-wrap:wrap;margin:.7rem 0}
+.list-style-tools .style-launcher{margin:0}
+.parcel-shell .records-reduced{gap:.4rem}
+.parcel-shell .records-reduced .record{padding:.6rem .65rem;gap:.6rem;clip-path:none}
+.parcel-shell .records-reduced .record::before,.parcel-shell .records-reduced .record::after{display:none}
+.parcel-shell .records-reduced .record-main{white-space:nowrap;overflow-x:auto;min-width:0;scrollbar-width:thin}
+.parcel-shell .records-reduced .record-compact-text{font:inherit;font-size:.85rem;white-space:nowrap}
+.parcel-shell .records-reduced .record-actions{flex-direction:row;gap:.3rem}
+.parcel-shell .records-reduced .record-actions .btn{font-size:.7rem;padding:.2rem .35rem}
