@@ -788,3 +788,13 @@ html .parcel-shell #appView.listing-compact .record:has(.object-record-main){
 }
 html .parcel-shell #appView.listing-compact .object-record-main > :first-child{margin-top:0}
 html .parcel-shell #appView.listing-compact .object-record-main > :last-child{margin-bottom:0}
+
+/* Neutralizar las uniones first/last-child de Bootstrap list-group-item. */
+html .parcel-shell #appView:not(.listing-compact) #records > .record{
+ border-style:solid;border-width:2px;border-radius:.65rem;
+ margin-top:0;margin-bottom:0;
+}
+html[data-style="azul-oscuro"] .parcel-shell #appView:not(.listing-compact) #records > .record{border-color:#355572}
+html[data-style="terminal"] .parcel-shell #appView:not(.listing-compact) #records > .record{
+ border-width:1px;border-radius:2px;border-color:var(--terminal-edge);
+}
