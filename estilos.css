@@ -502,3 +502,71 @@ html[data-style="carton"] .parcel-shell #appView:not(.listing-compact) .record::
 html:not([data-style]) .parcel-shell #appView:not(.listing-compact) .record::before{
  left:-16px;top:8px;transform:rotate(-45deg);transform-origin:center;
 }
+
+/* Completar la paleta azul: evitar colores de Cartón heredados. */
+html[data-style="azul-oscuro"]{
+ --bs-primary:#65b8ff;--bs-primary-rgb:101,184,255;
+}
+html[data-style="azul-oscuro"] .parcel-shell :is(.record-photo,.photo-preview){
+ border-color:#486f91;background-color:#112338;
+}
+html[data-style="azul-oscuro"] .parcel-shell .brand-art{box-shadow:0 5px 12px #020b1855}
+html[data-style="azul-oscuro"] .parcel-shell :is(.photo-field,.category-field){border-color:#486783}
+html[data-style="azul-oscuro"] .parcel-shell .category-field{background:#1a3049;color:#e6effa}
+html[data-style="azul-oscuro"] .parcel-shell :is(.category-filter-heading,.category-tip,.category-counter,.category-legacy,.record-category-legacy){color:#c5dcf0}
+html[data-style="azul-oscuro"] .parcel-shell :is(.category-legacy,.record-category-legacy,.category-option-count){
+ background:#284f73;color:#e6effa;
+}
+html[data-style="azul-oscuro"] .parcel-shell .category-filter-close{
+ background:#1a3049;color:#e6effa;border-color:#486783;
+}
+html[data-style="azul-oscuro"] .parcel-shell .category-filter-option:nth-child(even){background:#162b42}
+html[data-style="azul-oscuro"] .parcel-shell .category-filter-option:hover{
+ background:#284f73;color:#edf5ff;border-color:#65b8ff;
+}
+html[data-style="azul-oscuro"] .parcel-shell .category-filter-option.selected,
+html[data-style="azul-oscuro"] .parcel-shell .category-filter-option.selected:hover{
+ background:#284f73;color:#edf5ff;border-color:#65b8ff;box-shadow:none;
+}
+html[data-style="azul-oscuro"] .parcel-shell .category-filter-option.selected .category-option-count{
+ background:#65b8ff;color:#091a2c;
+}
+html[data-style="azul-oscuro"] .parcel-shell .category-filter-options{scrollbar-color:#486f91 #112338}
+html[data-style="azul-oscuro"] .parcel-shell .category-filter-search-wrap:focus-within,
+html[data-style="azul-oscuro"] .parcel-shell .search-field:focus-within{
+ background:#112338;border-color:#65b8ff;box-shadow:0 0 0 .2rem #65b8ff33;
+}
+html[data-style="azul-oscuro"] .parcel-shell .category-filter-search-wrap input::placeholder{color:#b9cde1}
+html[data-style="azul-oscuro"] .parcel-shell .category-choice .form-check-input{
+ background-color:#112338;border-color:#6c9dc5;
+}
+html[data-style="azul-oscuro"] .parcel-shell .category-choice .form-check-input:checked{
+ background-color:#3575ac;border-color:#85caff;
+}
+html[data-style="azul-oscuro"] .parcel-shell :is(.filter-clear,.inventory-toolbar .btn){
+ background:#1a3049;color:#c5e5ff;border-color:#6c9dc5;
+}
+html[data-style="azul-oscuro"] .parcel-shell .btn-outline-primary{
+ --bs-btn-active-bg:#284f73;--bs-btn-active-border-color:#85caff;
+ --bs-btn-active-color:#edf5ff;--bs-btn-hover-color:#edf5ff;
+}
+html[data-style="azul-oscuro"] .parcel-shell :is(.stat){background:#1a3049;border-color:#486783}
+html[data-style="azul-oscuro"] .parcel-shell .records-reduced .object-name-badge{
+ background:rgba(43,102,158,.45);color:#edf5ff;
+}
+html[data-style="azul-oscuro"] .parcel-shell #appView.listing-compact #inventoryFilters :is(.form-select,.category-filter-trigger){border-color:#6c9dc5}
+html[data-style="azul-oscuro"] .parcel-shell #appView.listing-compact #boxSpacePanel .form-select{
+ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='m2 2 4 4 4-4' fill='none' stroke='%23b9cde1' stroke-width='1.5'/%3E%3C/svg%3E");
+}
+html[data-style="azul-oscuro"] .parcel-shell #editPage.editor-compact .category-choice.selected{background:rgba(65,140,206,.2)}
+html[data-style="azul-oscuro"] .parcel-shell #appView.listing-compact .search-field:focus-within{
+ background:transparent;box-shadow:none;border-color:currentColor;
+}
+html[data-style="azul-oscuro"] .parcel-shell :is(input.form-control,.search-field input):-webkit-autofill,
+html[data-style="azul-oscuro"] .parcel-shell :is(input.form-control,.search-field input):-webkit-autofill:hover,
+html[data-style="azul-oscuro"] .parcel-shell :is(input.form-control,.search-field input):-webkit-autofill:focus{
+ -webkit-text-fill-color:#edf5ff;-webkit-box-shadow:0 0 0 1000px #112338 inset;caret-color:#edf5ff;
+}
+html[data-style="azul-oscuro"] .parcel-shell :is(.category-filter-trigger,.category-filter-option,.category-filter-close):focus-visible{
+ outline-color:#85caff;
+}
