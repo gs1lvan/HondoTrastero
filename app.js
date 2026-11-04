@@ -485,10 +485,16 @@ function render(){
   }
   let detail=item.descripcion||'';
   if(tab==='objetos'){
-   const cats=itemCategories(item).map(id=>CATEGORIES_BY_ID.get(id)).map(cat=>`${cat.icon} ${cat.name}`);
+   const cats=itemCategories(item).map(id=>CATEGORIES_BY_ID.get(id));
    detail=[`×${item.cantidad}`,item.caja_id?`${locationLabel(objectSpace(item))} | ${boxLabel(item.caja_id)}`:locationLabel(item.ubicacion_id),detail].filter(Boolean).join(' · ');
    const group=elem('div','record-categories');
-   for(const name of cats)group.append(elem('span','record-category',name));
+   for(const cat of cats){
+    const badge=elem('span','record-category',cat.icon);
+    badge.title=cat.name;
+    badge.setAttribute('role','img');
+    badge.setAttribute('aria-label',cat.name);
+    group.append(badge);
+   }
    if(!cats.length&&item.categoria?.trim())group.append(elem('span','record-category-legacy',`Pendiente de clasificar (antes: ${item.categoria.trim()})`));
    if(group.childElementCount)main.append(group);
   }
