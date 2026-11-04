@@ -309,3 +309,10 @@ html .parcel-shell #appView:not(.listing-compact) #inventoryFilters > summary,
 html .parcel-shell #appView:not(.listing-compact) #inventoryOrderPanel > summary{
  margin:0!important;padding:.25rem 0!important;font-weight:700;
 }
+
+/* Nombre destacado sin alterar los datos de la fila compacta. */
+html .parcel-shell .records-reduced .object-name-badge{
+ display:inline-block;vertical-align:baseline;padding:.12rem .35rem;
+ border-radius:3px;background:rgba(65,32,12,.65);color:#fff3df;
+ font:inherit;line-height:1.25;
+}
