@@ -482,3 +482,17 @@ html[data-style="azul-oscuro"] .parcel-shell #appView:not(.listing-compact) .rec
 html[data-style="azul-oscuro"] .parcel-shell :is(.paper-card,.editor-paper)::before{
  width:36px;height:56px;top:-18px;transform:none;filter:none;box-shadow:none;
 }
+
+/* Separación estable tras la ordenación, haya o no títulos de categorías. */
+html .parcel-shell #appView:not(.listing-compact) #inventoryOrderPanel{
+ margin-bottom:1.5rem!important;
+}
+html .parcel-shell #appView:not(.listing-compact) #records > h2:first-child{
+ margin-top:0!important;
+}
+html .parcel-shell #appView.listing-compact #inventoryOrderPanel{
+ margin-bottom:.65rem!important;
+}
+html .parcel-shell #appView.listing-compact #records > h2:first-child{
+ margin-top:0!important;
+}
