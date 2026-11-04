@@ -22,6 +22,10 @@ function setBrightness(value,persist=false){
   const saturation=high===low?0:(high-low)/(1-Math.abs(2*light-1));
   return 'color-mix(in srgb, hsl('+tone+' '+(saturation*100)+'% '+(light*100)+'%) '+brightness+'%, #07110d)';
  };
+ document.documentElement.style.setProperty('--terminal-accent','hsl('+tone+' 100% 61%)');
+ document.documentElement.style.setProperty('--terminal-edge','hsl('+tone+' 52% 28%)');
+ document.documentElement.style.setProperty('--terminal-fill','hsl('+tone+' 53% 10%)');
+ document.documentElement.style.setProperty('--terminal-surface','hsl('+tone+' 40% 4%)');
  document.documentElement.style.setProperty('--terminal-text',blend('76ff91'));
  document.documentElement.style.setProperty('--terminal-muted',blend('8ccea0'));
  document.documentElement.style.setProperty('--terminal-bright',blend('b8ffc6'));
