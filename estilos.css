@@ -704,3 +704,6 @@ html[data-style="terminal"] .parcel-shell .btn-primary{--bs-btn-bg:var(--termina
 html[data-style="terminal"] .parcel-shell #appView.listing-compact #boxSpacePanel .form-select{
  background-image:none;padding-right:.6rem;appearance:auto;-webkit-appearance:auto;
 }
+
+/* Terminal compacto: nombre sin iconos ni separador de categorías. */
+html[data-style="terminal"] .parcel-shell #appView.listing-compact .object-title-line :is(.object-category-icons,.object-category-separator){display:none}
