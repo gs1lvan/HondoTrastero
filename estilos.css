@@ -772,3 +772,5 @@ html[data-style="terminal"] .terminal-live-preview .record-detail{
 html[data-style="terminal"] .parcel-shell #appView .record-main .object-name-badge{
  background:color-mix(in srgb,var(--terminal-badge-color,var(--terminal-fill)) var(--terminal-badge-opacity,65%),transparent)!important;
 }
+
+html[data-style="terminal"] .parcel-shell .photo-button-icon{display:none}
