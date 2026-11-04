@@ -814,6 +814,8 @@ $('inventoryOrder').addEventListener('change',()=>{
  inventoryOrder=$('inventoryOrder').value;
  try{localStorage.setItem('hondotrastero:orden',inventoryOrder)}catch{}
  render();
+ $('inventoryOrderPanel').open=false;
+ $('inventoryOrderPanel').querySelector('summary').focus({preventScroll:true});
 });
 $('search').addEventListener('input',render);
 $('filterSpace').addEventListener('change',render);
