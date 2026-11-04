@@ -25,6 +25,18 @@ function loadTerminalFonts(){
 applyTerminalFont(terminalFont);
 const key='hondotrastero:estilo';
 function saved(){try{return localStorage.getItem(key)}catch{return null}}
+const badgeTransparencyKey='hondotrastero:terminal-transparencia-nombre';
+let badgeTransparency=35;
+try{const raw=localStorage.getItem(badgeTransparencyKey);if(raw!==null&&Number.isFinite(Number(raw)))badgeTransparency=Math.min(100,Math.max(0,Number(raw)))}catch{}
+function setBadgeTransparency(value,persist=false){
+ badgeTransparency=Math.min(100,Math.max(0,Math.round(Number(value)||0)));
+ document.documentElement.style.setProperty('--terminal-badge-opacity',(100-badgeTransparency)+'%');
+ const input=document.getElementById('terminalBadgeTransparency'),output=document.getElementById('terminalBadgeTransparencyValue');
+ if(input){input.value=badgeTransparency;input.setAttribute('aria-valuetext',badgeTransparency+' %')}
+ if(output)output.textContent=badgeTransparency+' %';
+ if(persist)try{localStorage.setItem(badgeTransparencyKey,String(badgeTransparency))}catch{}
+}
+setBadgeTransparency(badgeTransparency);
 const brightnessKey='hondotrastero:terminal-brillo';
 const toneKey='hondotrastero:terminal-tono';
 const saturationKey='hondotrastero:terminal-saturacion';
@@ -86,9 +98,11 @@ function apply(id, persist=false){
  });
 }
 apply(saved());
-window.addEventListener('storage',e=>{if(e.key===key)apply(e.newValue);if(e.key===fontKey)applyTerminalFont(e.newValue);if(e.key===brightnessKey)setBrightness(e.newValue===null?75:e.newValue);if(e.key===toneKey)setTone(e.newValue===null?132:e.newValue);if(e.key===saturationKey)setSaturation(e.newValue===null?100:e.newValue)});
+window.addEventListener('storage',e=>{if(e.key===key)apply(e.newValue);if(e.key===badgeTransparencyKey)setBadgeTransparency(e.newValue===null?35:e.newValue);if(e.key===fontKey)applyTerminalFont(e.newValue);if(e.key===brightnessKey)setBrightness(e.newValue===null?75:e.newValue);if(e.key===toneKey)setTone(e.newValue===null?132:e.newValue);if(e.key===saturationKey)setSaturation(e.newValue===null?100:e.newValue)});
 document.addEventListener('DOMContentLoaded',()=>{
  const options=document.getElementById('styleOptions');
+ document.getElementById('terminalBadgeTransparency').addEventListener('input',e=>setBadgeTransparency(e.target.value,true));
+ setBadgeTransparency(badgeTransparency);
  const fontOptions=document.getElementById('terminalFontOptions');
  for(const font of terminalFonts){
   const button=document.createElement('button');button.type='button';button.className='terminal-font-badge';button.dataset.terminalFont=font;button.style.fontFamily='"'+font+'",monospace';
@@ -102,7 +116,7 @@ document.addEventListener('DOMContentLoaded',()=>{
  document.getElementById('terminalTone').addEventListener('input',e=>setTone(e.target.value,true));
  setTone(tone);
  document.getElementById('terminalBrightness').addEventListener('input',e=>setBrightness(e.target.value,true));
- document.getElementById('resetTerminalBrightness').addEventListener('click',()=>{setSaturation(100,true);setTone(132,true);setBrightness(75,true)});
+ document.getElementById('resetTerminalBrightness').addEventListener('click',()=>{setBadgeTransparency(35,true);setSaturation(100,true);setTone(132,true);setBrightness(75,true)});
  setBrightness(brightness);
  for(const theme of themes){
   const b=document.createElement('button');b.type='button';b.className='style-choice';b.dataset.styleChoice=theme.id;
