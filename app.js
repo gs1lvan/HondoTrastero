@@ -422,6 +422,11 @@ function render(){
    signedPhoto(item.foto_path).then(url=>{img.src=url}).catch(()=>img.remove());line.append(img);
   }
   const main=elem('div','record-main');main.append(elem('div','record-title',item.nombre));
+  if(tab==='ubicaciones'){
+   const boxes=data.cajas.filter(box=>box.ubicacion_id===item.id)
+    .sort((a,b)=>a.nombre.localeCompare(b.nombre,'es'));
+   if(boxes.length)main.append(elem('div','record-detail space-box-list',boxes.map(box=>box.nombre).join(' | ')));
+  }
   let detail=item.descripcion||'';
   if(tab==='objetos'){
    const cats=itemCategories(item).map(id=>CATEGORIES_BY_ID.get(id)).map(cat=>`${cat.icon} ${cat.name}`);
