@@ -605,6 +605,25 @@ function render(){
    }else main.replaceChildren(elem('span','record-compact-text',concepts.join(' | ')));
   }
   if(tab==='objetos'){
+   main.classList.add('object-record-main');
+   const titleLine=elem('div','object-title-line');
+   const title=elem('span',listMode==='reducido'?'object-name-badge':'record-title',item.nombre);
+   titleLine.append(title);
+   const cats=itemCategories(item).map(id=>CATEGORIES_BY_ID.get(id));
+   if(cats.length){
+    titleLine.append(elem('span','object-category-separator',' | '));
+    const icons=elem('span','object-category-icons');
+    for(const cat of cats){
+     const icon=elem('span','record-category',cat.icon);
+     icon.title=cat.name;icon.setAttribute('role','img');icon.setAttribute('aria-label',cat.name);
+     icons.append(icon);
+    }
+    titleLine.append(icons);
+   }
+   const place=[locationLabel(objectSpace(item)),item.caja_id?boxLabel(item.caja_id):''].filter(Boolean).join(' | ');
+   main.replaceChildren(titleLine,elem('div','record-detail object-place-line',place));
+   if(item.descripcion)main.append(elem('div','record-detail',item.descripcion));
+   if(!cats.length&&item.categoria?.trim())main.append(elem('span','record-category-legacy','Pendiente de clasificar (antes: '+item.categoria.trim()+')'));
    line.append(main);root.append(line);
    continue;
   }
