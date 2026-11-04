@@ -174,7 +174,7 @@ function spaceBoxesField(space){
  const list=elem('div','vstack gap-2');
  const label=elem('label','form-label','Nueva caja');label.htmlFor='spaceNewBox';
  const input=elem('input','form-control');input.id='spaceNewBox';input.type='text';input.placeholder='Nombre de la caja';input.maxLength=150;
- const add=elem('button','btn btn-outline-primary mt-2','Añadir caja');add.type='button';
+ const add=elem('button','btn btn-primary','Añadir caja');add.type='button';add.id='spaceAddBoxBtn';
  const message=elem('p','form-text');message.setAttribute('role','status');
  let busy=false;
  async function run(action){
@@ -226,11 +226,15 @@ function spaceBoxesField(space){
   });
  });
  input.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();add.click()}});
- paint();panel.append(list,label,input,add,message);return panel;
+ paint();panel.append(list,label,input,message);
+ $('saveBtn').before(add);
+ return panel;
 }
 
 function openForm(type=tab,item=null){
  closeCategoryFilter();
+ $('spaceAddBoxBtn')?.remove();
+ show('saveBtn',true);
  clearMsg();editing={type,id:item?.id||null};selectedPhoto=null;
  show('deleteObjectBtn',type==='objetos'&&!!item?.id);
  if(photoPreviewUrl){URL.revokeObjectURL(photoPreviewUrl);photoPreviewUrl=null}
@@ -249,7 +253,16 @@ function openForm(type=tab,item=null){
   fields.addEventListener('invalid',()=>{extra.open=true},true);
   extra.append(summary,fields);root.append(extra);
  }
- if(type==='ubicaciones'&&item?.id)root.append(spaceBoxesField(item));
+ if(type==='ubicaciones'&&item?.id){
+  root.append(spaceBoxesField(item));
+  show('saveBtn',false);
+  const initial={fieldName:$('fieldName').value,fieldDesc:$('fieldDesc').value,fieldParent:$('fieldParent').value};
+  const refreshSave=()=>show('saveBtn',Object.keys(initial).some(id=>$(id).value!==initial[id]));
+  for(const id of Object.keys(initial)){
+   $(id).addEventListener('input',refreshSave);
+   $(id).addEventListener('change',refreshSave);
+  }
+ }
  if(type==='cajas')root.append(selectField('fieldLocation','Espacio',data.ubicaciones,false,item?.ubicacion_id||boxSpace||localStorage.getItem(lastLocationKey())));
  if(type==='objetos'){
   const extra=elem('details','object-extra-fields');
