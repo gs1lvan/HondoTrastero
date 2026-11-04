@@ -42,6 +42,7 @@ try{const saved=localStorage.getItem('hondotrastero:orden');if(['az','za','categ
 let administrationOpen=false;
 let boxSpace='';
 let tab='objetos', editing=null, user=null, selectedPhoto=null, photoPreviewUrl=null;
+let removePhoto=false;
 let selectedCategoryFilter = ''; // Filtro visual: no modifica las categorías de los objetos.
 
 function show(id,visible){$(id).classList.toggle('d-none',!visible)}
@@ -84,6 +85,7 @@ function photoField(item,onSelected=null){
  const preview=elem('img','photo-preview d-none');preview.id='photoPreview';preview.alt='Vista previa de la fotografía';
  const buttons=elem('div','d-flex flex-wrap gap-2');
  const cameraButton=elem('button','btn btn-outline-primary flex-grow-1','📷 Hacer foto');cameraButton.type='button';
+ const removeButton=elem('button','btn btn-outline-danger d-none','Eliminar foto');removeButton.type='button';removeButton.id='removePhotoBtn';
  const attachButton=elem('button','btn btn-outline-primary flex-grow-1','🖼️ Adjuntar foto');attachButton.type='button';
  const cameraInput=elem('input','visually-hidden');cameraInput.type='file';cameraInput.id='fieldCamera';cameraInput.accept='image/*';cameraInput.setAttribute('capture','environment');
  const galleryInput=elem('input','visually-hidden');galleryInput.type='file';galleryInput.id='fieldPhoto';galleryInput.accept='image/*';
@@ -91,7 +93,7 @@ function photoField(item,onSelected=null){
   const file=input.files?.[0];if(!file)return;
   if(!file.type.startsWith('image/')){alertMsg('Selecciona un archivo de imagen.');return}
   if(onSelected){onSelected(file);return}
-  selectedPhoto=file;
+  selectedPhoto=file;removePhoto=false;removeButton.classList.remove('d-none');
   if(photoPreviewUrl){URL.revokeObjectURL(photoPreviewUrl);photoPreviewUrl=null}
   photoPreviewUrl=URL.createObjectURL(file);preview.src=photoPreviewUrl;preview.classList.remove('d-none');
  }
@@ -99,11 +101,18 @@ function photoField(item,onSelected=null){
  attachButton.addEventListener('click',()=>{galleryInput.value='';galleryInput.click()});
  cameraInput.addEventListener('change',()=>choosePhoto(cameraInput));
  galleryInput.addEventListener('change',()=>choosePhoto(galleryInput));
- buttons.append(cameraButton,attachButton);
+ removeButton.addEventListener('click',()=>{
+  selectedPhoto=null;removePhoto=true;
+  if(photoPreviewUrl){URL.revokeObjectURL(photoPreviewUrl);photoPreviewUrl=null}
+  preview.removeAttribute('src');preview.classList.add('d-none');
+  cameraInput.value='';galleryInput.value='';removeButton.classList.add('d-none');
+ });
+ buttons.append(cameraButton,attachButton,removeButton);
+ if(item?.foto_path)removeButton.classList.remove('d-none');
  const help=elem('div','form-text','Puedes tomar una foto ahora o elegir una existente. Se comprimirá antes de subirla.');
  wrap.append(lab,preview,buttons,cameraInput,galleryInput,help);
  if(item?.foto_path)signedPhoto(item.foto_path).then(url=>{
-  if(!selectedPhoto){preview.src=url;preview.classList.remove('d-none')}
+  if(!selectedPhoto&&!removePhoto){preview.src=url;preview.classList.remove('d-none')}
  }).catch(()=>{});
  return wrap;
 }
@@ -234,7 +243,7 @@ function spaceBoxesField(space){
 
 function startObjectPhoto(){
  closeCategoryFilter();clearMsg();
- editing=null;selectedPhoto=null;
+ editing=null;selectedPhoto=null;removePhoto=false;
  if(photoPreviewUrl){URL.revokeObjectURL(photoPreviewUrl);photoPreviewUrl=null}
  $('spaceAddBoxBtn')?.remove();
  $('editPage').classList.toggle('editor-compact',listMode==='reducido');
@@ -244,21 +253,24 @@ function startObjectPhoto(){
  const field=photoField(null,file=>{
   openForm('objetos');
   selectedPhoto=file;
+  $('removePhotoBtn').classList.remove('d-none');
   photoPreviewUrl=URL.createObjectURL(file);
   const preview=$('photoPreview');
   preview.src=photoPreviewUrl;preview.classList.remove('d-none');
  });
- // El primer paso ofrece únicamente cámara y galería.
+ // Primer paso: cámara, galería o continuar sin foto.
  field.querySelector('label').remove();
  field.querySelector('.form-text').remove();
- root.append(field);page.show();
+ const skip=elem('button','btn btn-outline-primary','Omitir este paso');skip.type='button';
+ skip.addEventListener('click',()=>openForm('objetos'));
+ root.append(field,skip);page.show();
 }
 function openForm(type=tab,item=null){
  $('editPage').classList.toggle('editor-compact',listMode==='reducido');
  closeCategoryFilter();
  $('spaceAddBoxBtn')?.remove();
  show('saveBtn',true);
- clearMsg();editing={type,id:item?.id||null};selectedPhoto=null;
+ clearMsg();editing={type,id:item?.id||null};selectedPhoto=null;removePhoto=false;
  show('deleteObjectBtn',type==='objetos'&&!!item?.id);
  if(photoPreviewUrl){URL.revokeObjectURL(photoPreviewUrl);photoPreviewUrl=null}
  const root=$('modalFields');root.replaceChildren();
@@ -715,10 +727,11 @@ $('editForm').addEventListener('submit',async e=>{
  if(type==='cajas'&&!payload.ubicacion_id){alertMsg('Selecciona un espacio.');return}
  $('saveBtn').disabled=true;let newPhotoPath=null;
  try{
+  if(type==='objetos'&&removePhoto)payload.foto_path=null;
   if(type==='objetos'&&selectedPhoto){newPhotoPath=await uploadPhoto(selectedPhoto);payload.foto_path=newPhotoPath}
   const query=id?client.from(type).update(payload).eq('id',id):client.from(type).insert(payload);
   const {error}=await query;if(error)throw error;
-  if(type==='objetos'&&newPhotoPath&&id){
+  if(type==='objetos'&&(newPhotoPath||removePhoto)&&id){
    const previous=data.objetos.find(x=>x.id===id)?.foto_path;
    if(previous&&previous!==newPhotoPath){
     const removal=await client.storage.from(BUCKET).remove([previous]);
