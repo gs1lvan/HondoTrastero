@@ -316,3 +316,13 @@ html .parcel-shell .records-reduced .object-name-badge{
  border-radius:3px;background:rgba(65,32,12,.35);color:#fff3df;
  font:inherit;line-height:1.25;
 }
+
+/* Espacios compactos: nombre y cajas en líneas separadas. */
+html .parcel-shell .records-reduced .space-record-main{
+ white-space:normal;overflow-x:visible;
+}
+html .parcel-shell .records-reduced .space-record-main .record-compact-text{
+ white-space:normal;overflow-wrap:anywhere;
+}
+html .parcel-shell .records-reduced .space-record-name{display:block;font-weight:800}
+html .parcel-shell .records-reduced .space-record-boxes{margin-top:.15rem}
