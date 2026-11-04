@@ -798,3 +798,15 @@ html[data-style="azul-oscuro"] .parcel-shell #appView:not(.listing-compact) #rec
 html[data-style="terminal"] .parcel-shell #appView:not(.listing-compact) #records > .record{
  border-width:1px;border-radius:2px;border-color:var(--terminal-edge);
 }
+
+/* La parte trasera del clip se oculta en la arista exterior del borde. */
+html[data-style="azul-oscuro"] .parcel-shell #appView:not(.listing-compact) .record{
+ --clip-card-border:2px;
+}
+html[data-style="azul-oscuro"] .parcel-shell :is(.paper-card,.editor-paper){
+ --clip-card-border:3px;
+}
+html[data-style="azul-oscuro"] .parcel-shell #appView:not(.listing-compact) .record::before,
+html[data-style="azul-oscuro"] .parcel-shell :is(.paper-card,.editor-paper)::before{
+ top:calc(-18px - var(--clip-card-border));
+}
