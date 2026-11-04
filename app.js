@@ -557,6 +557,7 @@ function render(){
  show('records',!administrationOpen);
  show('inventoryOrderPanel',!administrationOpen&&tab==='objetos');
  $('inventoryOrder').value=inventoryOrder;
+ $('inventoryOrderSummary').textContent=' | '+$('inventoryOrder').selectedOptions[0].textContent;
  if(administrationOpen){
   for(const id of ['boxSpacePanel','inventoryToolbar','inventoryFilters','empty'])show(id,false);
   closeCategoryFilter();
