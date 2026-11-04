@@ -767,3 +767,8 @@ html[data-style="terminal"] .parcel-shell #appView .terminal-live-preview .objec
 html[data-style="terminal"] .terminal-live-preview .record-detail{
  font-family:inherit;font-size:.78rem;color:var(--terminal-muted);margin-top:.3rem;
 }
+
+/* Intensidad del fondo independiente del brillo global y de su transparencia. */
+html[data-style="terminal"] .parcel-shell #appView .record-main .object-name-badge{
+ background:color-mix(in srgb,var(--terminal-badge-color,var(--terminal-fill)) var(--terminal-badge-opacity,65%),transparent)!important;
+}
