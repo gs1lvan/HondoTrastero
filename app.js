@@ -36,6 +36,7 @@ const CATEGORIES = Object.freeze([
 const CATEGORIES_BY_ID = new Map(CATEGORIES.map(cat=>[cat.id,cat]));
 
 let administrationOpen=false;
+let boxSpace='';
 let tab='objetos', editing=null, user=null, selectedPhoto=null, photoPreviewUrl=null;
 let selectedCategoryFilter = ''; // Filtro visual: no modifica las categorías de los objetos.
 
@@ -168,7 +169,7 @@ function openForm(type=tab,item=null){
  root.append(inputField('fieldName','Nombre',item?.nombre));
  root.append(inputField('fieldDesc','Descripción (opcional)',item?.descripcion||'','text',false));
  if(type==='ubicaciones')root.append(selectField('fieldParent','Espacio superior (opcional)',data.ubicaciones.filter(x=>x.id!==item?.id),true,item?.ubicacion_padre_id));
- if(type==='cajas')root.append(selectField('fieldLocation','Espacio',data.ubicaciones,false,item?.ubicacion_id||localStorage.getItem(lastLocationKey())));
+ if(type==='cajas')root.append(selectField('fieldLocation','Espacio',data.ubicaciones,false,item?.ubicacion_id||boxSpace||localStorage.getItem(lastLocationKey())));
  if(type==='objetos'){
   root.append(inputField('fieldQty','Cantidad',item?.cantidad??1,'number'));
   root.append(categoryField(item));
@@ -299,11 +300,25 @@ function refreshInventoryFilters(){
  list.scrollTop=oldScroll;
  filterCategoryOptions();
 }
+function refreshBoxSpaces(){
+ show('boxSpacePanel',tab==='cajas');
+ if(tab!=='cajas')return;
+ if(!data.ubicaciones.some(s=>s.id===boxSpace))boxSpace='';
+ const select=$('boxSpace');
+ select.replaceChildren(new Option('Selecciona un espacio',''));
+ for(const space of [...data.ubicaciones].sort((a,b)=>a.nombre.localeCompare(b.nombre,'es'))){
+  const count=data.cajas.filter(box=>box.ubicacion_id===space.id).length;
+  select.add(new Option(space.nombre+' ('+count+')',space.id));
+ }
+ select.value=boxSpace;
+}
 function render(){
+ refreshBoxSpaces();
  show('adminStyleTools',administrationOpen);
  const managingSpaces=tab==='ubicaciones';
- show('inventoryToolbar',!managingSpaces);
- $('newItem').lastChild.textContent=managingSpaces?' Añadir espacio':' Añadir objeto';
+ show('inventoryToolbar',tab==='objetos'||(tab==='cajas'&&!!boxSpace));
+ $('newItem').lastChild.textContent=' Añadir '+names[tab];
+ show('newItem',tab!=='cajas'||!!boxSpace);
  refreshInventoryFilters();
  $('countObjects').textContent=data.objetos.length;
  $('countBoxes').textContent=data.cajas.length;
@@ -315,6 +330,7 @@ function render(){
  const parents=spaceParents();
  const rows=data[tab].filter(item=>{
   if(!`${item.nombre} ${item.descripcion||''}`.toLocaleLowerCase('es').includes(q))return false;
+  if(tab==='cajas')return !!boxSpace&&item.ubicacion_id===boxSpace;
   if(tab!=='objetos')return true;
   if(selectedSpace&&!belongsToSpace(item,selectedSpace,parents))return false;
   const cats=itemCategories(item);
@@ -322,6 +338,7 @@ function render(){
   return true;
  });
  const root=$('records');root.replaceChildren();show('empty',rows.length===0);
+ $('empty').textContent=tab==='cajas'?(!boxSpace?'Selecciona un espacio para ver sus cajas.':'Este espacio no tiene cajas. Pulsa Añadir caja para crear la primera.'):'Todavía no hay registros en esta sección.';
  for(const item of rows){
   const line=elem('div','list-group-item record');
   if(tab==='objetos'&&item.foto_path){
@@ -348,6 +365,7 @@ function render(){
  }
 }
 async function removeItem(type,item){
+ if(type==='cajas'&&data.objetos.some(obj=>obj.caja_id===item.id)){alertMsg('Esta caja contiene objetos. Muévelos a otro espacio o caja antes de eliminarla.','warning');return}
  if(!confirm(`¿Eliminar ${names[type]} «${item.nombre}»?`))return;
  const {error}=await client.from(type).delete().eq('id',item.id);
  if(error){alertMsg(`No se pudo eliminar: ${error.message}`);return}
@@ -397,6 +415,7 @@ $('editForm').addEventListener('submit',async e=>{
   return;
  }
  $('saveBtn').disabled=false;
+ if(type==='cajas')boxSpace=payload.ubicacion_id;
  if(payload.ubicacion_id)localStorage.setItem(lastLocationKey(),payload.ubicacion_id);
  if(type==='objetos'&&payload.caja_id){
   const box=data.cajas.find(x=>x.id===payload.caja_id);
@@ -443,7 +462,8 @@ document.addEventListener('pointerdown',event=>{
  closeCategoryFilter();
 });
 $('clearFilters').addEventListener('click',()=>{closeCategoryFilter();$('search').value='';$('filterSpace').value='';selectedCategoryFilter='';render()});
-$('newItem').addEventListener('click',()=>openForm(tab==='ubicaciones'?'ubicaciones':'objetos'));
+$('boxSpace').addEventListener('change',()=>{boxSpace=$('boxSpace').value;$('search').value='';render()});
+$('newItem').addEventListener('click',()=>{if(tab==='cajas'&&!boxSpace)return;openForm(tab)});
 $('loginForm').addEventListener('submit',async e=>{
  e.preventDefault();clearMsg();
  const btn=e.target.querySelector('button');btn.disabled=true;
