@@ -231,3 +231,24 @@ html .parcel-shell #appView.listing-compact .section-heading .add-button{
 html .parcel-shell #appView.listing-compact .section-heading .add-button:hover{background:transparent;opacity:.8}
 
 html .parcel-shell #appView.listing-compact #inventoryFilters .filter-field > span{font-weight:800}
+
+/* Cajas: selector y estado vacío mínimos en listado compacto. */
+html .parcel-shell #appView.listing-compact #boxSpacePanel{
+ background:transparent;border:0;border-radius:0;box-shadow:none;padding:0;margin:.35rem 0 .65rem;
+}
+html .parcel-shell #appView.listing-compact #boxSpacePanel::before,
+html .parcel-shell #appView.listing-compact #boxSpacePanel::after{display:none}
+html .parcel-shell #appView.listing-compact #boxSpacePanel .form-label{
+ font-size:.78rem;font-weight:800;margin-bottom:.25rem;
+}
+html .parcel-shell #appView.listing-compact #boxSpacePanel .form-select{
+ background-color:transparent;color:inherit;border:1px solid currentColor;border-radius:999px;
+ box-shadow:none;min-height:32px;padding:.25rem 1.8rem .25rem .6rem;font-size:.78rem;
+ appearance:none;-webkit-appearance:none;
+ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='m2 2 4 4 4-4' fill='none' stroke='%2380502b' stroke-width='1.5'/%3E%3C/svg%3E");
+ background-position:right .65rem center;background-size:10px 7px;background-repeat:no-repeat;
+}
+html .parcel-shell #appView.listing-compact #empty{
+ background:transparent;border:0;border-radius:0;box-shadow:none;padding:.5rem 0;margin:0;
+ text-align:left;font-size:.8rem;color:inherit;
+}
