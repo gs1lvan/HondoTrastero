@@ -811,9 +811,10 @@ html[data-style="azul-oscuro"] .parcel-shell :is(.paper-card,.editor-paper)::bef
  top:calc(-18px - var(--clip-card-border));
 }
 
-/* Logotipo exclusivo del tema Azul oscuro, sin marco circular. */
+/* Logotipo exclusivo del tema Azul oscuro, con marco circular como Cartón. */
 .brand-art-blue{display:none}
 html[data-style="azul-oscuro"] .parcel-shell .brand-art:not(.brand-art-blue){display:none}
 html[data-style="azul-oscuro"] .parcel-shell .brand-art-blue{
- display:block;object-fit:contain;border:0;border-radius:0;box-shadow:none;background:transparent;
+ display:block;object-fit:contain;border:3px solid #365b7d;border-radius:50%;
+ padding:6px;box-shadow:0 5px 12px #020b1844;background:#101e30;
 }
