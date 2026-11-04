@@ -93,9 +93,9 @@ function photoField(item,onSelected=null){
  const wrap=elem('div','photo-field'),lab=elem('label','form-label fw-semibold','Fotografía');
  const preview=elem('img','photo-preview d-none');preview.id='photoPreview';preview.alt='Vista previa de la fotografía';
  const buttons=elem('div','d-flex flex-wrap gap-2');
- const cameraButton=elem('button','btn btn-outline-primary flex-grow-1','📷 Hacer foto');cameraButton.type='button';
+ const cameraButton=elem('button','btn btn-outline-primary flex-grow-1','Hacer foto');cameraButton.type='button';
  const removeButton=elem('button','btn btn-outline-danger d-none','Eliminar foto');removeButton.type='button';removeButton.id='removePhotoBtn';
- const attachButton=elem('button','btn btn-outline-primary flex-grow-1','🖼️ Adjuntar foto');attachButton.type='button';
+ const attachButton=elem('button','btn btn-outline-primary flex-grow-1','Adjuntar foto');attachButton.type='button';
  const cameraInput=elem('input','visually-hidden');cameraInput.type='file';cameraInput.id='fieldCamera';cameraInput.accept='image/*';cameraInput.setAttribute('capture','environment');
  const galleryInput=elem('input','visually-hidden');galleryInput.type='file';galleryInput.id='fieldPhoto';galleryInput.accept='image/*';
  function choosePhoto(input){
@@ -105,6 +105,9 @@ function photoField(item,onSelected=null){
   selectedPhoto=file;removePhoto=false;removeButton.classList.remove('d-none');
   if(photoPreviewUrl){URL.revokeObjectURL(photoPreviewUrl);photoPreviewUrl=null}
   photoPreviewUrl=URL.createObjectURL(file);preview.src=photoPreviewUrl;preview.classList.remove('d-none');
+ }
+ for(const [button,symbol] of [[cameraButton,'📷'],[attachButton,'🖼️']]){
+  const icon=elem('span','photo-button-icon',symbol+' ');icon.setAttribute('aria-hidden','true');button.prepend(icon);
  }
  cameraButton.addEventListener('click',()=>{cameraInput.value='';cameraInput.click()});
  attachButton.addEventListener('click',()=>{galleryInput.value='';galleryInput.click()});
