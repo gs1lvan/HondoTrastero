@@ -435,6 +435,19 @@ function render(){
  $('empty').textContent=tab==='cajas'?(!boxSpace?'Selecciona un espacio para ver sus cajas.':'Este espacio no tiene cajas. Pulsa Añadir caja para crear la primera.'):'Todavía no hay registros en esta sección.';
  for(const item of rows){
   const line=elem('div','list-group-item record');
+  if(tab==='objetos'){
+   line.style.cursor='pointer';
+   line.tabIndex=0;
+   line.setAttribute('aria-label','Editar objeto '+item.nombre);
+   line.addEventListener('click',event=>{
+    if(event.target.closest('button,a,input,select,textarea,summary'))return;
+    openForm('objetos',item);
+   });
+   line.addEventListener('keydown',event=>{
+    if(event.target!==line||!['Enter',' '].includes(event.key))return;
+    event.preventDefault();openForm('objetos',item);
+   });
+  }
   if(tab==='objetos'&&item.foto_path){
    const img=elem('img','record-photo');img.alt='Foto de '+item.nombre;img.loading='lazy';
    signedPhoto(item.foto_path).then(url=>{img.src=url}).catch(()=>img.remove());line.append(img);
