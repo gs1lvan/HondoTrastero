@@ -182,3 +182,24 @@ html .parcel-shell #appView.listing-compact #inventoryFilters .category-filter-o
 html .parcel-shell #appView.listing-compact #inventoryFilters .category-filter-option.selected{font-weight:800}
 html .parcel-shell #appView.listing-compact #inventoryFilters .category-option-count{background:transparent;color:inherit;padding:0;font-size:.75rem}
 html .parcel-shell #appView.listing-compact #inventoryFilters .category-filter-search-wrap{border-bottom:1px solid currentColor}
+
+/* Búsqueda y desplegables compactos. */
+html .parcel-shell #appView.listing-compact .search-field,
+html .parcel-shell #appView.listing-compact .search-field:focus-within{
+ background:transparent;border:0;border-bottom:1px solid currentColor;border-radius:0;box-shadow:none;padding:0 .15rem;color:inherit;
+}
+html .parcel-shell #appView.listing-compact .search-field input{
+ padding:.35rem 0;background:transparent;color:inherit;font-size:.82rem;caret-color:currentColor;
+}
+html .parcel-shell #appView.listing-compact .search-field input::placeholder{color:inherit;opacity:.75}
+html .parcel-shell #appView.listing-compact .search-field span{font-size:1.3rem;color:inherit}
+html .parcel-shell #appView.listing-compact #inventoryFilters .filter-field{position:relative;gap:.2rem}
+html .parcel-shell #appView.listing-compact #inventoryFilters :is(.form-select,.category-filter-trigger){
+ border:1px solid #80502b;border-radius:999px;background:transparent;background-image:none;
+ padding:.25rem 1.5rem .25rem .6rem;min-height:32px;width:100%;color:inherit;
+}
+html .parcel-shell #appView.listing-compact #inventoryFilters .form-select{appearance:none;-webkit-appearance:none}
+html .parcel-shell #appView.listing-compact #inventoryFilters .filter-field::after{
+ content:"⌄";position:absolute;right:.6rem;bottom:.3rem;font:700 1rem/1 sans-serif;color:inherit;pointer-events:none;
+}
+html .parcel-shell #appView.listing-compact #inventoryFilters .category-filter-chevron{display:none}
