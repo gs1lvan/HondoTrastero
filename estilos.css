@@ -164,3 +164,21 @@ html[data-style="carton"] .parcel-shell .records-reduced .record::after{
  pointer-events:none;
  z-index:1;
 }
+
+/* Filtros mínimos, independientes del tema, solo en listado Reducido. */
+html .parcel-shell #appView.listing-compact #inventoryFilters .inventory-filters{
+ background:transparent;border:0;box-shadow:none;border-radius:0;padding:0;gap:.25rem .7rem;margin-bottom:.5rem;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+}
+html .parcel-shell #appView.listing-compact #inventoryFilters summary{font-size:.82rem;font-weight:600;padding:.25rem 0!important}
+html .parcel-shell #appView.listing-compact #inventoryFilters .filter-field{font-size:.75rem;gap:0;color:inherit;font-weight:400}
+html .parcel-shell #appView.listing-compact #inventoryFilters :is(.form-select,.category-filter-trigger,.filter-clear,.category-filter-panel,.category-filter-search-wrap,.category-filter-search-wrap input,.category-filter-option){
+ background:transparent;color:inherit;border:0;border-radius:0;box-shadow:none;font-size:.78rem;font-weight:400;min-height:32px;
+}
+html .parcel-shell #appView.listing-compact #inventoryFilters .form-select{padding:.2rem 1rem .2rem 0}
+html .parcel-shell #appView.listing-compact #inventoryFilters .category-filter-trigger{padding:.2rem 0}
+html .parcel-shell #appView.listing-compact #inventoryFilters .filter-clear{grid-column:1/-1;justify-self:start;padding:.15rem 0;text-decoration:underline;line-height:1.2}
+html .parcel-shell #appView.listing-compact #inventoryFilters .category-filter-panel{padding:.25rem 0}
+html .parcel-shell #appView.listing-compact #inventoryFilters .category-filter-option{padding:.2rem 0}
+html .parcel-shell #appView.listing-compact #inventoryFilters .category-filter-option.selected{font-weight:800}
+html .parcel-shell #appView.listing-compact #inventoryFilters .category-option-count{background:transparent;color:inherit;padding:0;font-size:.75rem}
+html .parcel-shell #appView.listing-compact #inventoryFilters .category-filter-search-wrap{border-bottom:1px solid currentColor}
