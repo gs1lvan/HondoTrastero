@@ -563,6 +563,14 @@ function render(){
     text.append(elem('span','object-name-badge',item.nombre));
     if(concepts.length>1)text.append(document.createTextNode(' | '+concepts.slice(1).join(' | ')));
     main.replaceChildren(text);
+   }else if(tab==='ubicaciones'){
+    main.classList.add('space-record-main');
+    main.replaceChildren(elem('strong','record-compact-text space-record-name',item.nombre));
+    const boxes=data.cajas.filter(box=>box.ubicacion_id===item.id)
+     .sort((a,b)=>a.nombre.localeCompare(b.nombre,'es')).map(box=>box.nombre);
+    if(boxes.length)main.append(elem('div','record-compact-text space-record-boxes',boxes.join(' | ')));
+    const details=[item.ubicacion_padre_id?'Dentro de '+locationLabel(item.ubicacion_padre_id):'',item.descripcion||''].filter(Boolean);
+    if(details.length)main.append(elem('div','record-compact-text',details.join(' | ')));
    }else main.replaceChildren(elem('span','record-compact-text',concepts.join(' | ')));
   }
   if(tab==='objetos'){
