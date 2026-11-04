@@ -608,3 +608,21 @@ html .parcel-shell #appView:not(.listing-compact) .space-record .space-move-cont
 html .parcel-shell #appView:not(.listing-compact) .space-record .space-move-controls .space-order-button{
  width:30px;min-width:30px;min-height:32px;padding:0;
 }
+
+/* Brillo del texto exclusivo del tema Terminal. */
+.terminal-brightness{margin-top:1rem}
+.terminal-brightness-heading{display:flex;justify-content:space-between;gap:.5rem;font-size:.85rem;margin-bottom:.4rem}
+.terminal-brightness input[type="range"]{display:block;width:100%;min-height:36px;accent-color:currentColor;margin-bottom:.4rem}
+html[data-style="terminal"]{--ink:var(--terminal-text);--cream:var(--terminal-text);--bs-body-color:var(--terminal-text)}
+html[data-style="terminal"] body{color:var(--terminal-text)}
+html[data-style="terminal"] .parcel-shell :is(.brand-title,.brand-copy p,.record-title,.filter-field>span,.parcel-tab,.section-heading h1,.record,.paper-card,.editor-paper,.inventory-filters,.empty-state,.category-field,.search-field,.form-control,.form-select,.category-filter-trigger,.category-filter-panel,.category-filter-search-wrap,.category-filter-search-wrap input,.category-filter-option,.category-choice,.photo-preview,.style-dialog,.style-choice,.category-filter-heading,.category-filter-close,.category-option-icon,.btn-outline-primary){
+ color:var(--terminal-text);
+}
+html[data-style="terminal"] .parcel-shell :is(input,input::placeholder,.search-field span,.record-detail,.form-text,.category-tip,.category-counter,.category-legacy,.category-filter-no-match){color:var(--terminal-muted)}
+html[data-style="terminal"] .parcel-shell :is(.record-category,.category-choice.selected,.category-filter-option.selected,.record-category-legacy,.category-option-count){color:var(--terminal-bright)}
+html[data-style="terminal"] .parcel-shell .brand-title{text-shadow:var(--terminal-glow)}
+html[data-style="terminal"] .parcel-shell :is(.form-control,.search-field input)::placeholder{color:var(--terminal-muted)}
+html[data-style="terminal"] .parcel-shell .parcel-tab.active,
+html[data-style="terminal"] .parcel-shell .category-filter-option.selected .category-option-count{color:#031006}
+html[data-style="terminal"] .parcel-shell #appView.listing-compact .parcel-tab.active{color:var(--terminal-text)}
+html[data-style="terminal"] .parcel-shell #editPage.editor-compact .category-choice.selected{color:var(--terminal-bright)}
