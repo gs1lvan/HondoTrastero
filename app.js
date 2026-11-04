@@ -159,6 +159,68 @@ function categoryField(item){
  }
  return field;
 }
+function spaceBoxesField(space){
+ const panel=elem('section','space-boxes');
+ panel.append(elem('h3','h5','Cajas de este espacio'));
+ panel.append(elem('p','form-text','Añadir o eliminar cajas se guarda al momento.'));
+ const list=elem('div','vstack gap-2');
+ const label=elem('label','form-label','Nueva caja');label.htmlFor='spaceNewBox';
+ const input=elem('input','form-control');input.id='spaceNewBox';input.type='text';input.placeholder='Nombre de la caja';input.maxLength=150;
+ const add=elem('button','btn btn-outline-primary','Añadir caja');add.type='button';
+ const message=elem('p','form-text');message.setAttribute('role','status');
+ let busy=false;
+ async function run(action){
+  if(busy)return;
+  busy=true;add.disabled=true;
+  list.querySelectorAll('button').forEach(b=>b.disabled=true);
+  message.textContent='';
+  try{
+   await action();
+   const result=await client.from('cajas').select('*').order('creado_en',{ascending:false});
+   if(result.error)throw result.error;
+   data.cajas=result.data||[];
+   render();paint();
+  }catch(error){message.textContent='No se pudo completar: '+error.message}
+  finally{busy=false;add.disabled=false;list.querySelectorAll('button').forEach(b=>b.disabled=false)}
+ }
+ function paint(){
+  list.replaceChildren();
+  const boxes=data.cajas.filter(box=>box.ubicacion_id===space.id).sort((a,b)=>a.nombre.localeCompare(b.nombre,'es'));
+  if(!boxes.length)list.append(elem('p','form-text','Este espacio todavía no tiene cajas.'));
+  for(const box of boxes){
+   const row=elem('div','d-flex align-items-center justify-content-between gap-2');
+   row.append(elem('span','',box.nombre));
+   const remove=elem('button','btn btn-sm btn-outline-danger','Eliminar');remove.type='button';
+   remove.setAttribute('aria-label','Eliminar caja '+box.nombre);
+   remove.addEventListener('click',()=>{
+    if(busy)return;
+    run(async()=>{
+     // Consultar el contenido actual antes de permitir el borrado.
+     const contents=await client.from('objetos').select('id').eq('caja_id',box.id).limit(1);
+     if(contents.error)throw contents.error;
+     if(contents.data?.length){message.textContent='Esta caja contiene objetos. Muévelos antes de eliminarla.';return}
+     if(!confirm('¿Eliminar la caja «'+box.nombre+'»?'))return;
+     const result=await client.from('cajas').delete().eq('id',box.id);
+     if(result.error)throw result.error;
+     message.textContent='Caja eliminada.';
+    });
+   });
+   row.append(remove);list.append(row);
+  }
+ }
+ add.addEventListener('click',()=>{
+  const name=input.value.trim();
+  if(!name){message.textContent='Escribe el nombre de la caja.';input.focus();return}
+  run(async()=>{
+   const result=await client.from('cajas').insert({nombre:name,ubicacion_id:space.id,descripcion:null});
+   if(result.error)throw result.error;
+   input.value='';message.textContent='Caja añadida.';
+  });
+ });
+ input.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();add.click()}});
+ paint();panel.append(list,label,input,add,message);return panel;
+}
+
 function openForm(type=tab,item=null){
  closeCategoryFilter();
  clearMsg();editing={type,id:item?.id||null};selectedPhoto=null;
@@ -169,6 +231,7 @@ function openForm(type=tab,item=null){
  root.append(inputField('fieldName','Nombre',item?.nombre));
  root.append(inputField('fieldDesc','Descripción (opcional)',item?.descripcion||'','text',false));
  if(type==='ubicaciones')root.append(selectField('fieldParent','Espacio superior (opcional)',data.ubicaciones.filter(x=>x.id!==item?.id),true,item?.ubicacion_padre_id));
+ if(type==='ubicaciones'&&item?.id)root.append(spaceBoxesField(item));
  if(type==='cajas')root.append(selectField('fieldLocation','Espacio',data.ubicaciones,false,item?.ubicacion_id||boxSpace||localStorage.getItem(lastLocationKey())));
  if(type==='objetos'){
   root.append(inputField('fieldQty','Cantidad',item?.cantidad??1,'number'));
