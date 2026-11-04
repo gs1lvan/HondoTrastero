@@ -445,14 +445,23 @@ function render(){
  refreshBoxSpaces();
  show('adminStyleTools',administrationOpen);
  const managingSpaces=tab==='ubicaciones';
- show('inventoryToolbar',tab==='objetos'||(tab==='cajas'&&!!boxSpace));
+ show('inventoryToolbar',tab==='objetos'||tab==='cajas');
  $('newItem').lastChild.textContent=' Añadir '+names[tab];
- show('newItem',tab!=='cajas'||!!boxSpace);
+ show('newItem',true);
  refreshInventoryFilters();
  $('countObjects').textContent=data.objetos.length;
  $('countBoxes').textContent=data.cajas.length;
  $('countLocations').textContent=data.ubicaciones.length;
- document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+ document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',!administrationOpen&&b.dataset.tab===tab));
+ $('manageSpaces').classList.toggle('active',administrationOpen);
+ $('manageSpaces').setAttribute('aria-expanded',String(administrationOpen));
+ document.querySelector('.section-heading').classList.toggle('d-none',administrationOpen);
+ show('records',!administrationOpen);
+ if(administrationOpen){
+  for(const id of ['boxSpacePanel','inventoryToolbar','inventoryFilters','empty'])show(id,false);
+  closeCategoryFilter();
+  return;
+ }
  const heading=$('sectionTitle');heading.textContent=tab==='objetos'?'📦 Inventario':tab==='cajas'?'▤ Cajas':'▥ Espacios';
  const q=$('search').value.trim().toLocaleLowerCase('es');
  const selectedSpace=$('filterSpace').value,selectedCategory=selectedCategoryFilter;
@@ -618,11 +627,10 @@ document.querySelector('.parcel-nav').addEventListener('click',e=>{
  closeCategoryFilter();tab=b.dataset.tab;$('search').value='';render();
 });
 $('manageSpaces').addEventListener('click',()=>{
- const spacesTab=document.querySelector('[data-tab="ubicaciones"]');
- spacesTab.click();
  administrationOpen=true;
+ closeCategoryFilter();
+ clearMsg();
  render();
- spacesTab.focus();
 });
 const listDialog=$('listMenu');
 $('openList').addEventListener('click',()=>listDialog.showModal());
@@ -663,7 +671,7 @@ document.addEventListener('pointerdown',event=>{
 });
 $('clearFilters').addEventListener('click',()=>{closeCategoryFilter();$('search').value='';$('filterSpace').value='';selectedCategoryFilter='';render()});
 $('boxSpace').addEventListener('change',()=>{boxSpace=$('boxSpace').value;$('search').value='';render()});
-$('newItem').addEventListener('click',()=>{if(tab==='cajas'&&!boxSpace)return;openForm(tab)});
+$('newItem').addEventListener('click',()=>openForm(tab));
 $('loginForm').addEventListener('submit',async e=>{
  e.preventDefault();clearMsg();
  const btn=e.target.querySelector('button');btn.disabled=true;
