@@ -37,6 +37,8 @@ const CATEGORIES_BY_ID = new Map(CATEGORIES.map(cat=>[cat.id,cat]));
 
 let listMode='ampliado';
 try{if(localStorage.getItem('hondotrastero:listado')==='reducido')listMode='reducido'}catch{}
+let inventoryOrder='az';
+try{const saved=localStorage.getItem('hondotrastero:orden');if(['az','za','categorias'].includes(saved))inventoryOrder=saved}catch{}
 let administrationOpen=false;
 let boxSpace='';
 let tab='objetos', editing=null, user=null, selectedPhoto=null, photoPreviewUrl=null;
@@ -439,6 +441,20 @@ function refreshBoxSpaces(){
  }
  select.value=boxSpace;
 }
+function inventoryEntries(rows,order){
+ const compare=(a,b)=>(a.nombre||'').localeCompare(b.nombre||'','es',{sensitivity:'base',numeric:true})||String(a.id).localeCompare(String(b.id));
+ const sorted=[...rows].sort(compare);
+ if(order!=='categorias')return (order==='za'?sorted.reverse():sorted).map(item=>({item}));
+ const groups=[...CATEGORIES].sort((a,b)=>a.name.localeCompare(b.name,'es',{sensitivity:'base'}));
+ const entries=[];
+ for(const category of groups){
+  const members=sorted.filter(item=>itemCategories(item).includes(category.id));
+  if(members.length){entries.push({heading:category.name});entries.push(...members.map(item=>({item})))}
+ }
+ const unclassified=sorted.filter(item=>!itemCategories(item).length);
+ if(unclassified.length){entries.push({heading:'Sin categoría'});entries.push(...unclassified.map(item=>({item})))}
+ return entries;
+}
 function render(){
  $('records').classList.toggle('records-reduced',listMode==='reducido');
  $('appView').classList.toggle('listing-compact',listMode==='reducido');
@@ -457,6 +473,8 @@ function render(){
  $('manageSpaces').setAttribute('aria-expanded',String(administrationOpen));
  document.querySelector('.section-heading').classList.toggle('d-none',administrationOpen);
  show('records',!administrationOpen);
+ show('inventoryOrderPanel',!administrationOpen&&tab==='objetos');
+ $('inventoryOrder').value=inventoryOrder;
  if(administrationOpen){
   for(const id of ['boxSpacePanel','inventoryToolbar','inventoryFilters','empty'])show(id,false);
   closeCategoryFilter();
@@ -477,7 +495,13 @@ function render(){
  });
  const root=$('records');root.replaceChildren();show('empty',rows.length===0);
  $('empty').textContent=tab==='cajas'?(!boxSpace?'Selecciona un espacio para ver sus cajas.':'Este espacio no tiene cajas. Pulsa Añadir caja para crear la primera.'):'Todavía no hay registros en esta sección.';
- for(const item of rows){
+ const entries=tab==='objetos'?inventoryEntries(rows,inventoryOrder):rows.map(item=>({item}));
+ for(const entry of entries){
+  if(entry.heading){
+   const title=elem('h2','h5 mt-4 mb-2',entry.heading);
+   root.append(title);continue;
+  }
+  const item=entry.item;
   const line=elem('div','list-group-item record');
   if(tab==='objetos'||tab==='ubicaciones'||listMode==='reducido'){
    const recordType=tab;
@@ -644,6 +668,11 @@ document.querySelectorAll('[data-list-mode]').forEach(button=>button.addEventLis
  syncListChoices();render();listDialog.close();
 }));
 syncListChoices();
+$('inventoryOrder').addEventListener('change',()=>{
+ inventoryOrder=$('inventoryOrder').value;
+ try{localStorage.setItem('hondotrastero:orden',inventoryOrder)}catch{}
+ render();
+});
 $('search').addEventListener('input',render);
 $('filterSpace').addEventListener('change',render);
 $('filterCategoryButton').addEventListener('click',toggleCategoryFilter);
