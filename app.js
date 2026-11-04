@@ -257,7 +257,16 @@ function openForm(type=tab,item=null){
   categoriesPanel.open=!item;
   const categoriesSummary=elem('summary','form-label','Categorías');
   categoriesSummary.style.cursor='pointer';
-  categoriesPanel.append(categoriesSummary,categoryField(item));
+  const categoryFields=categoryField(item);
+  function refreshCategorySummary(){
+   const selected=[...categoryFields.querySelectorAll('input[name="fieldCategories"]:checked')]
+    .map(input=>CATEGORIES_BY_ID.get(input.value)?.name).filter(Boolean)
+    .sort((a,b)=>a.localeCompare(b,'es'));
+   categoriesSummary.textContent='Categorías'+(selected.length?' | '+selected.join(', '):'');
+  }
+  categoryFields.addEventListener('change',refreshCategorySummary);
+  refreshCategorySummary();
+  categoriesPanel.append(categoriesSummary,categoryFields);
   root.append(categoriesPanel);
   const wrap=elem('div');
   const initialBox=data.cajas.find(b=>b.id===item?.caja_id);
