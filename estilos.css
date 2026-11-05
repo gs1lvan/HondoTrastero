@@ -827,3 +827,57 @@ html .parcel-shell #appView:has(.parcel-tab[data-tab="objetos"].active) .section
 html .parcel-shell #appView:has(.parcel-tab[data-tab="objetos"].active) .section-heading .add-button{
  width:100%;flex:1 1 100%;
 }
+
+/* Pestañas colgantes unidas al borde inferior de la cabecera. */
+html .parcel-shell .parcel-main{--tabs-inset:1.5rem;--tabs-top:1.3rem}
+html .parcel-shell #appView .parcel-nav{
+ display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;
+ margin:calc(-1 * var(--tabs-top)) calc(-1 * var(--tabs-inset)) 1.3rem;
+ padding:0 var(--tabs-inset);position:relative;
+}
+html .parcel-shell #appView .parcel-nav .parcel-tab{
+ min-height:58px;min-width:0;padding:.65rem .25rem;display:flex;
+ flex-direction:row;gap:0;border:2px solid #9f6936;border-top:0;
+ border-radius:0 0 20px 20px;
+ background:linear-gradient(#f6d4a2,#e6b97d);color:#3e200e;
+ box-shadow:0 4px 5px #70401828;
+ font-size:clamp(.85rem,2.5vw,1.35rem);line-height:1.2;
+}
+html .parcel-shell #appView .parcel-nav .parcel-tab > span{white-space:nowrap}
+html .parcel-shell #appView .parcel-nav .parcel-tab.active{
+ background:linear-gradient(#5a3019,#3c1c0d);color:#fff1d3;
+ border-color:#48230f;font-weight:800;
+}
+html[data-style="azul-oscuro"] .parcel-shell #appView .parcel-nav .parcel-tab{
+ background:#1a3049;color:#e6effa;border-color:#355572;box-shadow:0 3px 5px #020b1833;
+}
+html[data-style="azul-oscuro"] .parcel-shell #appView .parcel-nav .parcel-tab.active{
+ background:#65b8ff;color:#091a2c;border-color:#65b8ff;
+}
+html[data-style="terminal"] .parcel-shell #appView .parcel-nav .parcel-tab{
+ background:var(--terminal-surface);color:var(--terminal-text);
+ border-color:var(--terminal-edge);border-radius:0 0 6px 6px;box-shadow:none;
+ font-size:clamp(.68rem,2.1vw,1rem);
+}
+html[data-style="terminal"] .parcel-shell #appView .parcel-nav .parcel-tab.active{
+ background:var(--terminal-fill);color:var(--terminal-bright);
+ border-color:var(--terminal-accent);border-bottom-width:3px;
+}
+/* Compacto: misma unión a cabecera, pestañas más bajas y sin sombra. */
+html .parcel-shell #appView.listing-compact .parcel-nav{margin-bottom:.85rem}
+html .parcel-shell #appView.listing-compact .parcel-nav .parcel-tab{
+ min-height:38px;padding:.35rem .2rem;border-width:1px;border-top:0;
+ border-radius:0 0 10px 10px;box-shadow:none;
+ font-size:clamp(.75rem,2.2vw,.95rem);
+}
+html .parcel-shell #appView.listing-compact .parcel-nav .parcel-tab.active{border-bottom-width:3px}
+html[data-style="terminal"] .parcel-shell #appView.listing-compact .parcel-nav .parcel-tab{
+ border-radius:0 0 4px 4px;font-size:clamp(.62rem,1.9vw,.85rem);
+}
+@media(max-width:640px){
+ html .parcel-shell .parcel-main{--tabs-inset:.7rem;--tabs-top:1rem}
+ html .parcel-shell #appView .parcel-nav{padding:0 .7rem}
+ html .parcel-shell #appView .parcel-nav .parcel-tab{min-height:50px;border-radius:0 0 16px 16px}
+ html .parcel-shell #appView.listing-compact .parcel-nav .parcel-tab{min-height:36px;border-radius:0 0 9px 9px}
+ html[data-style="terminal"] .parcel-shell #appView .parcel-nav .parcel-tab{border-radius:0 0 5px 5px}
+}
