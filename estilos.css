@@ -1025,3 +1025,6 @@ html .parcel-shell #appView #adminStyleTools #styleOptions .style-choice{
 html .parcel-shell #appView #adminStyleTools #styleOptions .style-preview{
  width:32px;height:24px;border-radius:3px;
 }
+
+/* Menor separación entre Inventariar y Estilos. */
+html .parcel-shell #adminStyleTools > section[aria-labelledby="adminInventoryTitle"]{margin-bottom:-.5rem}
