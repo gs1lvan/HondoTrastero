@@ -7,7 +7,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="styles.css?v=sinletras2-kraft3">
 <link rel="stylesheet" href="filtros.css?v=selector-carton-20261103">
-<link rel="stylesheet" href="estilos.css?v=industrial-20261105">
+<link rel="stylesheet" href="estilos.css?v=catalogo-categorias-20261105">
 <script src="estilos.js?v=industrial-20261105"></script>
 </head><body>
 <div class="parcel-shell">
@@ -47,6 +47,17 @@
  <button id="resetTerminalBrightness" type="button" class="btn btn-sm btn-outline-primary">Restablecer</button>
  <section class="terminal-typography" aria-labelledby="terminalTypographyTitle"><h3 id="terminalTypographyTitle">Tipografía</h3><div id="terminalFontOptions" class="terminal-font-options" role="group" aria-label="Tipografías de Terminal"></div></section>
  </div></section>
+ <section aria-labelledby="adminCategoriesTitle" class="category-admin">
+ <h2 id="adminCategoriesTitle">Categorías</h2>
+ <form id="categoryAdminForm" class="category-admin-form">
+ <label for="categoryName" class="form-label">Nombre de la categoría</label>
+ <input id="categoryName" class="form-control" type="text" maxlength="80" required autocomplete="off" placeholder="Por ejemplo, Informática">
+ <div class="category-admin-actions"><button id="categorySave" type="submit" class="btn btn-primary">Crear categoría</button><button id="categoryCancel" type="button" class="btn btn-outline-primary" hidden>Cancelar</button><button id="categoryReload" type="button" class="btn btn-outline-primary">Actualizar catálogo</button></div>
+ </form>
+ <p id="categoryAdminStatus" role="status" aria-live="polite"></p>
+ <a id="categorySetupLink" href="02_catalogo_categorias.sql" download>Descargar SQL de activación</a>
+ <div id="categoryAdminList" class="category-admin-list"></div>
+ </section>
  <section aria-labelledby="adminInventoryTitle"><h2 id="adminInventoryTitle">Inventariar</h2><label class="d-flex align-items-center gap-2"><input id="inventoryQuickMode" type="checkbox" class="form-check-input m-0"> Inventariar</label><p class="form-text">Foto, formulario y siguiente objeto al guardar.</p></section>
  <section aria-labelledby="adminListTitle"><h2 id="adminListTitle">Listado</h2><div class="style-options" role="group" aria-label="Formato del listado"><button type="button" class="style-choice" data-list-mode="ampliado">Ampliado</button><button type="button" class="style-choice" data-list-mode="reducido">Compacto</button></div></section>
  <section aria-labelledby="adminDefaultTitle"><h2 id="adminDefaultTitle">Espacio por defecto</h2><label for="defaultObjectSpace" class="visually-hidden">Espacio para nuevos objetos</label><select id="defaultObjectSpace" class="form-select"></select></section>
@@ -86,7 +97,7 @@
 </main>
 <footer class="parcel-footer"><div class="handling-icons" aria-hidden="true"><span>↑↑</span><span>♜</span><span>☂</span><span>♻</span></div><div class="footer-barcode" aria-hidden="true"></div></footer>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script><script src="config.js?v=kraft3"></script><script defer src="app.js?v=subespacio-defecto-20261105"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script><script src="config.js?v=kraft3"></script><script defer src="app.js?v=catalogo-categorias-20261105"></script>
 <script>
 // Registro necesario para que Chrome Android reconozca HondoTrastero como PWA.
 // No se almacenan contraseñas ni respuestas de Supabase en caché.
@@ -100,3 +111,4 @@ if ('serviceWorker' in navigator) {
 
 
 </body></html>
+

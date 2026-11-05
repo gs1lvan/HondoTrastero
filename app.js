@@ -9,7 +9,7 @@ let inventoryQuickMode=false;
 let closeQuickCamera=null;
 const names = {objetos:'objeto', cajas:'subespacio', ubicaciones:'espacio'};
 const BUCKET = 'objetos';
-const CATEGORIES = Object.freeze([
+const DEFAULT_CATEGORIES = Object.freeze([
  {"id": "herramientas-bricolaje", "icon": "🔧", "name": "Herramientas y bricolaje"},
  {"id": "ferreteria-repuestos", "icon": "🔩", "name": "Ferretería y repuestos"},
  {"id": "electricidad-iluminacion", "icon": "💡", "name": "Electricidad e iluminación"},
@@ -35,7 +35,92 @@ const CATEGORIES = Object.freeze([
  {"id": "mascotas", "icon": "🐕", "name": "Mascotas"},
  {"id": "recuerdos-colecciones", "icon": "🏺", "name": "Recuerdos y colecciones"}
 ]);
-const CATEGORIES_BY_ID = new Map(CATEGORIES.map(cat=>[cat.id,cat]));
+let CATEGORIES = [...DEFAULT_CATEGORIES];
+let CATEGORIES_BY_ID = new Map(CATEGORIES.map(cat=>[cat.id,cat]));
+let categoryCatalogReady=false;
+let categoryCatalogError='';
+let categoryEditingId=null;
+let categoryBusy=false;
+let categoryChannel=null;
+let categoryRefreshPending=false;
+function setCategoryCatalog(rows){
+ CATEGORIES=rows.map(row=>({id:row.id,name:row.nombre,icon:row.icono||''})).sort((a,b)=>a.name.localeCompare(b.name,'es',{sensitivity:'base'}));
+ CATEGORIES_BY_ID=new Map(CATEGORIES.map(cat=>[cat.id,cat]));
+ if(selectedCategoryFilter&&!CATEGORIES_BY_ID.has(selectedCategoryFilter))selectedCategoryFilter='';
+}
+async function loadCategoryCatalog(){
+ const {data:rows,error}=await client.from('categorias').select('id,nombre,icono').order('nombre');
+ categoryCatalogReady=!error;
+ categoryCatalogError=error?(error.code==='42P01'||error.code==='PGRST205'
+  ? 'Para activar la gestión, ejecuta una vez 02_catalogo_categorias.sql en Supabase.'
+  : 'No se pudo cargar el catálogo de categorías. Vuelve a intentarlo.'):'';
+ if(!error)setCategoryCatalog(rows||[]);
+}
+function categoryMessage(text,error=false){
+ const status=$('categoryAdminStatus');status.textContent=text;status.classList.toggle('text-danger',error);
+}
+function renderCategoryAdmin(){
+ $('categoryName').disabled=!categoryCatalogReady||categoryBusy;
+ $('categorySave').disabled=!categoryCatalogReady||categoryBusy;
+ $('categoryCancel').hidden=!categoryEditingId;
+ $('categorySave').textContent=categoryEditingId?'Guardar nombre':'Crear categoría';
+ $('categorySetupLink').hidden=categoryCatalogReady;
+ if(categoryCatalogError)categoryMessage(categoryCatalogError,true);
+ const list=$('categoryAdminList');list.replaceChildren();
+ if(!CATEGORIES.length)list.append(elem('p','','Todavía no hay categorías.'));
+ for(const cat of CATEGORIES){
+  const row=elem('div','category-admin-row');
+  const name=elem('span','category-admin-name',(cat.icon?cat.icon+' ':'')+cat.name);
+  const actions=elem('div','category-admin-actions');
+  const edit=elem('button','btn btn-outline-primary','Editar nombre');edit.type='button';
+  const remove=elem('button','btn btn-outline-danger','Eliminar');remove.type='button';
+  edit.disabled=remove.disabled=!categoryCatalogReady||categoryBusy;
+  edit.addEventListener('click',()=>{
+   categoryEditingId=cat.id;$('categoryName').value=cat.name;categoryMessage('Editando «'+cat.name+'».');renderCategoryAdmin();
+   $('categoryName').scrollIntoView({block:'center'});$('categoryName').focus({preventScroll:true});
+  });
+  remove.addEventListener('click',()=>deleteCategory(cat));
+  actions.append(edit,remove);row.append(name,actions);list.append(row);
+ }
+}
+async function saveCategory(event){
+ event.preventDefault();if(categoryBusy||!categoryCatalogReady)return;
+ const nombre=$('categoryName').value.trim();
+ if(!nombre||nombre.length>80){categoryMessage('Escribe un nombre de entre 1 y 80 caracteres.',true);return}
+ if(CATEGORIES.some(cat=>cat.id!==categoryEditingId&&normalizarCategoria(cat.name.trim())===normalizarCategoria(nombre))){categoryMessage('Ya existe una categoría con ese nombre.',true);return}
+ categoryBusy=true;renderCategoryAdmin();
+ try{
+  const result=categoryEditingId
+   ?await client.from('categorias').update({nombre}).eq('id',categoryEditingId).select('id').single()
+   :await client.from('categorias').insert({id:crypto.randomUUID(),nombre,icono:''}).select('id').single();
+  if(result.error)throw result.error;
+  categoryEditingId=null;$('categoryName').value='';await load();categoryMessage('Categoría guardada.');
+ }catch(error){categoryMessage(error.code==='23505'?'Ya existe una categoría con ese nombre.':'No se pudo guardar la categoría. '+error.message,true)}
+ finally{categoryBusy=false;renderCategoryAdmin()}
+}
+async function deleteCategory(cat){
+ if(categoryBusy||!categoryCatalogReady)return;
+ if(!confirm('¿Eliminar «'+cat.name+'» del catálogo? Se quitará esta categoría de los objetos que la tengan. Los objetos y sus otras categorías se conservarán.'))return;
+ categoryBusy=true;renderCategoryAdmin();
+ try{
+  const {data:deleted,error}=await client.from('categorias').delete().eq('id',cat.id).select('id');
+  if(error)throw error;if(!deleted?.length)throw new Error('La categoría ya no existe o no tienes permiso.');
+  if(categoryEditingId===cat.id){categoryEditingId=null;$('categoryName').value=''}
+  await load();categoryMessage('Categoría eliminada. Los objetos se han conservado.');
+ }catch(error){categoryMessage('No se pudo eliminar la categoría. '+error.message,true)}
+ finally{categoryBusy=false;renderCategoryAdmin()}
+}
+async function refreshSharedCategories(){
+ if(!user||categoryBusy||categoryRefreshPending||document.hidden)return;
+ categoryRefreshPending=true;
+ try{await load()}catch{}finally{categoryRefreshPending=false}
+}
+function subscribeCategories(){
+ if(categoryChannel){client.removeChannel(categoryChannel);categoryChannel=null}
+ if(user)categoryChannel=client.channel('catalogo-categorias-'+user.id)
+  .on('postgres_changes',{event:'*',schema:'public',table:'categorias'},refreshSharedCategories).subscribe();
+}
+
 
 let listMode='ampliado';
 try{if(localStorage.getItem('hondotrastero:listado')==='reducido')listMode='reducido'}catch{}
@@ -475,6 +560,7 @@ function openForm(type=tab,item=null){
  page.show();
 }
 async function load(){
+ await loadCategoryCatalog();
  const tables=Object.keys(data);
  const results=await Promise.all(tables.map(t=>client.from(t).select('*').order('creado_en',{ascending:false})));
  for(let i=0;i<results.length;i++){
@@ -632,7 +718,7 @@ function render(){
  $('appView').classList.toggle('listing-compact',listMode==='reducido');
  refreshBoxSpaces();
  show('adminStyleTools',administrationOpen);
- if(administrationOpen)refreshDefaultSpace();
+ if(administrationOpen){refreshDefaultSpace();renderCategoryAdmin()}
  const managingSpaces=tab==='ubicaciones';
  show('inventoryToolbar',tab==='objetos'||tab==='cajas');
  $('newItem').lastChild.textContent=' Añadir '+names[tab];
@@ -886,7 +972,7 @@ $('editForm').addEventListener('submit',async e=>{
  }catch(err){
   if(newPhotoPath)await client.storage.from(BUCKET).remove([newPhotoPath]);
   $('saveBtn').disabled=false;
-  alertMsg(err.message?.includes('categorias')?'Para usar categorías múltiples, ejecuta primero 01_categorias_multiples.sql en Supabase.':'No se pudo guardar: '+err.message);
+  alertMsg('No se pudo guardar: '+err.message);
   return;
  }
  $('saveBtn').disabled=false;
@@ -910,6 +996,12 @@ $('inventoryQuickMode').addEventListener('change',e=>{
  if(inventoryQuickMode){administrationOpen=false;tab='objetos';render();startObjectPhoto()}
  else closeQuickCamera?.();
 });
+$('categoryAdminForm').addEventListener('submit',saveCategory);
+$('categoryCancel').addEventListener('click',()=>{categoryEditingId=null;$('categoryName').value='';categoryMessage('');renderCategoryAdmin()});
+$('categoryReload').addEventListener('click',refreshSharedCategories);
+window.addEventListener('focus',refreshSharedCategories);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshSharedCategories()});
+setInterval(refreshSharedCategories,30000);
 $('manageSpaces').addEventListener('click',()=>{
  administrationOpen=true;
  closeCategoryFilter();
@@ -978,7 +1070,9 @@ $('logout').addEventListener('click',async()=>{
 });
 async function sessionChanged(session){
  if(user?.id!==session?.user?.id)sessionObjectSpace='';
+ const changedUser=user?.id!==session?.user?.id;
  user=session?.user||null;
+ if(changedUser){categoryEditingId=null;categoryBusy=false;categoryCatalogReady=false;subscribeCategories();CATEGORIES=[...DEFAULT_CATEGORIES];CATEGORIES_BY_ID=new Map(CATEGORIES.map(cat=>[cat.id,cat]))}
  show('account',!!user);$('account').style.display=user?'flex':'none';
  show('appView',!!user&&$('editPage').classList.contains('d-none'));
  show('loginView',!user&&ready);
@@ -990,3 +1084,4 @@ if(!ready){show('setup',true);return}
 client.auth.onAuthStateChange((event,session)=>{setTimeout(()=>sessionChanged(session),0)});
 client.auth.getSession().then(({data:{session}})=>sessionChanged(session)).catch(e=>alertMsg(e.message));
 })();
+

@@ -989,3 +989,15 @@ html[data-style="industrial"] .parcel-shell #appView.listing-compact :is(.record
  html[data-style="industrial"] .parcel-shell .editor-footer .btn{flex:1}
 }
 @media(prefers-reduced-motion:reduce){html[data-style="industrial"]{scroll-behavior:auto}html[data-style="industrial"] *,html[data-style="industrial"] *::before,html[data-style="industrial"] *::after{animation:none!important;transition:none!important}}
+
+
+/* Gestión de categorías integrada en Administración, compatible con todos los temas. */
+.category-admin-form{display:grid;gap:.65rem;margin-bottom:1rem}
+.category-admin-form .form-label{margin:0}
+.category-admin-actions{display:flex;flex-wrap:wrap;gap:.5rem}
+.category-admin-actions .btn{min-height:48px}
+.category-admin-list{display:grid;gap:.65rem;margin-top:1rem}
+.category-admin-row{display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.85rem 0;border-bottom:1px solid currentColor}
+.category-admin-name{font-weight:700;overflow-wrap:anywhere;min-width:0;flex:1}
+#categoryAdminStatus{margin:.75rem 0;overflow-wrap:anywhere}
+@media(max-width:640px){.category-admin-row{align-items:flex-start;flex-direction:column}.category-admin-row .category-admin-actions{width:100%}.category-admin-row .btn{flex:1}}
