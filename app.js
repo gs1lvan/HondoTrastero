@@ -78,10 +78,24 @@ function defaultSpaceKey(){return 'hondotrastero:espacio-defecto:'+user.id}
 function defaultObjectSpace(){
  try{const id=localStorage.getItem(defaultSpaceKey());return data.ubicaciones.some(space=>space.id===id)?id:''}catch{return ''}
 }
+function defaultBoxKey(spaceId){return 'hondotrastero:subespacio-defecto:'+user.id+':'+spaceId}
+function defaultObjectBox(spaceId){
+ try{const id=localStorage.getItem(defaultBoxKey(spaceId));return data.cajas.some(box=>box.id===id&&box.ubicacion_id===spaceId)?id:''}catch{return ''}
+}
+function refreshDefaultBox(){
+ const select=$('defaultObjectBox'),spaceId=$('defaultObjectSpace').value;
+ select.replaceChildren(new Option('Sin subespacio por defecto',''));
+ for(const box of data.cajas.filter(box=>box.ubicacion_id===spaceId).sort((a,b)=>a.nombre.localeCompare(b.nombre,'es'))){
+  select.add(new Option(box.nombre,box.id));
+ }
+ select.value=defaultObjectBox(spaceId);
+ select.disabled=!spaceId;
+}
 function refreshDefaultSpace(){
  const select=$('defaultObjectSpace');select.replaceChildren(new Option('Sin espacio por defecto',''));
  for(const space of [...data.ubicaciones].sort((a,b)=>a.nombre.localeCompare(b.nombre,'es')))select.add(new Option(space.nombre,space.id));
  select.value=defaultObjectSpace();
+ refreshDefaultBox();
 }
 function lastLocationKey(){return `hondotrastero:last-location:${user.id}`}
 function objectSpace(item){
@@ -448,10 +462,10 @@ function openForm(type=tab,item=null){
    }
    box.value=[...box.options].some(o=>o.value===selected)?selected:'';
   }
-  refreshBoxes(item?.caja_id||'');
+  refreshBoxes(item?item.caja_id||'':defaultObjectBox(loc.value));
   loc.addEventListener('change',()=>{
    if(!item)sessionObjectSpace=loc.value;
-   refreshBoxes(box.value);
+   refreshBoxes(!item?defaultObjectBox(loc.value):box.value);
   });
   box.addEventListener('change',()=>{
    const selected=data.cajas.find(b=>b.id===box.value);
@@ -903,7 +917,11 @@ $('manageSpaces').addEventListener('click',()=>{
  render();
 });
 $('defaultObjectSpace').addEventListener('change',()=>{
- try{localStorage.setItem(defaultSpaceKey(),$('defaultObjectSpace').value)}catch{alertMsg('No se pudo recordar el espacio por defecto en este dispositivo.')}
+ try{localStorage.setItem(defaultSpaceKey(),$('defaultObjectSpace').value);sessionObjectSpace='';refreshDefaultBox()}catch{alertMsg('No se pudo recordar el espacio por defecto en este dispositivo.')}
+});
+$('defaultObjectBox').addEventListener('change',()=>{
+ const spaceId=$('defaultObjectSpace').value;if(!spaceId)return;
+ try{localStorage.setItem(defaultBoxKey(spaceId),$('defaultObjectBox').value)}catch{alertMsg('No se pudo recordar el subespacio por defecto en este dispositivo.')}
 });
 function syncListChoices(){
  document.querySelectorAll('[data-list-mode]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.listMode===listMode)));
