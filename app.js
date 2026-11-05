@@ -5,6 +5,8 @@ const config = window.HONDO_CONFIG || {};
 const ready = !!(config.supabaseUrl && config.supabaseAnonKey);
 const client = ready ? window.supabase.createClient(config.supabaseUrl, config.supabaseAnonKey) : null;
 const data = {objetos: [], cajas: [], ubicaciones: []};
+let inventoryQuickMode=false;
+let closeQuickCamera=null;
 const names = {objetos:'objeto', cajas:'subespacio', ubicaciones:'espacio'};
 const BUCKET = 'objetos';
 const CATEGORIES = Object.freeze([
@@ -56,7 +58,7 @@ const page={
  show(){show('appView',false);show('editPage',true);window.scrollTo(0,0)},
  hide(){show('editPage',false);if(user)show('appView',true);window.scrollTo(0,0)}
 };
-document.querySelectorAll('[data-close-form]').forEach(b=>b.addEventListener('click',()=>page.hide()));
+document.querySelectorAll('[data-close-form]').forEach(b=>b.addEventListener('click',()=>{closeQuickCamera?.();page.hide()}));
 
 function selectField(id,label,items,optional=false,selected=''){
  const wrap=elem('div'),lab=elem('label','form-label',label),sel=elem('select','form-select');
@@ -99,8 +101,9 @@ function photoField(item,onSelected=null){
  const attachButton=elem('button','btn btn-outline-primary flex-grow-1','Adjuntar foto');attachButton.type='button';
  const cameraInput=elem('input','visually-hidden');cameraInput.type='file';cameraInput.id='fieldCamera';cameraInput.accept='image/*';cameraInput.setAttribute('capture','environment');
  const galleryInput=elem('input','visually-hidden');galleryInput.type='file';galleryInput.id='fieldPhoto';galleryInput.accept='image/*';
- function choosePhoto(input){
-  const file=input.files?.[0];if(!file)return;
+ function choosePhoto(input){acceptPhoto(input.files?.[0])}
+ function acceptPhoto(file){
+  if(!file)return;
   if(!file.type.startsWith('image/')){alertMsg('Selecciona un archivo de imagen.');return}
   if(onSelected){onSelected(file);return}
   selectedPhoto=file;removePhoto=false;removeButton.classList.remove('d-none');
@@ -120,6 +123,7 @@ function photoField(item,onSelected=null){
   preview.removeAttribute('src');preview.classList.add('d-none');
   cameraInput.value='';galleryInput.value='';removeButton.classList.add('d-none');
  });
+ wrap.openQuickCamera=()=>openInventoryCamera(acceptPhoto,()=>cameraButton.click());
  buttons.append(cameraButton,attachButton,removeButton);
  if(item?.foto_path)removeButton.classList.remove('d-none');
  wrap.append(lab,preview,buttons,cameraInput,galleryInput);
@@ -253,6 +257,51 @@ function spaceBoxesField(space){
  return panel;
 }
 
+
+async function openInventoryCamera(onPhoto,fallback){
+ closeQuickCamera?.();
+ if(!navigator.mediaDevices?.getUserMedia){fallback();return}
+ const overlay=elem('div','inventory-camera paper-card');
+ overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-label','Fotografiar objeto');
+ overlay.style.cssText='position:fixed;inset:0;z-index:10000;margin:0;display:flex;flex-direction:column;gap:12px;padding:16px;overflow:auto;border-radius:0';
+ const video=document.createElement('video');video.autoplay=true;video.muted=true;video.playsInline=true;
+ video.style.cssText='width:100%;min-height:0;flex:1;object-fit:contain;background:#111';
+ const preview=document.createElement('img');preview.alt='Foto para confirmar';preview.hidden=true;preview.style.cssText=video.style.cssText;
+ const controls=elem('div','d-flex flex-wrap gap-2');
+ const shoot=elem('button','btn btn-primary','Hacer foto');
+ const accept=elem('button','btn btn-primary','Usar foto');accept.hidden=true;
+ const retry=elem('button','btn btn-outline-primary','Repetir');retry.hidden=true;
+ const cancel=elem('button','btn btn-outline-primary','Volver');
+ for(const b of [shoot,accept,retry,cancel])b.type='button';
+ controls.append(shoot,accept,retry,cancel);overlay.append(video,preview,controls);document.body.append(overlay);
+ let stream=null,blob=null,url=null,closed=false;
+ const close=()=>{
+  if(closed)return;closed=true;stream?.getTracks().forEach(t=>t.stop());
+  video.srcObject=null;if(url)URL.revokeObjectURL(url);overlay.remove();
+  if(closeQuickCamera===close)closeQuickCamera=null;
+ };
+ closeQuickCamera=close;
+ cancel.addEventListener('click',close);
+ retry.addEventListener('click',()=>{preview.hidden=true;video.hidden=false;shoot.hidden=false;accept.hidden=true;retry.hidden=true});
+ accept.addEventListener('click',()=>{if(!blob)return;const file=new File([blob],'objeto-'+Date.now()+'.jpg',{type:'image/jpeg'});close();onPhoto(file)});
+ shoot.addEventListener('click',()=>{
+  if(!video.videoWidth)return;
+  shoot.disabled=true;
+  const canvas=document.createElement('canvas');canvas.width=video.videoWidth;canvas.height=video.videoHeight;
+  canvas.getContext('2d').drawImage(video,0,0);
+  canvas.toBlob(result=>{
+   shoot.disabled=false;if(closed||!result)return;blob=result;
+   if(url)URL.revokeObjectURL(url);url=URL.createObjectURL(blob);preview.src=url;
+   video.hidden=true;preview.hidden=false;shoot.hidden=true;accept.hidden=false;retry.hidden=false;
+  },'image/jpeg',.9);
+ });
+ try{
+  stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});
+  if(closed){stream.getTracks().forEach(t=>t.stop());return}
+  video.srcObject=stream;await video.play();
+ }catch(error){if(closed)return;close();fallback()}
+}
+
 function startObjectPhoto(){
  closeCategoryFilter();clearMsg();
  editing=null;selectedPhoto=null;removePhoto=false;
@@ -274,7 +323,14 @@ function startObjectPhoto(){
  field.querySelector('label').remove();
  const skip=elem('button','btn btn-outline-primary','Omitir este paso');skip.type='button';
  skip.addEventListener('click',()=>openForm('objetos'));
- root.append(field,skip);page.show();
+ root.append(field,skip);
+ if(inventoryQuickMode){
+  const stop=elem('button','btn btn-outline-danger','Terminar de inventariar');stop.type='button';
+  stop.addEventListener('click',()=>{inventoryQuickMode=false;$('inventoryQuickMode').checked=false;closeQuickCamera?.();page.hide();administrationOpen=true;render()});
+  root.append(stop);
+ }
+ page.show();
+ if(inventoryQuickMode)field.openQuickCamera();
 }
 function openForm(type=tab,item=null){
  $('editPage').classList.toggle('editor-compact',listMode==='reducido');
@@ -828,12 +884,17 @@ $('editForm').addEventListener('submit',async e=>{
   if(box)localStorage.setItem(lastLocationKey(),box.ubicacion_id);
  }
  page.hide();
- try{await load();clearMsg()}catch(err){alertMsg(err.message)}
+ try{await load();clearMsg();if(inventoryQuickMode&&type==='objetos'&&!id)startObjectPhoto()}catch(err){alertMsg(err.message)}
 });
 document.querySelector('.parcel-nav').addEventListener('click',e=>{
  const b=e.target.closest('[data-tab]');if(!b)return;
  administrationOpen=false;
  closeCategoryFilter();tab=b.dataset.tab;$('search').value='';render();
+});
+$('inventoryQuickMode').addEventListener('change',e=>{
+ inventoryQuickMode=e.target.checked;
+ if(inventoryQuickMode){administrationOpen=false;tab='objetos';render();startObjectPhoto()}
+ else closeQuickCamera?.();
 });
 $('manageSpaces').addEventListener('click',()=>{
  administrationOpen=true;
@@ -903,7 +964,7 @@ async function sessionChanged(session){
  show('account',!!user);$('account').style.display=user?'flex':'none';
  show('appView',!!user&&$('editPage').classList.contains('d-none'));
  show('loginView',!user&&ready);
- if(!user){administrationOpen=false;show('adminStyleTools',false);$('userEmail').textContent='';return}
+ if(!user){inventoryQuickMode=false;closeQuickCamera?.();$('inventoryQuickMode').checked=false;administrationOpen=false;show('adminStyleTools',false);$('userEmail').textContent='';return}
  $('userEmail').textContent=user.email||'';
  try{await load();clearMsg()}catch(e){alertMsg(`Error al cargar el inventario: ${e.message}`)}
 }
