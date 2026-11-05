@@ -50,8 +50,9 @@
  <section aria-labelledby="adminInventoryTitle"><h2 id="adminInventoryTitle">Inventariar</h2><label class="d-flex align-items-center gap-2"><input id="inventoryQuickMode" type="checkbox" class="form-check-input m-0"> Inventariar</label><p class="form-text">Foto, formulario y siguiente objeto al guardar.</p></section>
  <section aria-labelledby="adminListTitle"><h2 id="adminListTitle">Listado</h2><div class="style-options" role="group" aria-label="Formato del listado"><button type="button" class="style-choice" data-list-mode="ampliado">Ampliado</button><button type="button" class="style-choice" data-list-mode="reducido">Compacto</button></div></section>
  <section aria-labelledby="adminDefaultTitle"><h2 id="adminDefaultTitle">Espacio por defecto</h2><label for="defaultObjectSpace" class="visually-hidden">Espacio para nuevos objetos</label><select id="defaultObjectSpace" class="form-select"></select></section>
+ <section aria-labelledby="adminDefaultBoxTitle"><h2 id="adminDefaultBoxTitle">Subespacio por defecto</h2><label for="defaultObjectBox" class="visually-hidden">Subespacio para nuevos objetos</label><select id="defaultObjectBox" class="form-select"><option value="">Sin subespacio por defecto</option></select></section>
  </div>
- <div class="section-heading"><h1 id="sectionTitle">📦 Inventario</h1><button id="newItem" type="button" class="btn btn-primary add-button"><span aria-hidden="true">＋</span> Añadir objeto</button></div>
+ <div class="section-heading><h1 id="sectionTitle">📦 Inventario</h1><button id="newItem" type="button" class="btn btn-primary add-button"><span aria-hidden="true">＋</span> Añadir objeto</button></div>
  <div id="boxSpacePanel" class="paper-card mb-3 d-none"><label for="boxSpace" class="form-label">Espacio</label><select id="boxSpace" class="form-select"><option value="">Selecciona un espacio</option></select></div>
  <div id="inventoryToolbar" class="inventory-toolbar"><label class="search-field"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Buscar en el inventario…" aria-label="Buscar por nombre o descripción"></label></div>
  <details id="inventoryFilters" class="inventory-filter-fold mb-3">
@@ -85,7 +86,7 @@
 </main>
 <footer class="parcel-footer"><div class="handling-icons" aria-hidden="true"><span>↑↑</span><span>♜</span><span>☂</span><span>♻</span></div><div class="footer-barcode" aria-hidden="true"></div></footer>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script><script src="config.js?v=kraft3"></script><script defer src="app.js?v=inventariar-rapido-20261105"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script><script src="config.js?v=kraft3"></script><script defer src="app.js?v=subespacio-defecto-20261105"></script>
 <script>
 // Registro necesario para que Chrome Android reconozca HondoTrastero como PWA.
 // No se almacenan contraseñas ni respuestas de Supabase en caché.
