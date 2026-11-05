@@ -406,10 +406,8 @@ function normalizarCategoria(texto){
 function closeCategoryFilter(focusTrigger=false){
  const panel=$('filterCategoryPanel'),trigger=$('filterCategoryButton');
  if(panel.hidden)return;
- if(document.activeElement===$('categoryFilterSearch'))$('categoryFilterSearch').blur();
  panel.hidden=true;
  trigger.setAttribute('aria-expanded','false');
- $('categoryFilterSearch').value='';
  if(focusTrigger)trigger.focus({preventScroll:true});
 }
 function toggleCategoryFilter(){
@@ -417,19 +415,7 @@ function toggleCategoryFilter(){
  if(!panel.hidden){closeCategoryFilter(true);return}
  panel.hidden=false;
  trigger.setAttribute('aria-expanded','true');
- $('categoryFilterSearch').value='';
  $('categoryFilterOptions').scrollTop=0;
- filterCategoryOptions();
- // No enfocamos la búsqueda: Android mostrará el teclado solamente cuando el usuario toque Buscar categoría.
-}
-function filterCategoryOptions(){
- const term=normalizarCategoria($('categoryFilterSearch').value.trim());
- let count=0;
- for(const row of $('categoryFilterOptions').querySelectorAll('.category-filter-option')){
-  row.hidden=!normalizarCategoria(row.dataset.categoryName).includes(term);
-  if(!row.hidden)count++;
- }
- $('categoryFilterNoMatch').hidden=count!==0;
 }
 function chooseCategoryFilter(value){
  selectedCategoryFilter=value;
@@ -491,7 +477,6 @@ function refreshInventoryFilters(){
   list.append(row);
  }
  list.scrollTop=oldScroll;
- filterCategoryOptions();
 }
 function refreshBoxSpaces(){
  show('boxSpacePanel',tab==='cajas');
@@ -826,12 +811,9 @@ $('search').addEventListener('input',render);
 $('filterSpace').addEventListener('change',render);
 $('filterCategoryButton').addEventListener('click',toggleCategoryFilter);
 $('closeCategoryFilter').addEventListener('click',()=>closeCategoryFilter(true));
-$('categoryFilterSearch').addEventListener('input',filterCategoryOptions);
 $('filterCategoryPanel').addEventListener('keydown',event=>{
  if(event.key==='Escape'){event.preventDefault();closeCategoryFilter(true);return}
  if(!['ArrowDown','ArrowUp','Home','End'].includes(event.key))return;
- // Desde el buscador, Flecha abajo entra en la lista.
- if(event.target===$('categoryFilterSearch')&&event.key!=='ArrowDown')return;
  const options=[...$('categoryFilterOptions').querySelectorAll('.category-filter-option:not([hidden])')];
  if(!options.length)return;
  const current=options.indexOf(document.activeElement);
