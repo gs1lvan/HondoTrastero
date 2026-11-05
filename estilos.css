@@ -931,3 +931,61 @@ html[data-style="carton"] .parcel-shell #appView:not(.listing-compact) .record::
  border:0;border-radius:0;box-shadow:none;filter:none;opacity:1;
  pointer-events:none;z-index:2;
 }
+
+/* Industrial: lectura cómoda y acciones claras en ambos formatos. */
+.style-preview-industrial{background:linear-gradient(90deg,#1f2933 0 22%,#f4f5f6 22% 100%);border:2px solid #66717d;border-radius:3px}
+html[data-style="industrial"]{color-scheme:light;--ink:#18212b;--brown:#243746;--dark:#18212b;--kraft:#eef0f2;--cream:#18212b;--bs-primary:#243746;--bs-primary-rgb:36,55,70}
+html[data-style="industrial"] body{background:#e4e7eb;color:#18212b;font:18px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+html[data-style="industrial"] .parcel-shell{background:#f4f5f6;border:0;box-shadow:none}
+html[data-style="industrial"] .parcel-shell :is(.packing-tape,.brand-art,.brand-rule,.brand-barcode,.footer-barcode,.handling-icons){display:none!important}
+html[data-style="industrial"] .parcel-shell :is(.record,.paper-card,.editor-paper,.brand-row,.section-heading h1)::before,
+html[data-style="industrial"] .parcel-shell :is(.record,.paper-card,.editor-paper)::after{display:none!important}
+html[data-style="industrial"] .parcel-shell .parcel-header{background:#fff;border-bottom:3px solid #243746;box-shadow:none;padding:1.25rem}
+html[data-style="industrial"] .parcel-shell .brand-row{min-height:0}
+html[data-style="industrial"] .parcel-shell .brand-title{font:750 clamp(1.8rem,5vw,2.5rem)/1.2 system-ui,sans-serif;letter-spacing:-.025em;color:#18212b;text-shadow:none}
+html[data-style="industrial"] .parcel-shell .brand-copy p{font:500 1rem/1.5 system-ui,sans-serif;color:#384552;margin-top:.4rem}
+html[data-style="industrial"] .parcel-shell :is(.account-email,.account-admin,.account-logout){font:600 1rem/1.5 system-ui,sans-serif;color:#18212b}
+html[data-style="industrial"] .parcel-shell :is(button,input,select,textarea){font-family:inherit}
+html[data-style="industrial"] .parcel-shell :is(button,.btn,summary){touch-action:manipulation}
+html[data-style="industrial"] .parcel-shell :is(.btn,.style-choice,.account-admin,.account-logout,.category-filter-trigger,.category-filter-close,.object-name-clear){min-height:48px;min-width:48px;font-size:1rem;border-radius:5px}
+html[data-style="industrial"] .parcel-shell #appView .parcel-nav{margin:0 0 1.25rem;padding:0;gap:.5rem}
+html[data-style="industrial"] .parcel-shell #appView .parcel-nav .parcel-tab{min-height:54px;padding:.65rem .25rem;background:#fff;border:2px solid #66717d;border-radius:5px;box-shadow:none;color:#18212b;font:650 clamp(.95rem,2.6vw,1.15rem)/1.4 system-ui,sans-serif}
+html[data-style="industrial"] .parcel-shell #appView .parcel-nav .parcel-tab.active{background:#243746;color:#fff;border-color:#243746;border-bottom-width:4px}
+html[data-style="industrial"] .parcel-shell :is(.section-heading h1,.editor-header h2,.login-card h1){font:700 1.5rem/1.35 system-ui,sans-serif;background:transparent;color:#18212b;clip-path:none;box-shadow:none}
+html[data-style="industrial"] .parcel-shell .btn-primary{--bs-btn-bg:#243746;--bs-btn-border-color:#243746;--bs-btn-hover-bg:#132532;--bs-btn-hover-border-color:#132532;--bs-btn-active-bg:#132532;color:#fff;box-shadow:none}
+html[data-style="industrial"] .parcel-shell .btn-outline-primary{--bs-btn-color:#243746;--bs-btn-border-color:#536575;--bs-btn-hover-bg:#243746;--bs-btn-hover-border-color:#243746;--bs-btn-hover-color:#fff;background-color:transparent}
+html[data-style="industrial"] .parcel-shell .btn-outline-primary:hover{background:#243746;color:#fff}
+html[data-style="industrial"] .parcel-shell :is(.record,.paper-card,.editor-paper,.inventory-filters,.empty-state,.category-field,.category-filter-panel){background:#fff;color:#18212b;border:1px solid #83909b;border-radius:6px;box-shadow:none;clip-path:none}
+html[data-style="industrial"] .parcel-shell #appView .record{padding:1rem;gap:1rem;align-items:center}
+html[data-style="industrial"] .parcel-shell .records-list{gap:.75rem}
+html[data-style="industrial"] .parcel-shell :is(.record-title,.object-name-badge){font:700 1.35rem/1.4 system-ui,sans-serif;color:#18212b;background:transparent;border:0;border-radius:0;box-shadow:none;padding:0;text-shadow:none}
+html[data-style="industrial"] .parcel-shell :is(.record-detail,.record-compact-text){font:400 1.05rem/1.5 system-ui,sans-serif;color:#384552}
+html[data-style="industrial"] .parcel-shell .record-main{white-space:normal;overflow-wrap:anywhere}
+html[data-style="industrial"] .parcel-shell .record-photo{width:80px;height:88px;border:1px solid #83909b;border-radius:4px;background:#eef0f2;object-fit:cover}
+html[data-style="industrial"] .parcel-shell :is(.search-field,.form-control,.form-select,.category-filter-trigger){background:#fff;color:#18212b;border:2px solid #66717d;border-radius:5px;min-height:52px;font-size:1.05rem;box-shadow:none}
+html[data-style="industrial"] .parcel-shell .search-field input{color:#18212b;font-size:1.05rem;min-height:50px}
+html[data-style="industrial"] .parcel-shell :is(input,textarea)::placeholder{color:#53616e;opacity:1}
+html[data-style="industrial"] .parcel-shell :is(.form-label,.filter-field>span,summary){color:#18212b;font-size:1.05rem;font-weight:650}
+html[data-style="industrial"] .parcel-shell :is(summary,.category-filter-option){min-height:48px;padding:.65rem .4rem}
+html[data-style="industrial"] .parcel-shell :is(.category-filter-option,.category-option,.style-choice){background:#fff;color:#18212b;border-color:#66717d}
+html[data-style="industrial"] .parcel-shell :is(.category-filter-option.selected,.style-choice[aria-pressed="true"]){background:#e5edf3;color:#18212b;border:2px solid #243746;outline:none}
+html[data-style="industrial"] .parcel-shell :is(.editor-header,.editor-footer){background:#eef0f2;border-color:#83909b;border-style:solid}
+html[data-style="industrial"] .parcel-shell :is(.photo-field,.category-field){border-color:#83909b}
+html[data-style="industrial"] .parcel-shell .photo-preview{background:#eef0f2;border:1px solid #83909b}
+html[data-style="industrial"] .parcel-shell .object-name-clear{color:#243746}
+html[data-style="industrial"] .parcel-shell .parcel-footer{background:transparent;border:0;min-height:0;padding:.5rem;margin-top:0}
+html[data-style="industrial"] .parcel-shell :is(button,a,input,select,textarea,summary):focus-visible,
+html[data-style="industrial"] .parcel-shell .search-field:focus-within{outline:3px solid #005fcc;outline-offset:3px;box-shadow:none}
+html[data-style="industrial"] .parcel-shell .form-check-input{width:1.4rem;height:1.4rem;flex-shrink:0;border:2px solid #66717d}
+html[data-style="industrial"] .parcel-shell .form-check-input:checked{background-color:#243746;border-color:#243746}
+html[data-style="industrial"] .parcel-shell #appView.listing-compact :is(.record-title,.object-name-badge,.record-compact-text){font-size:1.1rem;white-space:normal}
+@media(max-width:640px){
+ html[data-style="industrial"] .parcel-shell .parcel-main{padding:1rem .75rem}
+ html[data-style="industrial"] .parcel-shell #appView .record{flex-wrap:wrap;padding:.85rem;gap:.75rem}
+ html[data-style="industrial"] .parcel-shell .record-main{flex:1 1 140px}
+ html[data-style="industrial"] .parcel-shell .record-actions{flex-direction:row;flex-wrap:wrap;width:100%;gap:.5rem}
+ html[data-style="industrial"] .parcel-shell .record-actions .btn{flex:1;min-height:48px;font-size:1rem;padding:.6rem}
+ html[data-style="industrial"] .parcel-shell .editor-header{flex-wrap:wrap}
+ html[data-style="industrial"] .parcel-shell .editor-footer .btn{flex:1}
+}
+@media(prefers-reduced-motion:reduce){html[data-style="industrial"]{scroll-behavior:auto}html[data-style="industrial"] *,html[data-style="industrial"] *::before,html[data-style="industrial"] *::after{animation:none!important;transition:none!important}}
