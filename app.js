@@ -728,7 +728,7 @@ async function nextAutomaticObjectName(){
   const {data:rows,error}=await client.from('objetos').select('id,nombre').order('id').range(offset,offset+999);
   if(error)throw new Error('No se pudo obtener un nombre automático: '+error.message);
   for(const row of rows){
-   const match=/^Objeto_(\\d+)$/i.exec((row.nombre||'').trim());
+   const match=/^Objeto_(\d+)$/i.exec((row.nombre||'').trim());
    if(match){const n=Number(match[1]);if(Number.isSafeInteger(n))maximum=Math.max(maximum,n)}
   }
   if(rows.length<1000)break;
