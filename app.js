@@ -287,7 +287,7 @@ function openForm(type=tab,item=null){
  const root=$('modalFields');root.replaceChildren();
  if(type==='objetos')root.append(photoField(item));
  $('modalTitle').textContent=(item?'Editar ':'Añadir ')+names[type];
- root.append(inputField('fieldName','Nombre',item?.nombre));
+ root.append(inputField('fieldName','Nombre',item?.nombre,'text',type!=='objetos'||!!item?.id));
  if(type==='cajas')root.append(inputField('fieldDesc','Descripción',item?.descripcion||'','text',false));
  if(type==='ubicaciones'){
   const extra=elem('details','space-extra-fields');
@@ -720,10 +720,33 @@ $('deleteObjectBtn').addEventListener('click',async()=>{
  const button=$('deleteObjectBtn');button.disabled=true;
  try{await removeItem('objetos',item)}finally{button.disabled=false}
 });
+
+async function nextAutomaticObjectName(){
+ // Consultar todo el inventario visible, sin depender de filtros ni de datos antiguos.
+ let maximum=0;
+ for(let offset=0;;offset+=1000){
+  const {data:rows,error}=await client.from('objetos').select('id,nombre').order('id').range(offset,offset+999);
+  if(error)throw new Error('No se pudo obtener un nombre automático: '+error.message);
+  for(const row of rows){
+   const match=/^Objeto_(\\d+)$/i.exec((row.nombre||'').trim());
+   if(match){const n=Number(match[1]);if(Number.isSafeInteger(n))maximum=Math.max(maximum,n)}
+  }
+  if(rows.length<1000)break;
+ }
+ const key='hondotrastero:ultimo-nombre-automatico';
+ try{const saved=Number(localStorage.getItem(key));if(Number.isSafeInteger(saved))maximum=Math.max(maximum,saved)}catch{}
+ if(maximum>=Number.MAX_SAFE_INTEGER)throw new Error('Se ha agotado la numeración automática.');
+ const next=maximum+1;
+ try{localStorage.setItem(key,String(next))}catch{}
+ return 'Objeto_'+next;
+}
+
 $('editForm').addEventListener('submit',async e=>{
  e.preventDefault();if(!editing)return;
- const {type,id}=editing,name=$('fieldName').value.trim();
- if(!name){alertMsg('El nombre es obligatorio');return}
+ const {type,id}=editing;
+ const name=$('fieldName').value.trim();
+ const automaticName=type==='objetos'&&!id&&!name;
+ if(!name&&!automaticName){alertMsg('El nombre es obligatorio');return}
  const payload={nombre:name,descripcion:$('fieldDesc').value.trim()||null};
  if(type==='ubicaciones')payload.ubicacion_padre_id=$('fieldParent').value||null;
  if(type==='cajas')payload.ubicacion_id=$('fieldLocation').value||null;
@@ -749,6 +772,7 @@ $('editForm').addEventListener('submit',async e=>{
  if(type==='cajas'&&!payload.ubicacion_id){alertMsg('Selecciona un espacio.');return}
  $('saveBtn').disabled=true;let newPhotoPath=null;
  try{
+  if(automaticName)payload.nombre=await nextAutomaticObjectName();
   if(type==='objetos'&&removePhoto)payload.foto_path=null;
   if(type==='objetos'&&selectedPhoto){newPhotoPath=await uploadPhoto(selectedPhoto);payload.foto_path=newPhotoPath}
   const query=id?client.from(type).update(payload).eq('id',id):client.from(type).insert(payload);
