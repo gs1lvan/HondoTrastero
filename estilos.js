@@ -4,7 +4,8 @@
 const themes = [
  {id:'carton', name:'Cartón', preview:'', color:'#9b612f'},
  {id:'azul-oscuro', name:'Azul oscuro', preview:'style-preview-blue', color:'#14253b'},
- {id:'terminal', name:'>_', preview:'style-preview-terminal', color:'#07110d'}
+ {id:'terminal', name:'>_', preview:'style-preview-terminal', color:'#07110d'},
+ {id:'industrial', name:'Industrial', preview:'style-preview-industrial', color:'#243746'}
 ];
 const terminalFonts=['Geist Mono','JetBrains Mono','Fira Code','IBM Plex Mono','Space Mono','Google Sans Code'];
 const fontKey='hondotrastero:terminal-tipografia';
