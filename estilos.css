@@ -912,3 +912,11 @@ html[data-style="carton"] .parcel-shell #appView:not(.listing-compact) #records 
  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 22' fill='none' stroke='%23895b30' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cellipse cx='7' cy='5' rx='5' ry='3.5'/%3E%3Cellipse cx='7' cy='17' rx='5' ry='3.5'/%3E%3Cpath d='m11 7 22 12M11 15 33 3M17 11l16 8M17 11 33 3'/%3E%3C/svg%3E") center/contain no-repeat;
  pointer-events:none;
 }
+
+/* Botón de borrado integrado en el nombre del objeto, en todos los temas. */
+.object-name-control{position:relative;min-width:0}
+.object-name-control #fieldName{padding-right:3rem}
+.object-name-clear{position:absolute;right:.35rem;top:50%;transform:translateY(-50%);display:grid;place-items:center;width:2.5rem;height:2.5rem;padding:0;border:0;border-radius:.4rem;background:transparent;color:var(--cream,#fff4dc);font:inherit;font-size:1.5rem;line-height:1;cursor:pointer}
+html[data-style="azul-oscuro"] .object-name-clear{color:#edf5ff}
+html[data-style="terminal"] .object-name-clear{color:var(--terminal-text,#76ff91)}
+.object-name-clear:active{opacity:.65}
