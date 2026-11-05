@@ -439,13 +439,13 @@ html .parcel-shell #appView.listing-compact .admin-settings .form-select{min-hei
 
 /* Tres secciones y administración integrada en la cuenta. */
 html .parcel-shell .parcel-nav{grid-template-columns:repeat(3,minmax(0,1fr))}
-html .parcel-shell #account #manageSpaces{
+html .parcel-shell #manageSpaces{
  appearance:none;-webkit-appearance:none;display:inline-flex;align-items:center;justify-content:center;
  background:transparent;border:0;border-radius:0;box-shadow:none;color:inherit;
  font:inherit;line-height:1.4;padding:0;margin:0;min-width:1.2em;flex-shrink:0;cursor:pointer;
 }
-html .parcel-shell #account #manageSpaces.active{background:transparent;color:inherit}
-html .parcel-shell #account #manageSpaces:hover{opacity:.75}
+html .parcel-shell #manageSpaces.active{background:transparent;color:inherit}
+html .parcel-shell #manageSpaces:hover{opacity:.75}
 
 /* Azul oscuro: clip metálico superpuesto al borde de las fichas ampliadas. */
 html[data-style="azul-oscuro"] .parcel-shell #appView:not(.listing-compact) .records-list{gap:1.15rem}
@@ -881,3 +881,8 @@ html[data-style="terminal"] .parcel-shell #appView.listing-compact .parcel-nav .
  html .parcel-shell #appView.listing-compact .parcel-nav .parcel-tab{min-height:36px;border-radius:0 0 9px 9px}
  html[data-style="terminal"] .parcel-shell #appView .parcel-nav .parcel-tab{border-radius:0 0 5px 5px}
 }
+
+/* Administración junto al subtítulo, visible al iniciar sesión. */
+html .parcel-shell .brand-admin-tools{display:none;align-items:center;gap:.4em;margin-left:.4em;white-space:nowrap;vertical-align:middle}
+html .parcel-shell:has(#account[style*="flex"]) .brand-admin-tools{display:inline-flex}
+html .parcel-shell .brand-copy #manageSpaces{font:inherit;line-height:1;min-width:1.2em}
