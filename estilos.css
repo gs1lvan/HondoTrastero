@@ -1016,3 +1016,12 @@ html[data-style="azul-oscuro"] .category-admin-delete{color:#ff8e9c}
 html[data-style="terminal"] .category-admin-delete{color:var(--terminal-text,#76ff91)}
 html[data-style="industrial"] .parcel-shell .category-admin-name{border:0;background:transparent;color:#18212b;border-radius:3px;text-align:left;padding:.5rem 0;font-size:1.05rem;min-height:48px}
 html[data-style="industrial"] .parcel-shell .category-admin-delete{color:#a1192d;min-height:48px;flex-basis:48px}
+
+/* Selector de estilos con la misma presentación en Ampliado y Compacto. */
+html .parcel-shell #appView #adminStyleTools #styleOptions .style-choice{
+ padding:.45rem;background:transparent;color:inherit;border:1px solid currentColor;
+ border-radius:4px;font:inherit;font-size:.8rem;gap:.4rem;min-width:0;
+}
+html .parcel-shell #appView #adminStyleTools #styleOptions .style-preview{
+ width:32px;height:24px;border-radius:3px;
+}
