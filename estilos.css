@@ -1028,3 +1028,42 @@ html .parcel-shell #appView #adminStyleTools #styleOptions .style-preview{
 
 /* Menor separación entre Inventariar y Estilos. */
 html .parcel-shell #adminStyleTools > section[aria-labelledby="adminInventoryTitle"]{margin-bottom:-.5rem}
+
+/* Entrada animada, aislada del inventario y de Administración. */
+html.welcome-open{overflow:hidden}
+.welcome-gate{position:fixed;inset:0;z-index:10000;overflow:auto;background:#e6bc82;color:#452411;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+.welcome-inner{max-width:620px;min-height:100dvh;margin:auto;padding:max(20px,env(safe-area-inset-top)) 24px calc(85px + env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:stretch}
+.welcome-inner h1{font:800 clamp(1.6rem,5vw,2.2rem)/1.2 system-ui;margin:12px 0 4px;text-align:center;color:inherit}
+.welcome-intro{text-align:center;margin:8px 0 14px;font-size:1rem}
+.welcome-choices{flex:1;display:grid;grid-template-rows:1fr 1fr;gap:18px}
+.welcome-choice{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;min-height:190px;padding:12px;border:2px solid currentColor;border-radius:22px;background:#fff4dd;color:inherit;cursor:pointer;font:700 1.25rem/1.4 system-ui;box-shadow:0 4px 0 #45241125}
+.welcome-choice:disabled{cursor:progress}
+.welcome-scene{display:block;position:relative;width:180px;height:140px;flex-shrink:0}
+.welcome-box{position:absolute;width:140px;height:125px;left:10px;bottom:0}
+.welcome-magnifier{position:absolute;width:75px;height:75px;right:0;top:18px;animation:welcome-search 3.2s ease-in-out both}
+.welcome-camera{position:absolute;width:90px;height:75px;right:-4px;top:30px;animation:welcome-camera 3.2s ease-in-out both}
+.welcome-flash{position:absolute;right:-5px;top:0;font-size:3rem;line-height:1;color:#9c6100;opacity:0;animation:welcome-flash 3.2s ease-in-out both}
+.welcome-label{margin-top:8px;padding:9px 24px;border-radius:9px;background:#452411;color:#fff4dd;animation:welcome-reveal 3.2s ease both}
+.welcome-status{min-height:1.5em;text-align:center;margin:12px 0 0;font-size:.9rem}
+.welcome-skip{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));min-height:48px;padding:10px 16px;border:1px solid currentColor;border-radius:8px;background:#fff4dd;color:#452411;font:600 .95rem/1.4 system-ui;cursor:pointer}
+.welcome-gate :is(button):focus-visible{outline:3px solid #005fcc;outline-offset:4px}
+.welcome-gate.animation-finished .welcome-scene *{animation:none!important}
+.welcome-gate.animation-finished .welcome-label{animation:none!important;opacity:1;transform:none}
+.welcome-gate.animation-finished .welcome-skip{display:none}
+.welcome-gate.animation-finished .welcome-flash{opacity:0}
+html[data-style="azul-oscuro"] .welcome-gate{background:#14253b;color:#e6effa;--welcome-box:#294b6e;--welcome-glass:#14253b}
+html[data-style="azul-oscuro"] .welcome-choice{background:#1a3049;box-shadow:none}
+html[data-style="azul-oscuro"] :is(.welcome-label,.welcome-skip){background:#65b8ff;color:#091a2c}
+html[data-style="terminal"] .welcome-gate{background:var(--terminal-surface,#07110d);color:var(--terminal-text,#76ff91);--welcome-box:var(--terminal-fill,#133e20);--welcome-glass:var(--terminal-surface,#07110d)}
+html[data-style="terminal"] .welcome-gate,html[data-style="terminal"] .welcome-choice,html[data-style="terminal"] .welcome-inner h1{font-family:var(--terminal-font,monospace)}
+html[data-style="terminal"] .welcome-choice{background:transparent;border-radius:4px;box-shadow:none}
+html[data-style="terminal"] :is(.welcome-label,.welcome-skip){background:var(--terminal-fill,#133e20);color:var(--terminal-text,#76ff91);border-radius:4px}
+html[data-style="industrial"] .welcome-gate{background:#f4f5f6;color:#18212b;--welcome-box:#bcc6cf;--welcome-glass:#fff}
+html[data-style="industrial"] .welcome-choice{background:#fff;border-radius:6px;box-shadow:none}
+html[data-style="industrial"] :is(.welcome-label,.welcome-skip){background:#243746;color:#fff;border-radius:5px}
+@keyframes welcome-search{0%{transform:translate(-25px,12px) rotate(-12deg)}25%{transform:translate(0,-8px) rotate(5deg)}50%{transform:translate(-32px,20px) rotate(-8deg)}75%{transform:translate(3px,6px) rotate(4deg)}100%{transform:translate(0,0)}}
+@keyframes welcome-camera{0%,100%{transform:rotate(0)}25%,60%{transform:rotate(-8deg) scale(1.05)}35%,70%{transform:rotate(2deg)}}
+@keyframes welcome-flash{0%,24%,34%,59%,69%,100%{opacity:0;transform:scale(.5)}28%,63%{opacity:1;transform:scale(1)}}
+@keyframes welcome-reveal{0%,75%{opacity:0;transform:translateY(10px)}100%{opacity:1;transform:translateY(0)}}
+@media(max-height:650px){.welcome-inner{padding-top:10px}.welcome-choice{min-height:160px}.welcome-scene{transform:scale(.8);height:115px}.welcome-choices{gap:12px}}
+@media(prefers-reduced-motion:reduce){.welcome-gate *{animation:none!important}.welcome-label{opacity:1;transform:none}.welcome-flash{opacity:0}}

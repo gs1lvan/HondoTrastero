@@ -1086,17 +1086,60 @@ $('logout').addEventListener('click',async()=>{
  if(!confirm('¿Quieres cerrar sesión?'))return;
  const {error}=await client.auth.signOut();if(error)alertMsg(error.message);
 });
+
+let welcomeEntered=false;
+let welcomeDataReady=false;
+let welcomeTimer=null;
+function finishWelcomeAnimation(){
+ $('welcomeGate').classList.add('animation-finished');clearTimeout(welcomeTimer);
+ if(document.activeElement===$('welcomeSkip'))(welcomeDataReady?$('welcomeInventory'):$('welcomeTitle')).focus({preventScroll:true});
+}
+function setWelcomeVisible(visible){
+ const gate=$('welcomeGate'),wasVisible=!gate.classList.contains('d-none');
+ show('welcomeGate',visible);document.documentElement.classList.toggle('welcome-open',visible);
+ document.querySelector('.parcel-shell').inert=visible;
+ if(visible&&!wasVisible){
+  gate.classList.remove('animation-finished');
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)finishWelcomeAnimation();
+  else welcomeTimer=setTimeout(finishWelcomeAnimation,3200);
+  $('welcomeTitle').focus({preventScroll:true});
+ }
+ if(!visible)clearTimeout(welcomeTimer);
+}
+function enterFromWelcome(inventariar){
+ if(!user||!welcomeDataReady)return;
+ welcomeEntered=true;setWelcomeVisible(false);
+ administrationOpen=false;tab='objetos';
+ inventoryQuickMode=inventariar;$('inventoryQuickMode').checked=inventariar;
+ render();
+ if(inventariar)startObjectPhoto();
+ else{$('newItem').focus({preventScroll:true});window.scrollTo(0,0)}
+}
+$('welcomeSkip').addEventListener('click',()=>{finishWelcomeAnimation();$('welcomeInventory').focus({preventScroll:true})});
+$('welcomeInventory').addEventListener('click',()=>enterFromWelcome(false));
+$('welcomeCreate').addEventListener('click',()=>enterFromWelcome(true));
+$('welcomeRetry').addEventListener('click',()=>location.reload());
+$('welcomeGate').addEventListener('keydown',event=>{
+ if(event.key!=='Tab')return;
+ const controls=[...$('welcomeGate').querySelectorAll('button')].filter(button=>!button.disabled&&!button.hidden&&getComputedStyle(button).display!=='none');
+ if(!controls.length)return;
+ const first=controls[0],last=controls[controls.length-1];
+ if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus()}
+ else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus()}
+});
+
 async function sessionChanged(session){
  if(user?.id!==session?.user?.id)sessionObjectSpace='';
  const changedUser=user?.id!==session?.user?.id;
  user=session?.user||null;
- if(changedUser){categoryEditingId=null;categoryBusy=false;categoryCatalogReady=false;subscribeCategories();CATEGORIES=[...DEFAULT_CATEGORIES];CATEGORIES_BY_ID=new Map(CATEGORIES.map(cat=>[cat.id,cat]))}
+ if(changedUser){welcomeEntered=false;welcomeDataReady=false;$('welcomeInventory').disabled=true;$('welcomeCreate').disabled=true;categoryEditingId=null;categoryBusy=false;categoryCatalogReady=false;subscribeCategories();CATEGORIES=[...DEFAULT_CATEGORIES];CATEGORIES_BY_ID=new Map(CATEGORIES.map(cat=>[cat.id,cat]))}
  show('account',!!user);$('account').style.display=user?'flex':'none';
  show('appView',!!user&&$('editPage').classList.contains('d-none'));
  show('loginView',!user&&ready);
+ setWelcomeVisible(!!user&&!welcomeEntered);
  if(!user){inventoryQuickMode=false;closeQuickCamera?.();$('inventoryQuickMode').checked=false;administrationOpen=false;show('adminStyleTools',false);$('userEmail').textContent='';return}
  $('userEmail').textContent=user.email||'';
- try{await load();clearMsg()}catch(e){alertMsg(`Error al cargar el inventario: ${e.message}`)}
+ try{await load();welcomeDataReady=true;$('welcomeInventory').disabled=false;$('welcomeCreate').disabled=false;$('welcomeStatus').textContent='';$('welcomeRetry').hidden=true;clearMsg()}catch(e){$('welcomeStatus').textContent='No se pudo cargar el inventario. Vuelve a intentarlo.';$('welcomeRetry').hidden=false;alertMsg(`Error al cargar el inventario: ${e.message}`)}
 }
 if(!ready){show('setup',true);return}
 client.auth.onAuthStateChange((event,session)=>{setTimeout(()=>sessionChanged(session),0)});
