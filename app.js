@@ -40,6 +40,7 @@ let CATEGORIES_BY_ID = new Map(CATEGORIES.map(cat=>[cat.id,cat]));
 let categoryCatalogReady=false;
 let categoryCatalogError='';
 let categoryEditingId=null;
+let categoryEditDraft='';
 let categoryBusy=false;
 let categoryChannel=null;
 let categoryRefreshPending=false;
@@ -59,44 +60,62 @@ async function loadCategoryCatalog(){
 function categoryMessage(text,error=false){
  const status=$('categoryAdminStatus');status.textContent=text;status.classList.toggle('text-danger',error);
 }
+function cancelCategoryEdit(focusId=null){
+ categoryEditingId=null;categoryEditDraft='';categoryMessage('');renderCategoryAdmin();
+ if(focusId)document.getElementById('categoryEdit-'+focusId)?.focus({preventScroll:true});
+}
 function renderCategoryAdmin(){
  $('categoryName').disabled=!categoryCatalogReady||categoryBusy;
  $('categorySave').disabled=!categoryCatalogReady||categoryBusy;
- $('categoryCancel').hidden=!categoryEditingId;
- $('categorySave').textContent=categoryEditingId?'Guardar nombre':'Crear categoría';
  $('categorySetupLink').hidden=categoryCatalogReady;
  if(categoryCatalogError)categoryMessage(categoryCatalogError,true);
+ if(categoryEditingId&&!CATEGORIES_BY_ID.has(categoryEditingId)){categoryEditingId=null;categoryEditDraft=''}
  const list=$('categoryAdminList');list.replaceChildren();
  if(!CATEGORIES.length)list.append(elem('p','','Todavía no hay categorías.'));
  for(const cat of CATEGORIES){
   const row=elem('div','category-admin-row');
-  const name=elem('span','category-admin-name',(cat.icon?cat.icon+' ':'')+cat.name);
-  const actions=elem('div','category-admin-actions');
-  const edit=elem('button','btn btn-outline-primary','Editar nombre');edit.type='button';
-  const remove=elem('button','btn btn-outline-danger','Eliminar');remove.type='button';
-  edit.disabled=remove.disabled=!categoryCatalogReady||categoryBusy;
-  edit.addEventListener('click',()=>{
-   categoryEditingId=cat.id;$('categoryName').value=cat.name;categoryMessage('Editando «'+cat.name+'».');renderCategoryAdmin();
-   $('categoryName').scrollIntoView({block:'center'});$('categoryName').focus({preventScroll:true});
-  });
-  remove.addEventListener('click',()=>deleteCategory(cat));
-  actions.append(edit,remove);row.append(name,actions);list.append(row);
+  if(cat.id===categoryEditingId){
+   const form=elem('form','category-inline-form');
+   const input=elem('input','form-control category-inline-input');input.type='text';input.maxLength=80;input.required=true;
+   input.id='categoryInlineName';input.value=categoryEditDraft;input.setAttribute('aria-label','Nombre de la categoría');
+   input.disabled=categoryBusy||!categoryCatalogReady;
+   input.addEventListener('input',()=>{categoryEditDraft=input.value});
+   input.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();cancelCategoryEdit(cat.id)}});
+   const save=elem('button','btn btn-primary category-inline-save','✓');save.type='submit';save.title='Guardar nombre';save.setAttribute('aria-label','Guardar nombre de la categoría');
+   const cancel=elem('button','btn btn-outline-primary category-inline-cancel','↶');cancel.type='button';cancel.title='Cancelar edición';cancel.setAttribute('aria-label','Cancelar edición');
+   save.disabled=cancel.disabled=categoryBusy||!categoryCatalogReady;
+   cancel.addEventListener('click',()=>cancelCategoryEdit(cat.id));
+   form.addEventListener('submit',event=>saveCategory(event,cat.id));form.append(input,save,cancel);row.append(form);
+  }else{
+   const name=elem('button','category-admin-name',(cat.icon?cat.icon+' ':'')+cat.name);name.type='button';
+   name.id='categoryEdit-'+cat.id;name.title=cat.name;name.setAttribute('aria-label','Editar categoría: '+cat.name);
+   name.disabled=!categoryCatalogReady||categoryBusy;
+   name.addEventListener('click',()=>{
+    categoryEditingId=cat.id;categoryEditDraft=cat.name;categoryMessage('');renderCategoryAdmin();
+    $('categoryInlineName').focus({preventScroll:true});$('categoryInlineName').select();
+   });
+   row.append(name);
+  }
+  const remove=elem('button','category-admin-delete','×');remove.type='button';remove.title='Eliminar '+cat.name;remove.setAttribute('aria-label','Eliminar categoría: '+cat.name);
+  remove.disabled=!categoryCatalogReady||categoryBusy;
+  remove.addEventListener('click',()=>deleteCategory(cat));row.append(remove);list.append(row);
  }
 }
-async function saveCategory(event){
+async function saveCategory(event,editingId=null){
  event.preventDefault();if(categoryBusy||!categoryCatalogReady)return;
- const nombre=$('categoryName').value.trim();
+ const nombre=(editingId?categoryEditDraft:$('categoryName').value).trim();
  if(!nombre||nombre.length>80){categoryMessage('Escribe un nombre de entre 1 y 80 caracteres.',true);return}
- if(CATEGORIES.some(cat=>cat.id!==categoryEditingId&&normalizarCategoria(cat.name.trim())===normalizarCategoria(nombre))){categoryMessage('Ya existe una categoría con ese nombre.',true);return}
+ if(CATEGORIES.some(cat=>cat.id!==editingId&&normalizarCategoria(cat.name.trim())===normalizarCategoria(nombre))){categoryMessage('Ya existe una categoría con ese nombre.',true);return}
  categoryBusy=true;renderCategoryAdmin();
  try{
-  const result=categoryEditingId
-   ?await client.from('categorias').update({nombre}).eq('id',categoryEditingId).select('id').single()
+  const result=editingId
+   ?await client.from('categorias').update({nombre}).eq('id',editingId).select('id').single()
    :await client.from('categorias').insert({id:crypto.randomUUID(),nombre,icono:''}).select('id').single();
   if(result.error)throw result.error;
-  categoryEditingId=null;$('categoryName').value='';await load();categoryMessage('Categoría guardada.');
+  if(editingId){categoryEditingId=null;categoryEditDraft=''}else $('categoryName').value='';
+  await load();categoryMessage('Categoría guardada.');
  }catch(error){categoryMessage(error.code==='23505'?'Ya existe una categoría con ese nombre.':'No se pudo guardar la categoría. '+error.message,true)}
- finally{categoryBusy=false;renderCategoryAdmin()}
+ finally{categoryBusy=false;renderCategoryAdmin();if(categoryEditingId)$('categoryInlineName')?.focus({preventScroll:true})}
 }
 async function deleteCategory(cat){
  if(categoryBusy||!categoryCatalogReady)return;
@@ -105,13 +124,13 @@ async function deleteCategory(cat){
  try{
   const {data:deleted,error}=await client.from('categorias').delete().eq('id',cat.id).select('id');
   if(error)throw error;if(!deleted?.length)throw new Error('La categoría ya no existe o no tienes permiso.');
-  if(categoryEditingId===cat.id){categoryEditingId=null;$('categoryName').value=''}
+  if(categoryEditingId===cat.id){categoryEditingId=null;categoryEditDraft=''}
   await load();categoryMessage('Categoría eliminada. Los objetos se han conservado.');
  }catch(error){categoryMessage('No se pudo eliminar la categoría. '+error.message,true)}
  finally{categoryBusy=false;renderCategoryAdmin()}
 }
 async function refreshSharedCategories(){
- if(!user||categoryBusy||categoryRefreshPending||document.hidden)return;
+ if(!user||categoryBusy||categoryEditingId||categoryRefreshPending||document.hidden)return;
  categoryRefreshPending=true;
  try{await load()}catch{}finally{categoryRefreshPending=false}
 }
@@ -996,9 +1015,8 @@ $('inventoryQuickMode').addEventListener('change',e=>{
  if(inventoryQuickMode){administrationOpen=false;tab='objetos';render();startObjectPhoto()}
  else closeQuickCamera?.();
 });
-$('categoryAdminForm').addEventListener('submit',saveCategory);
-$('categoryCancel').addEventListener('click',()=>{categoryEditingId=null;$('categoryName').value='';categoryMessage('');renderCategoryAdmin()});
-$('categoryReload').addEventListener('click',refreshSharedCategories);
+$('categoryAdminForm').addEventListener('submit',event=>saveCategory(event));
+$('categoryAdminPanel').addEventListener('toggle',()=>{if($('categoryAdminPanel').open)refreshSharedCategories()});
 window.addEventListener('focus',refreshSharedCategories);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshSharedCategories()});
 setInterval(refreshSharedCategories,30000);
