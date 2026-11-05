@@ -500,7 +500,7 @@ html .parcel-shell #appView.listing-compact #records > h2:first-child{
 /* Cartón: cinta diagonal cruzando la esquina, conservando su acabado. */
 html[data-style="carton"] .parcel-shell #appView:not(.listing-compact) .record::before,
 html:not([data-style]) .parcel-shell #appView:not(.listing-compact) .record::before{
- left:-16px;top:8px;transform:rotate(-45deg);transform-origin:center;
+ left:-22px;top:2px;transform:rotate(-45deg);transform-origin:center;
 }
 
 /* Completar la paleta azul: evitar colores de Cartón heredados. */
