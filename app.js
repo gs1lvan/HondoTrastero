@@ -288,6 +288,35 @@ function openForm(type=tab,item=null){
  if(type==='objetos')root.append(photoField(item));
  $('modalTitle').textContent=(item?'Editar ':'Añadir ')+names[type];
  root.append(inputField('fieldName','Nombre',item?.nombre,'text',type!=='objetos'||!!item?.id));
+ if(type==='objetos'){
+  const input=$('fieldName');
+  const control=elem('div','object-name-control');
+  input.before(control);control.append(input);
+  const clear=elem('button','object-name-clear','×');
+  clear.type='button';clear.setAttribute('aria-label','Borrar nombre');clear.title='Borrar nombre';
+  control.append(clear);
+  let edited=false;
+  const syncClear=()=>{clear.hidden=!input.value};
+  input.addEventListener('input',()=>{edited=true;syncClear()});
+  clear.addEventListener('click',()=>{
+   input.value='';input.dispatchEvent(new Event('input',{bubbles:true}));input.focus();
+  });
+  if(!item?.id){
+   let maximum=0;
+   for(const object of data.objetos){
+    const match=/^Objeto_(\d+)$/i.exec((object.nombre||'').trim());
+    if(match&&Number.isSafeInteger(Number(match[1])))maximum=Math.max(maximum,Number(match[1]));
+   }
+   try{const n=Number(localStorage.getItem('hondotrastero:ultimo-nombre-automatico'));if(Number.isSafeInteger(n))maximum=Math.max(maximum,n)}catch{}
+   input.value='Objeto_'+(maximum+1);
+   nextAutomaticObjectName().then(name=>{
+    if(!input.isConnected||edited)return;
+    input.value=name;syncClear();
+   }).catch(()=>{/* Al guardar se volverá a validar la numeración en Supabase. */});
+  }
+  syncClear();
+ }
+
  if(type==='cajas')root.append(inputField('fieldDesc','Descripción',item?.descripcion||'','text',false));
  if(type==='ubicaciones'){
   const extra=elem('details','space-extra-fields');
