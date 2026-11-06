@@ -1410,3 +1410,13 @@ html .welcome-gate .welcome-skip{left:50%;right:auto;transform:translateX(-50%);
 #newItem .add-object-art-carton .add-art-objects>span{width:21px;height:27px}
 html .parcel-shell #appView.listing-compact #newItem .add-art-phone{width:28px;height:40px}
 html .parcel-shell #appView.listing-compact #newItem .add-object-art-carton .add-art-objects>span{width:12px;height:17px}
+
+/* Al terminar o saltar, el móvil de Cartón muestra el objeto central: la planta. */
+.welcome-gate.animation-finished .welcome-phone-carton .carton-phone-preview{opacity:0}
+.welcome-gate.animation-finished .welcome-phone-carton .carton-preview-2{opacity:1}
+.welcome-gate.animation-finished .welcome-phone-carton .carton-preview-2 .carton-phone-motion{transform:none}
+@media(prefers-reduced-motion:reduce){
+ .welcome-phone-carton .carton-phone-preview{opacity:0}
+ .welcome-phone-carton .carton-preview-2{opacity:1}
+ .welcome-phone-carton .carton-preview-2 .carton-phone-motion{transform:none}
+}
