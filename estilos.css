@@ -1399,3 +1399,14 @@ html .welcome-gate .welcome-skip{left:50%;right:auto;transform:translateX(-50%);
 
 /* Más aire entre la caja con lupa y la acción Ver inventario. */
 #welcomeInventory .welcome-scene{top:-10px}
+
+/* Ilustración de Añadir objeto actualizada al móvil y a los objetos de cada tema. */
+#newItem .add-art-phone{display:block;width:46px;height:65px;flex-shrink:0;transform:rotate(-6deg)}
+#newItem .add-art-phone *{animation:none!important}
+#newItem .add-art-phone :is(.phone-preview,.carton-phone-preview){opacity:0}
+#newItem .add-art-phone :is(.phone-preview-0,.carton-preview-0){opacity:1}
+#newItem .add-art-phone :is(.phone-preview-motion,.carton-phone-motion){transform:none}
+#newItem .add-object-art-carton .add-art-objects{gap:2px}
+#newItem .add-object-art-carton .add-art-objects>span{width:21px;height:27px}
+html .parcel-shell #appView.listing-compact #newItem .add-art-phone{width:28px;height:40px}
+html .parcel-shell #appView.listing-compact #newItem .add-object-art-carton .add-art-objects>span{width:12px;height:17px}
