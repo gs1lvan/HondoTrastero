@@ -1607,3 +1607,6 @@ html:is([data-style="carton"],:not([data-style])) #appView.listing-compact:has(.
 
 /* La pestaña Espacios conserva únicamente el botón de alta ilustrado. */
 html .parcel-shell #appView:has(.parcel-tab[data-tab="ubicaciones"].active) #sectionTitle{display:none!important}
+
+/* Subespacios: conservar solo el botón ilustrado sobre el listado. */
+html .parcel-shell #appView:has(.parcel-tab[data-tab="cajas"].active) #sectionTitle{display:none!important}
