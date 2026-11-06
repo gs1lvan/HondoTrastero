@@ -1648,3 +1648,7 @@ html:is([data-style="carton"],:not([data-style])) .parcel-shell .brand-rule{disp
 /* Nombre visible bajo cada icono del selector. */
 html .parcel-shell .subspace-icon-choice{flex-direction:column;gap:5px;width:72px;height:auto;min-height:74px;padding:8px 4px}
 html .parcel-shell .subspace-icon-caption{display:block;font:400 11px/1.2 system-ui,sans-serif;text-align:center;white-space:normal;overflow-wrap:anywhere;color:inherit}
+
+/* Colores compartidos de marca: la animación es la referencia. */
+html:is([data-style="carton"],:not([data-style])) .parcel-shell .brand-hondo{color:#634023;opacity:.88}
+html:is([data-style="carton"],:not([data-style])) .parcel-shell .brand-trastero{color:#352819}
