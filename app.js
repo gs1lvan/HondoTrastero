@@ -1215,6 +1215,12 @@ function finishWelcomeAnimation(){
  $('welcomeGate').classList.add('animation-finished');clearTimeout(welcomeTimer);
  if(document.activeElement===$('welcomeSkip'))(welcomeDataReady?$('welcomeInventory'):$('welcomeTitle')).focus({preventScroll:true});
 }
+function skipWelcomeKey(){return 'hondotrastero:saltar-entrada:'+(user?.id||'local')}
+function shouldSkipWelcome(){try{return localStorage.getItem(skipWelcomeKey())==='true'}catch{return false}}
+$('skipWelcomeAnimation').addEventListener('change',event=>{
+ try{localStorage.setItem(skipWelcomeKey(),String(event.target.checked))}catch{event.target.checked=shouldSkipWelcome();alertMsg('No se pudo guardar la preferencia en este dispositivo.')}
+});
+
 function setWelcomeVisible(visible){
  const gate=$('welcomeGate'),wasVisible=!gate.classList.contains('d-none');
  show('welcomeGate',visible);document.documentElement.classList.toggle('welcome-open',visible);
@@ -1257,6 +1263,8 @@ async function sessionChanged(session){
  show('account',!!user);$('account').style.display=user?'flex':'none';
  show('appView',!!user&&$('editPage').classList.contains('d-none'));
  show('loginView',!user&&ready);
+ $('skipWelcomeAnimation').checked=shouldSkipWelcome();
+ if(user&&!welcomeEntered&&shouldSkipWelcome()){welcomeEntered=true;administrationOpen=false;tab='objetos';inventoryQuickMode=false;$('inventoryQuickMode').checked=false}
  setWelcomeVisible(!!user&&!welcomeEntered);
  if(!user){inventoryQuickMode=false;closeQuickCamera?.();$('inventoryQuickMode').checked=false;administrationOpen=false;show('adminStyleTools',false);$('userEmail').textContent='';return}
  $('userEmail').textContent=user.email||'';

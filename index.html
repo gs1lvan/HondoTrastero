@@ -43,6 +43,7 @@
  <nav class="parcel-nav" aria-label="Secciones"><button type="button" class="parcel-tab active" data-tab="objetos"><span>Objetos <span id="countObjects">0</span></span></button><button type="button" class="parcel-tab" data-tab="ubicaciones"><span>Espacios <span id="countLocations">0</span></span></button><button type="button" class="parcel-tab" data-tab="cajas"><span>Subespacios <span id="countBoxes">0</span></span></button></nav>
  <div id="adminStyleTools" class="d-none admin-settings">
  <section aria-labelledby="adminInventoryTitle"><h2 id="adminInventoryTitle">Inventariar</h2><label class="d-flex align-items-center gap-2"><input id="inventoryQuickMode" type="checkbox" class="form-check-input m-0"> Inventariar</label></section>
+ <section aria-labelledby="adminSkipAnimationTitle"><h2 id="adminSkipAnimationTitle">Entrada</h2><label class="d-flex align-items-center gap-2"><input id="skipWelcomeAnimation" type="checkbox" class="form-check-input m-0"> Saltar animación e ir al inventario</label></section>
  <section aria-labelledby="adminStylesTitle"><h2 id="adminStylesTitle">Estilos</h2><div id="styleOptions" class="style-options" role="group" aria-label="Estilos disponibles"></div>
  <div id="terminalBrightnessSettings" class="terminal-brightness" hidden>
  <div class="terminal-brightness-heading"><label for="terminalBrightness">Brillo del tema</label><output id="terminalBrightnessValue" for="terminalBrightness">75 %</output></div>
@@ -113,7 +114,7 @@
 </main>
 <footer class="parcel-footer"><div class="handling-icons" aria-hidden="true"><span>↑↑</span><span>♜</span><span>☂</span><span>♻</span></div><div class="footer-barcode" aria-hidden="true"></div></footer>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script><script src="config.js?v=kraft3"></script><script defer src="app.js?v=iconos-subespacios-20261106"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script><script src="config.js?v=kraft3"></script><script defer src="app.js?v=saltar-entrada-20261106"></script>
 <script>
 // Registro necesario para que Chrome Android reconozca HondoTrastero como PWA.
 // No se almacenan contraseñas ni respuestas de Supabase en caché.
