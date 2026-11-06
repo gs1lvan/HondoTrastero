@@ -1489,3 +1489,17 @@ html .welcome-gate .welcome-skip{bottom:max(6px,env(safe-area-inset-bottom));fon
  html:is([data-style="carton"],:not([data-style])) #welcomeTitle .welcome-brand-stack{width:min(100%,125px)}
  html .welcome-gate .welcome-intro{font-size:.8rem}
 }
+
+/* Caja más protagonista y mayor separación respecto a Ver inventario. */
+html .welcome-gate #welcomeInventory .welcome-scene{
+ width:200px;height:158px;margin-bottom:10px;
+}
+html .welcome-gate #welcomeInventory .welcome-logo{
+ width:160px;height:160px;left:14px;bottom:0;
+}
+html .welcome-gate #welcomeInventory .welcome-magnifier{
+ width:82px;height:82px;right:0;top:20px;
+}
+@media(max-height:640px){
+ html .welcome-gate #welcomeInventory .welcome-scene{margin-bottom:6px}
+}
