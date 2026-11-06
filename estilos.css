@@ -1420,3 +1420,31 @@ html .parcel-shell #appView.listing-compact #newItem .add-object-art-carton .add
  .welcome-phone-carton .carton-preview-2{opacity:1}
  .welcome-phone-carton .carton-preview-2 .carton-phone-motion{transform:none}
 }
+
+/* Marca en dos líneas solo en la entrada de Cartón. */
+.welcome-brand-stack{display:none}
+html:is([data-style="carton"],:not([data-style])) .welcome-gate .welcome-inner #welcomeTitle{
+ container-type:inline-size;transform:none;opacity:1;
+ -webkit-mask-image:none;mask-image:none;line-height:1;margin:12px 0 4px;
+}
+html:is([data-style="carton"],:not([data-style])) #welcomeTitle .welcome-brand-single{display:none}
+html:is([data-style="carton"],:not([data-style])) #welcomeTitle .welcome-brand-stack{
+ display:block;container-type:inline-size;position:relative;isolation:isolate;
+ width:min(100%,360px);margin:0 auto;padding:10px 0 12px;text-align:left;
+}
+html:is([data-style="carton"],:not([data-style])) .welcome-brand-stack>span{
+ display:block;position:relative;width:max-content;max-width:100%;
+ font-family:'Anton',Impact,sans-serif;font-weight:400;line-height:1;
+ letter-spacing:.005em;white-space:nowrap;
+ -webkit-mask-image:radial-gradient(ellipse 1.9px 1px at 7px 8px,transparent 98%,#000 100%),radial-gradient(ellipse 1.1px 2.5px at 19px 17px,transparent 98%,#000 100%),radial-gradient(ellipse 4px .65px at 23px 6px,transparent 98%,#000 100%);
+ mask-image:radial-gradient(ellipse 1.9px 1px at 7px 8px,transparent 98%,#000 100%),radial-gradient(ellipse 1.1px 2.5px at 19px 17px,transparent 98%,#000 100%),radial-gradient(ellipse 4px .65px at 23px 6px,transparent 98%,#000 100%);
+ -webkit-mask-size:23px 21px,37px 31px,47px 33px;mask-size:23px 21px,37px 31px,47px 33px;
+ -webkit-mask-composite:source-in;mask-composite:intersect;
+}
+html:is([data-style="carton"],:not([data-style])) .welcome-brand-stack .welcome-brand-hondo{
+ z-index:1;font-size:31cqw;color:#634023;opacity:.88;margin-left:5%;transform:rotate(-2deg);
+}
+html:is([data-style="carton"],:not([data-style])) .welcome-brand-stack .welcome-brand-trastero{
+ z-index:2;font-size:22cqw;margin-top:-.18em;margin-left:6%;color:#352819;
+ transform:rotate(-2deg);-webkit-text-stroke:5px #d9a362;paint-order:stroke fill;
+}
