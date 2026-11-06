@@ -742,11 +742,11 @@ function render(){
  show('inventoryToolbar',tab==='objetos'||tab==='cajas');
  const addLabel=$('newItem').querySelector('.add-button-label');
  addLabel.textContent='＋ Añadir '+names[tab];
- if(tab==='objetos'){
+ if(tab==='objetos'||tab==='ubicaciones'){
   const plain=document.createElement('span');plain.className='add-label-plain';plain.textContent=addLabel.textContent;
   const stamp=document.createElement('span');stamp.className='add-label-stamp';stamp.setAttribute('aria-hidden','true');
   const verb=document.createElement('span');verb.className='add-stamp-verb';verb.textContent='Añadir';
-  const noun=document.createElement('span');noun.className='add-stamp-noun';noun.textContent='objeto';
+  const noun=document.createElement('span');noun.className='add-stamp-noun';noun.textContent=names[tab];
   stamp.append(verb,noun);addLabel.replaceChildren(plain,stamp);
  }
  show('newItem',true);
