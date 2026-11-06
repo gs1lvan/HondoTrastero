@@ -1353,3 +1353,43 @@ html[data-style="azul-oscuro"] .welcome-procession .object-plan{animation-name:b
  .welcome-phone .phone-preview-0{opacity:1!important}
  .welcome-phone .phone-preview-0 .phone-preview-motion{transform:none}
 }
+
+/* Cartón: móvil dibujado, objetos detrás y vista de cámara sincronizada. */
+html:is([data-style="carton"],:not([data-style])) .welcome-procession{height:176px}
+html:is([data-style="carton"],:not([data-style])) .welcome-procession .welcome-phone-carton{
+ top:16px;width:82px;height:124px;z-index:3;margin-left:-41px;
+ transform:rotate(-6deg);transform-origin:center;filter:drop-shadow(2px 3px 1px #45241144);
+}
+html:is([data-style="carton"],:not([data-style])) .welcome-procession .welcome-belt{z-index:1;bottom:35px}
+html:is([data-style="carton"],:not([data-style])) .welcome-procession .welcome-flash{z-index:4;top:8px;right:calc(50% - 52px)}
+html:is([data-style="carton"],:not([data-style])) .welcome-object .welcome-carton-object{filter:drop-shadow(1px 2px 1px #45241130)}
+.carton-phone-motion{transform:translateX(-78px);animation-duration:5s;animation-timing-function:linear;animation-fill-mode:both}
+html:is([data-style="carton"],:not([data-style])) .welcome-procession .object-lamp{animation-name:carton-phone-object-0}
+@keyframes carton-phone-object-0{0%,0%{opacity:0;transform:translateX(-170px)}3%{opacity:1}12%,18%{opacity:1;transform:translateX(0)}27%,100%{opacity:0;transform:translateX(170px)}}
+.carton-preview-0 .carton-phone-motion{animation-name:carton-phone-frame-0}
+@keyframes carton-phone-frame-0{0%,0%{transform:translateX(-78px)}12%,18%{transform:translateX(0)}27%,100%{transform:translateX(78px)}}
+html:is([data-style="carton"],:not([data-style])) .welcome-procession .object-books{animation-name:carton-phone-object-1}
+@keyframes carton-phone-object-1{0%,16%{opacity:0;transform:translateX(-170px)}19%{opacity:1}28%,34%{opacity:1;transform:translateX(0)}43%,100%{opacity:0;transform:translateX(170px)}}
+.carton-preview-1 .carton-phone-motion{animation-name:carton-phone-frame-1}
+@keyframes carton-phone-frame-1{0%,16%{transform:translateX(-78px)}28%,34%{transform:translateX(0)}43%,100%{transform:translateX(78px)}}
+html:is([data-style="carton"],:not([data-style])) .welcome-procession .object-plant{animation-name:carton-phone-object-2}
+@keyframes carton-phone-object-2{0%,32%{opacity:0;transform:translateX(-170px)}35%{opacity:1}44%,50%{opacity:1;transform:translateX(0)}59%,100%{opacity:0;transform:translateX(170px)}}
+.carton-preview-2 .carton-phone-motion{animation-name:carton-phone-frame-2}
+@keyframes carton-phone-frame-2{0%,32%{transform:translateX(-78px)}44%,50%{transform:translateX(0)}59%,100%{transform:translateX(78px)}}
+html:is([data-style="carton"],:not([data-style])) .welcome-procession .object-brushes{animation-name:carton-phone-object-3}
+@keyframes carton-phone-object-3{0%,48%{opacity:0;transform:translateX(-170px)}51%{opacity:1}60%,66%{opacity:1;transform:translateX(0)}75%,100%{opacity:0;transform:translateX(170px)}}
+.carton-preview-3 .carton-phone-motion{animation-name:carton-phone-frame-3}
+@keyframes carton-phone-frame-3{0%,48%{transform:translateX(-78px)}60%,66%{transform:translateX(0)}75%,100%{transform:translateX(78px)}}
+html:is([data-style="carton"],:not([data-style])) .welcome-procession .object-plan{animation-name:carton-phone-object-4}
+@keyframes carton-phone-object-4{0%,64%{opacity:0;transform:translateX(-170px)}67%{opacity:1}76%,82%{opacity:1;transform:translateX(0)}91%,100%{opacity:0;transform:translateX(170px)}}
+.carton-preview-4 .carton-phone-motion{animation-name:carton-phone-frame-4}
+@keyframes carton-phone-frame-4{0%,64%{transform:translateX(-78px)}76%,82%{transform:translateX(0)}91%,100%{transform:translateX(78px)}}
+
+.welcome-gate.animation-finished .carton-phone-preview{opacity:0}
+.welcome-gate.animation-finished .carton-preview-0{opacity:1}
+.welcome-gate.animation-finished .carton-preview-0 .carton-phone-motion{transform:none}
+@media(prefers-reduced-motion:reduce){
+ .carton-phone-preview{opacity:0}
+ .carton-preview-0{opacity:1}
+ .carton-preview-0 .carton-phone-motion{transform:none}
+}
