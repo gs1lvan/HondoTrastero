@@ -1172,3 +1172,25 @@ html[data-style="carton"] .parcel-shell .brand-title,
 html:not([data-style]) .parcel-shell .brand-title{
  font-size:clamp(1.9rem,19cqw,6rem);white-space:nowrap;line-height:1;
 }
+
+/* Marca Anton con tinta estampada y usada, exclusiva del tema Cartón. */
+html[data-style="carton"] .parcel-shell .brand-title,
+html:not([data-style]) .parcel-shell .brand-title,
+html[data-style="carton"] .welcome-gate .welcome-inner #welcomeTitle,
+html:not([data-style]) .welcome-gate .welcome-inner #welcomeTitle{
+ font-family:'Anton',Impact,sans-serif;font-weight:400;letter-spacing:.005em;
+ color:#352819;opacity:.9;transform:rotate(-1.1deg);
+ -webkit-mask-image:radial-gradient(ellipse 2.1px 1.2px at 7px 8px,transparent 98%,#000 100%),radial-gradient(ellipse 1.2px 3px at 19px 17px,transparent 98%,#000 100%),radial-gradient(ellipse 5px .65px at 23px 6px,transparent 98%,#000 100%),radial-gradient(ellipse 1.6px 1.1px at 5px 23px,transparent 98%,#000 100%);
+ mask-image:radial-gradient(ellipse 2.1px 1.2px at 7px 8px,transparent 98%,#000 100%),radial-gradient(ellipse 1.2px 3px at 19px 17px,transparent 98%,#000 100%),radial-gradient(ellipse 5px .65px at 23px 6px,transparent 98%,#000 100%),radial-gradient(ellipse 1.6px 1.1px at 5px 23px,transparent 98%,#000 100%);
+ -webkit-mask-size:23px 21px,37px 31px,47px 33px,31px 43px;
+ mask-size:23px 21px,37px 31px,47px 33px,31px 43px;
+ -webkit-mask-composite:source-in;mask-composite:intersect;
+}
+html[data-style="carton"] .parcel-shell .brand-title,
+html:not([data-style]) .parcel-shell .brand-title{
+ font-size:clamp(1.3rem,14cqw,4rem);line-height:1.2;white-space:nowrap;
+}
+html[data-style="carton"] .welcome-gate .welcome-inner #welcomeTitle,
+html:not([data-style]) .welcome-gate .welcome-inner #welcomeTitle{
+ font-size:clamp(2rem,8vw,3.4rem);line-height:1.3;
+}
