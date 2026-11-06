@@ -335,7 +335,11 @@ function spaceBoxesField(space){
   if(!boxes.length)list.append(elem('p','form-text','Este espacio todavía no tiene subespacios.'));
   for(const box of boxes){
    const row=elem('div','d-flex align-items-center justify-content-between gap-2');
-   row.append(elem('span','',box.nombre));
+   const parsed=splitSubspaceName(box.nombre);
+   const name=elem('span','subspace-icon-title');
+   name.style.minWidth='0';name.style.overflowWrap='anywhere';
+   if(parsed.icon)name.append(subspaceIcon(parsed.icon));
+   name.append(document.createTextNode(parsed.name));row.append(name);
    const remove=elem('button','btn btn-sm btn-outline-danger','Eliminar');remove.type='button';
    remove.setAttribute('aria-label','Eliminar subespacio '+box.nombre);
    remove.addEventListener('click',()=>{
