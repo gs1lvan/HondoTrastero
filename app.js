@@ -467,7 +467,7 @@ const SUBSPACE_ICONS=[
  ['zapatero','Zapatero','👞','M5 3h14v18H5zM5 9h14M5 15h14M9 6h6m-6 6h6m-6 6h6']
 ];
 function splitSubspaceName(name=''){
- for(const icon of SUBSPACE_ICONS)if(name.startsWith(icon[2]))return {icon,name:name.slice(icon[2].length).replace(/^[\\uFE0E\\uFE0F\\s]+/u,'')};
+ for(const icon of SUBSPACE_ICONS)if(name.startsWith(icon[2]))return {icon,name:name.slice(icon[2].length).replace(/^[\uFE0E\uFE0F\s]+/u,'')};
  return {icon:null,name};
 }
 function subspaceIcon(icon){
