@@ -740,7 +740,15 @@ function render(){
  if(administrationOpen){refreshDefaultSpace();renderCategoryAdmin()}
  const managingSpaces=tab==='ubicaciones';
  show('inventoryToolbar',tab==='objetos'||tab==='cajas');
- $('newItem').querySelector('.add-button-label').textContent='＋ Añadir '+names[tab];
+ const addLabel=$('newItem').querySelector('.add-button-label');
+ addLabel.textContent='＋ Añadir '+names[tab];
+ if(tab==='objetos'){
+  const plain=document.createElement('span');plain.className='add-label-plain';plain.textContent=addLabel.textContent;
+  const stamp=document.createElement('span');stamp.className='add-label-stamp';stamp.setAttribute('aria-hidden','true');
+  const verb=document.createElement('span');verb.className='add-stamp-verb';verb.textContent='Añadir';
+  const noun=document.createElement('span');noun.className='add-stamp-noun';noun.textContent='objeto';
+  stamp.append(verb,noun);addLabel.replaceChildren(plain,stamp);
+ }
  show('newItem',true);
  refreshInventoryFilters();
  $('countObjects').textContent=data.objetos.length;
