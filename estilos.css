@@ -1503,3 +1503,9 @@ html .welcome-gate #welcomeInventory .welcome-magnifier{
 @media(max-height:640px){
  html .welcome-gate #welcomeInventory .welcome-scene{margin-bottom:6px}
 }
+
+/* Sellos decorativos de embalaje: tinta discreta, sin interacción. */
+.welcome-cardboard-tear .carton-packaging-marks{position:absolute;display:block;color:#633d20;opacity:.24;pointer-events:none;user-select:none;overflow:visible;transform:rotate(1.8deg)}
+.welcome-cardboard-tear .marks-above{width:112px;height:18px;left:24px;top:-21px}
+.welcome-cardboard-tear .marks-below{width:74px;height:15px;right:26px;bottom:-19px}
+@media(max-height:640px){.welcome-cardboard-tear .marks-above{width:88px;height:14px;top:-16px}.welcome-cardboard-tear .marks-below{width:60px;height:12px;bottom:-14px}}
