@@ -1258,3 +1258,20 @@ html[data-style="azul-oscuro"] .welcome-procession .welcome-camera-carton{displa
 html[data-style="azul-oscuro"] .welcome-procession .welcome-camera-blue{display:block;filter:drop-shadow(0 2px 2px #0003)}
 html[data-style="azul-oscuro"] .welcome-blue-object{stroke:none}
 html[data-style="azul-oscuro"] .add-object-art-blue svg{stroke:none}
+
+/* Móvil con vista previa sincronizada con el objeto que se fotografía. */
+html[data-style="azul-oscuro"] .welcome-procession .welcome-phone{
+ width:82px;height:116px;margin-left:-41px;top:-19px;transform:rotate(-8deg);
+ stroke:none;filter:drop-shadow(2px 4px 3px #0006);
+}
+html[data-style="azul-oscuro"] .welcome-procession .welcome-phone>path{fill:none;stroke:#adc5d4}
+.welcome-phone .phone-preview{opacity:0;animation-duration:5s;animation-timing-function:steps(1,end);animation-fill-mode:both}
+.welcome-phone .phone-preview-0{opacity:1;animation-name:phone-capture-drill}
+.welcome-phone .phone-preview-1{animation-name:phone-capture-books}
+.welcome-phone .phone-preview-2{animation-name:phone-capture-mat}
+.welcome-phone .phone-preview-3{animation-name:phone-capture-light}
+@keyframes phone-capture-drill{0%{opacity:1}28%,100%{opacity:0}}
+@keyframes phone-capture-books{0%{opacity:0}28%{opacity:1}47%,100%{opacity:0}}
+@keyframes phone-capture-mat{0%{opacity:0}47%{opacity:1}66%,100%{opacity:0}}
+@keyframes phone-capture-light{0%{opacity:0}66%,100%{opacity:1}}
+html[data-style="azul-oscuro"] .welcome-procession .welcome-flash{right:calc(50% - 52px);top:-20px}
