@@ -446,28 +446,34 @@ function startObjectPhoto(){
 }
 
 const SUBSPACE_ICONS=[
- ['canape','Canapé','🛏','M3 16V9h18v11M3 17h18M5 9l3-5 13 5M6 20v-3m12 3v-3'],
- ['armario','Armario','🚪','M5 3h14v18H5zM12 3v18M10 11v3m4-3v3'],
- ['estanteria','Estantería alta','📚','M5 2v20M19 2v20M5 7h14M5 13h14M5 19h14M8 3v4m4-3v3m4-4v4M9 9v4m6-3v3'],
- ['mesilla','Mesilla','🛎','M5 8h14v12H5zM5 14h14M10 11h4M7 20v2m10-2v2'],
- ['comoda','Cómoda','🗄','M4 4h16v17H4zM4 10h16M4 15h16M10 7h4m-4 6h4m-4 5h4'],
- ['baul','Baúl','🧳','M3 10h18v11H3zM3 10V7q9-7 18 0v3M3 14h18M10 12h4v5h-4z'],
- ['altillo','Altillo','🏗','M2 4h20M3 13h18M5 13v5m14-5v5M6 6h5v7H6zM13 7h5v6h-5z'],
- ['caja','Caja','📦','M3 6l9-4 9 4v13l-9 3-9-3zM3 6l9 4 9-4M12 10v12'],
- ['maletero','Maletero','🚗','M4 10l2-6h12l2 6M3 10h18v10H3zM7 14h10M6 20v2m12-2v2M5 10l2-2h10l2 2'],
- ['cajon','Cajón','🗃','M3 5h18v6M3 11l3 9h12l3-9zM8 11v3h8v-3'],
- ['banco','Banco','🪑','M3 11h18v5H3zM5 16v6m14-6v6M5 11V5h14v6'],
- ['zapatero','Zapatero','👞','M5 3h14v18H5zM5 9h14M5 15h14M9 6h6m-6 6h6m-6 6h6']
+ ['canape','Canapé','🛏',[30,160,300,300]],
+ ['armario','Armario','🚪',[385,155,250,305]],
+ ['estanteria','Estantería alta','📚',[735,150,240,315]],
+ ['mesilla','Mesilla','🛎',[60,565,245,240]],
+ ['comoda','Cómoda','🗄',[365,565,295,240]],
+ ['baul','Baúl','🧳',[700,550,290,260]],
+ ['altillo','Altillo','🏗',[25,920,310,210]],
+ ['caja','Caja','📦',[365,920,295,215]],
+ ['maletero','Maletero','🚗',[700,890,300,260]],
+ ['cajon','Cajón','🗃',[30,1250,300,205]],
+ ['banco','Banco','🪑',[355,1250,310,205]],
+ ['zapatero','Zapatero','👞',[735,1220,245,250]],
+ ['mesa-elevable','Mesa elevable','🪟',[50,230,730,600],'extra'],
+ ['reposapies','Reposapiés','🛋',[915,225,500,610],'extra']
 ];
 function splitSubspaceName(name=''){
  for(const icon of SUBSPACE_ICONS)if(name.startsWith(icon[2]))return {icon,name:name.slice(icon[2].length).replace(/^[\uFE0E\uFE0F\s]+/u,'')};
  return {icon:null,name};
 }
 function subspaceIcon(icon){
- const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
- svg.setAttribute('viewBox','0 0 24 24');svg.setAttribute('aria-hidden','true');svg.classList.add('subspace-type-icon');
- const path=document.createElementNS('http://www.w3.org/2000/svg','path');
- path.setAttribute('d',icon[3]);path.setAttribute('fill','none');path.setAttribute('stroke','currentColor');path.setAttribute('stroke-width','1.8');path.setAttribute('stroke-linecap','round');path.setAttribute('stroke-linejoin','round');svg.append(path);return svg;
+ const ns='http://www.w3.org/2000/svg';
+ const svg=document.createElementNS(ns,'svg');
+ svg.setAttribute('viewBox',icon[3].join(' '));svg.setAttribute('aria-hidden','true');svg.setAttribute('focusable','false');svg.classList.add('subspace-type-icon');
+ const image=document.createElementNS(ns,'image');
+ const extra=icon[4]==='extra';
+ image.setAttribute('href',extra?'assets/subespacios-mesa-reposapies.webp':'assets/subespacios-ilustrados.webp');
+ image.setAttribute('width',extra?'1536':'1024');image.setAttribute('height',extra?'1024':'1536');
+ svg.append(image);return svg;
 }
 function subspaceIconField(initial){
  const field=elem('fieldset','subspace-icon-field'),legend=elem('legend','form-label','Icono del subespacio');

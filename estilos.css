@@ -1683,3 +1683,13 @@ html[data-style="industrial"] .parcel-shell .photo-preview-frame .photo-remove-c
 .object-photo-actions #saveBtn{flex:1}
 .object-photo-actions #deleteObjectBtn{flex:1}
 html .parcel-shell .object-photo-actions .btn{min-height:44px;white-space:normal}
+
+/* Ilustraciones aprobadas: selector táctil y títulos con iconos reconocibles. */
+html .parcel-shell .subspace-icon-cloud{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:9px}
+html .parcel-shell .subspace-icon-choice{width:100%;min-height:108px;padding:8px 5px;gap:6px;overflow:hidden}
+html .parcel-shell .subspace-icon-choice .subspace-type-icon{width:68px;height:68px}
+html .parcel-shell .subspace-type-icon{overflow:hidden;border-radius:6px;background:#fff1d2}
+html .parcel-shell .subspace-icon-title .subspace-type-icon,
+html .parcel-shell .subspace-icon-preview .subspace-type-icon{width:44px;height:44px}
+html .parcel-shell .listing-compact .subspace-icon-title .subspace-type-icon{width:32px;height:32px}
+html .parcel-shell .subspace-icon-choice:focus-visible{outline:3px solid currentColor;outline-offset:3px}
