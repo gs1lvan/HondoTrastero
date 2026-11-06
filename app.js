@@ -683,7 +683,7 @@ function refreshInventoryFilters(){
  list.scrollTop=oldScroll;
 }
 function refreshBoxSpaces(){
- show('boxSpacePanel',tab==='cajas');
+ show('boxSpacePanel',false);
  if(tab!=='cajas')return;
  if(!data.ubicaciones.some(s=>s.id===boxSpace))boxSpace='';
  const select=$('boxSpace');
@@ -716,6 +716,19 @@ function inventoryEntries(rows,order){
  if(unclassified.length){entries.push({heading:'Sin categoría'});entries.push(...unclassified.map(item=>({item})))}
  return entries;
 }
+function subspaceEntries(rows){
+ const entries=[],assigned=new Set();
+ const compare=(a,b)=>(a.nombre||'').localeCompare(b.nombre||'','es',{sensitivity:'base',numeric:true});
+ for(const space of orderedSpaces()){
+  const boxes=rows.filter(box=>box.ubicacion_id===space.id).sort(compare);
+  if(!boxes.length)continue;
+  entries.push({heading:space.nombre});
+  for(const item of boxes){entries.push({item});assigned.add(item.id)}
+ }
+ const unassigned=rows.filter(box=>!assigned.has(box.id)).sort(compare);
+ if(unassigned.length){entries.push({heading:'Sin espacio'});entries.push(...unassigned.map(item=>({item})))}
+ return entries;
+}
 function orderedSpaces(){
  let ids=[];
  try{const saved=JSON.parse(localStorage.getItem('hondotrastero:orden-espacios:'+user.id)||'[]');if(Array.isArray(saved))ids=saved}catch{}
@@ -739,7 +752,7 @@ function render(){
  show('adminStyleTools',administrationOpen);
  if(administrationOpen){refreshDefaultSpace();renderCategoryAdmin()}
  const managingSpaces=tab==='ubicaciones';
- show('inventoryToolbar',tab==='objetos'||tab==='cajas');
+ show('inventoryToolbar',tab==='objetos');
  const addLabel=$('newItem').querySelector('.add-button-label');
  addLabel.textContent='＋ Añadir '+names[tab];
  if(tab==='objetos'||tab==='ubicaciones'||tab==='cajas'){
@@ -768,13 +781,13 @@ function render(){
   return;
  }
  const heading=$('sectionTitle');heading.textContent=tab==='objetos'?'📦 Inventario':tab==='cajas'?'▤ Subespacios':'▥ Espacios';
- const q=$('search').value.trim().toLocaleLowerCase('es');
+ const q=tab==='cajas'?'':$('search').value.trim().toLocaleLowerCase('es');
  const selectedSpace=$('filterSpace').value,selectedCategory=selectedCategoryFilter;
  const parents=spaceParents();
  const source=tab==='ubicaciones'?orderedSpaces():data[tab];
  const rows=source.filter(item=>{
   if(!`${item.nombre} ${item.descripcion||''}`.toLocaleLowerCase('es').includes(q))return false;
-  if(tab==='cajas')return !!boxSpace&&item.ubicacion_id===boxSpace;
+  if(tab==='cajas')return true;
   if(tab!=='objetos')return true;
   if(selectedSpace&&!belongsToSpace(item,selectedSpace,parents))return false;
   const cats=itemCategories(item);
@@ -782,8 +795,8 @@ function render(){
   return true;
  });
  const root=$('records');root.replaceChildren();show('empty',rows.length===0);
- $('empty').textContent=tab==='cajas'?(!boxSpace?'Selecciona un espacio para ver sus subespacios.':'Este espacio no tiene subespacios. Pulsa Añadir subespacio para crear el primero.'):'Todavía no hay registros en esta sección.';
- const entries=tab==='objetos'?inventoryEntries(rows,inventoryOrder):rows.map(item=>({item}));
+ $('empty').textContent=tab==='cajas'?'Todavía no hay subespacios. Pulsa Añadir subespacio para crear el primero.':'Todavía no hay registros en esta sección.';
+ const entries=tab==='objetos'?inventoryEntries(rows,inventoryOrder):tab==='cajas'?subspaceEntries(rows):rows.map(item=>({item}));
  for(const entry of entries){
   if(entry.heading){
    const title=elem('h2','h5 mt-4 mb-2',entry.heading);
