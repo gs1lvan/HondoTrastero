@@ -1509,3 +1509,23 @@ html .welcome-gate #welcomeInventory .welcome-magnifier{
 .welcome-cardboard-tear .marks-above{width:112px;height:18px;left:24px;top:-21px}
 .welcome-cardboard-tear .marks-below{width:74px;height:15px;right:26px;bottom:-19px}
 @media(max-height:640px){.welcome-cardboard-tear .marks-above{width:88px;height:14px;top:-16px}.welcome-cardboard-tear .marks-below{width:60px;height:12px;bottom:-14px}}
+
+/* Cartón: composición estática idéntica al cierre de la animación. */
+html .parcel-shell #newItem .add-object-art-carton{position:relative;height:88px}
+#newItem .add-object-art-carton .add-art-phone{position:absolute;z-index:2;left:36px;top:0;width:47px;height:86px}
+#newItem .add-object-art-carton .carton-phone-preview{opacity:0}
+#newItem .add-object-art-carton .carton-preview-2{opacity:1}
+#newItem .add-object-art-carton .add-art-objects{position:absolute;inset:auto 0 9px;width:112px;height:32px;display:block}
+#newItem .add-object-art-carton .add-art-objects>span{position:absolute;bottom:0;width:21px;height:32px}
+#newItem .add-object-art-carton .add-art-objects>span:nth-child(1){left:0}
+#newItem .add-object-art-carton .add-art-objects>span:nth-child(2){left:22px}
+#newItem .add-object-art-carton .add-art-objects>span:nth-child(3){display:none}
+#newItem .add-object-art-carton .add-art-objects>span:nth-child(4){left:80px}
+#newItem .add-object-art-carton .add-art-objects>span:nth-child(5){left:101px;width:16px}
+html .parcel-shell #appView.listing-compact #newItem .add-object-art-carton{height:54px}
+html .parcel-shell #appView.listing-compact #newItem .add-object-art-carton .add-art-phone{left:22px;top:0;width:28px;height:52px}
+html .parcel-shell #appView.listing-compact #newItem .add-object-art-carton .add-art-objects{width:68px;height:20px;bottom:5px}
+html .parcel-shell #appView.listing-compact #newItem .add-object-art-carton .add-art-objects>span{width:12px;height:20px}
+html .parcel-shell #appView.listing-compact #newItem .add-object-art-carton .add-art-objects>span:nth-child(2){left:13px}
+html .parcel-shell #appView.listing-compact #newItem .add-object-art-carton .add-art-objects>span:nth-child(4){left:48px}
+html .parcel-shell #appView.listing-compact #newItem .add-object-art-carton .add-art-objects>span:nth-child(5){left:61px;width:10px}
