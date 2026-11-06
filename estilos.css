@@ -1558,3 +1558,6 @@ html:is([data-style="carton"],:not([data-style])) #appView:has(.parcel-tab[data-
 html:is([data-style="carton"],:not([data-style])) #appView:has(.parcel-tab[data-tab="ubicaciones"].active) #newItem .add-stamp-noun{font-size:clamp(28px,7vw,44px)}
 html:is([data-style="carton"],:not([data-style])) #appView.listing-compact:has(.parcel-tab[data-tab="ubicaciones"].active) #newItem .add-stamp-verb{font-size:20px}
 html:is([data-style="carton"],:not([data-style])) #appView.listing-compact:has(.parcel-tab[data-tab="ubicaciones"].active) #newItem .add-stamp-noun{font-size:26px}
+
+/* Caja de Cartón un 10 % mayor, con la base y el margen conservados. */
+html:is([data-style="carton"],:not([data-style])) .welcome-gate #welcomeInventory .welcome-logo-carton{width:176px;height:176px;left:6px;bottom:0}
