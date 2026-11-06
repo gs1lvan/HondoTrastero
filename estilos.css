@@ -1652,3 +1652,11 @@ html .parcel-shell .subspace-icon-caption{display:block;font:400 11px/1.2 system
 /* Colores compartidos de marca: la animación es la referencia. */
 html:is([data-style="carton"],:not([data-style])) .parcel-shell .brand-hondo{color:#634023;opacity:.88}
 html:is([data-style="carton"],:not([data-style])) .parcel-shell .brand-trastero{color:#352819}
+
+/* Referencia original proporcionada por el usuario, sin redibujar sus objetos. */
+#newItem .add-object-exact-carton{display:none}
+html:is([data-style="carton"],:not([data-style])) .parcel-shell #appView:has(.parcel-tab[data-tab="objetos"].active) #newItem .add-object-art-carton{display:none}
+html:is([data-style="carton"],:not([data-style])) .parcel-shell #appView:has(.parcel-tab[data-tab="objetos"].active) #newItem .add-object-exact-carton{
+ display:block;width:145px;height:auto;flex:0 0 145px;object-fit:contain;border:0;border-radius:0;box-shadow:none;
+}
+html:is([data-style="carton"],:not([data-style])) .parcel-shell #appView.listing-compact:has(.parcel-tab[data-tab="objetos"].active) #newItem .add-object-exact-carton{width:94px;flex-basis:94px}
