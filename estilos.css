@@ -1663,3 +1663,8 @@ html:is([data-style="carton"],:not([data-style])) .parcel-shell #appView.listing
 
 /* Caja de bienvenida: otro diez por ciento y un pequeño desplazamiento superior. */
 html:is([data-style="carton"],:not([data-style])) .welcome-gate #welcomeInventory .welcome-logo-carton{width:193.6px;height:193.6px;left:-2.8px;bottom:8px}
+
+/* Ilustración sin fondo añadido y de mayor tamaño. */
+html:is([data-style="carton"],:not([data-style])) .parcel-shell #appView:has(.parcel-tab[data-tab="objetos"].active) #newItem .add-object-exact-carton{width:158px;flex-basis:158px}
+html:is([data-style="carton"],:not([data-style])) .parcel-shell #appView.listing-compact:has(.parcel-tab[data-tab="objetos"].active) #newItem .add-object-exact-carton{width:104px;flex-basis:104px}
+@media(max-width:360px){html:is([data-style="carton"],:not([data-style])) .parcel-shell #appView:has(.parcel-tab[data-tab="objetos"].active) #newItem{gap:12px;padding-left:10px;padding-right:10px}html:is([data-style="carton"],:not([data-style])) .parcel-shell #appView:has(.parcel-tab[data-tab="objetos"].active) #newItem .add-object-exact-carton{width:140px;flex-basis:140px}}
