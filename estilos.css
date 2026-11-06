@@ -1131,3 +1131,20 @@ html .parcel-shell #appView.listing-compact #newItem .add-button-label{font-size
 .welcome-logo-blue{display:none}
 html[data-style="azul-oscuro"] .welcome-logo-carton{display:none}
 html[data-style="azul-oscuro"] .welcome-logo-blue{display:block;border-radius:0;object-fit:contain}
+
+/* Azul oscuro: objetos del cajón industrial y cámara de metal frío. */
+.welcome-object .welcome-blue-object{display:none}
+html[data-style="azul-oscuro"] .welcome-object .welcome-carton-object{display:none}
+html[data-style="azul-oscuro"] .welcome-object .welcome-blue-object{display:block}
+html[data-style="azul-oscuro"] .welcome-procession .welcome-camera{stroke:#263e50;filter:drop-shadow(0 3px 2px #0004)}
+html[data-style="azul-oscuro"] .welcome-procession .welcome-camera>path:nth-of-type(1){fill:#203546}
+html[data-style="azul-oscuro"] .welcome-procession .welcome-camera>path:nth-of-type(2){fill:#aebfca}
+html[data-style="azul-oscuro"] .welcome-procession .welcome-camera>path:nth-of-type(3){fill:#c9d5dc}
+html[data-style="azul-oscuro"] .welcome-procession .welcome-camera>path:nth-of-type(4){fill:#6e8797}
+html[data-style="azul-oscuro"] .welcome-procession .welcome-camera>path:nth-of-type(5){stroke:#607d91}
+html[data-style="azul-oscuro"] .welcome-procession .welcome-camera>path:nth-of-type(6){stroke:#496375}
+html[data-style="azul-oscuro"] .welcome-procession .welcome-camera>circle:nth-of-type(1){fill:#a6bdcc}
+html[data-style="azul-oscuro"] .welcome-procession .welcome-camera>circle:nth-of-type(2){fill:#10293c}
+html[data-style="azul-oscuro"] .welcome-procession .welcome-camera>circle:nth-of-type(3){fill:#229eb7}
+html[data-style="azul-oscuro"] .welcome-procession .welcome-flash{color:#d6f5ff}
+html[data-style="azul-oscuro"] .welcome-logo-blue{background:transparent;border:0;box-shadow:none}
