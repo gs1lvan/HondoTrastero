@@ -1635,3 +1635,9 @@ html .parcel-shell .subspace-icon-choice[aria-pressed="true"]{background:#79512d
 .subspace-icon-preview{margin-top:12px;color:#452b18;overflow-wrap:anywhere}
 html[data-style="azul-oscuro"] .parcel-shell .subspace-icon-choice,html[data-style="azul-oscuro"] .subspace-icon-preview{color:#dbe8f5;border-color:#7192ad}
 html[data-style="terminal"] .parcel-shell .subspace-icon-choice,html[data-style="terminal"] .subspace-icon-preview{color:inherit;border-color:currentColor}
+
+/* Cabecera de Cartón: marca bicolor, diez por ciento mayor y sin trazo. */
+html:is([data-style="carton"],:not([data-style])) .parcel-shell .brand-title{font-size:clamp(1.43rem,15.4cqw,4.4rem)}
+html:is([data-style="carton"],:not([data-style])) .parcel-shell .brand-hondo{color:#85603d}
+html:is([data-style="carton"],:not([data-style])) .parcel-shell .brand-trastero{color:#352819}
+html:is([data-style="carton"],:not([data-style])) .parcel-shell .brand-rule{display:none}
