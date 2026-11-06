@@ -1571,3 +1571,18 @@ html:is([data-style="carton"],:not([data-style])) #appView:has(.parcel-tab[data-
 html:is([data-style="carton"],:not([data-style])) #appView:has(.parcel-tab[data-tab="cajas"].active) #newItem .add-stamp-noun{font-size:clamp(26px,6.5vw,40px);margin-left:0;-webkit-text-stroke:1.5px #f4d39f}
 html:is([data-style="carton"],:not([data-style])) #appView.listing-compact:has(.parcel-tab[data-tab="cajas"].active) #newItem .add-stamp-verb{font-size:20px}
 html:is([data-style="carton"],:not([data-style])) #appView.listing-compact:has(.parcel-tab[data-tab="cajas"].active) #newItem .add-stamp-noun{font-size:25px}
+
+/* Espacios ilustrados, con el mismo lenguaje visual que Añadir objeto. */
+#newItem .add-space-art{display:none}
+html:is([data-style="carton"],:not([data-style])) .parcel-shell #appView:has(.parcel-tab[data-tab="ubicaciones"].active) .section-heading{flex-wrap:wrap}
+html:is([data-style="carton"],:not([data-style])) .parcel-shell #appView:has(.parcel-tab[data-tab="ubicaciones"].active) #newItem{
+ display:flex;align-items:center;justify-content:center;gap:1.1rem;flex:1 1 100%;width:100%;min-height:100px;padding:12px 18px;overflow:hidden;
+}
+html:is([data-style="carton"],:not([data-style])) #appView:has(.parcel-tab[data-tab="ubicaciones"].active) #newItem .add-space-art{display:block;width:128px;height:88px;object-fit:contain;flex:0 0 128px}
+html:is([data-style="carton"],:not([data-style])) #appView:has(.parcel-tab[data-tab="ubicaciones"].active) #newItem .add-label-stamp>span{
+ -webkit-mask-image:radial-gradient(ellipse 1.1px .65px at 9px 11px,transparent 98%,#000 100%),radial-gradient(ellipse 1.6px .45px at 22px 7px,transparent 98%,#000 100%);
+ mask-image:radial-gradient(ellipse 1.1px .65px at 9px 11px,transparent 98%,#000 100%),radial-gradient(ellipse 1.6px .45px at 22px 7px,transparent 98%,#000 100%);
+ -webkit-mask-size:41px 37px,59px 47px;mask-size:41px 37px,59px 47px;-webkit-mask-composite:source-in;mask-composite:intersect;
+}
+html:is([data-style="carton"],:not([data-style])) #appView.listing-compact:has(.parcel-tab[data-tab="ubicaciones"].active) #newItem{min-height:64px;padding:7px 12px;gap:12px}
+html:is([data-style="carton"],:not([data-style])) #appView.listing-compact:has(.parcel-tab[data-tab="ubicaciones"].active) #newItem .add-space-art{width:80px;height:55px;flex-basis:80px}
