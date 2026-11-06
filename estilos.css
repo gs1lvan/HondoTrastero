@@ -1624,3 +1624,14 @@ html .parcel-shell .subspace-object-category{display:block;font-size:.8em;opacit
 html .parcel-shell .subspace-object-arrow{font-size:1.4em}
 html .parcel-shell .subspace-empty{font-size:.9rem;opacity:.75}
 html .parcel-shell #appView.listing-compact .subspace-contents-summary{font-size:.9rem}
+
+/* Selector monocromo de tipos de subespacio. */
+.subspace-icon-field{border:0;padding:0;margin:0;min-width:0}
+.subspace-icon-cloud{display:flex;flex-wrap:wrap;gap:9px}
+html .parcel-shell .subspace-icon-choice{display:flex;align-items:center;justify-content:center;width:48px;height:48px;padding:8px;border:1px solid #79512d66;border-radius:9px;background:transparent;color:#452b18;font:inherit}
+html .parcel-shell .subspace-icon-choice[aria-pressed="true"]{background:#79512d20;border:2px solid #452b18}
+.subspace-type-icon{width:28px;height:28px;flex-shrink:0;vertical-align:middle}
+.subspace-icon-preview,.subspace-icon-title{display:flex;align-items:center;gap:8px}
+.subspace-icon-preview{margin-top:12px;color:#452b18;overflow-wrap:anywhere}
+html[data-style="azul-oscuro"] .parcel-shell .subspace-icon-choice,html[data-style="azul-oscuro"] .subspace-icon-preview{color:#dbe8f5;border-color:#7192ad}
+html[data-style="terminal"] .parcel-shell .subspace-icon-choice,html[data-style="terminal"] .subspace-icon-preview{color:inherit;border-color:currentColor}
