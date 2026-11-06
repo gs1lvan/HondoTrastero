@@ -1092,3 +1092,6 @@ html[data-style="industrial"] :is(.welcome-label,.welcome-skip){background:#2437
 
 /* Entrada abierta: ilustraciones sobre el fondo, sin paneles. */
 html .welcome-gate .welcome-choice{background:transparent;border-color:transparent;border-radius:0;box-shadow:none}
+
+/* Caja recortada con transparencia real, sin máscara circular. */
+.welcome-logo{border-radius:0}
