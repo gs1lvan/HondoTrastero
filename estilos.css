@@ -1040,10 +1040,10 @@ html.welcome-open{overflow:hidden}
 .welcome-choice:disabled{cursor:progress}
 .welcome-scene{display:block;position:relative;width:180px;height:140px;flex-shrink:0}
 .welcome-box{position:absolute;width:140px;height:125px;left:10px;bottom:0}
-.welcome-magnifier{position:absolute;width:75px;height:75px;right:0;top:18px;animation:welcome-search 3.2s ease-in-out both}
-.welcome-camera{position:absolute;width:90px;height:75px;right:-4px;top:30px;animation:welcome-camera 3.2s ease-in-out both}
-.welcome-flash{position:absolute;right:-5px;top:0;font-size:3rem;line-height:1;color:#9c6100;opacity:0;animation:welcome-flash 3.2s ease-in-out both}
-.welcome-label{margin-top:8px;padding:9px 24px;border-radius:9px;background:#452411;color:#fff4dd;animation:welcome-reveal 3.2s ease both}
+.welcome-magnifier{position:absolute;width:75px;height:75px;right:0;top:18px;animation:welcome-search 5s ease-in-out both}
+.welcome-camera{position:absolute;width:90px;height:75px;right:-4px;top:30px;animation:welcome-camera 5s ease-in-out both}
+.welcome-flash{position:absolute;right:-5px;top:0;font-size:3rem;line-height:1;color:#9c6100;opacity:0;animation:welcome-flash 5s ease-in-out both}
+.welcome-label{margin-top:8px;padding:9px 24px;border-radius:9px;background:#452411;color:#fff4dd;animation:welcome-reveal 5s ease both}
 .welcome-status{min-height:1.5em;text-align:center;margin:12px 0 0;font-size:.9rem}
 .welcome-skip{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));min-height:48px;padding:10px 16px;border:1px solid currentColor;border-radius:8px;background:#fff4dd;color:#452411;font:600 .95rem/1.4 system-ui;cursor:pointer}
 .welcome-gate :is(button):focus-visible{outline:3px solid #005fcc;outline-offset:4px}
@@ -1067,3 +1067,22 @@ html[data-style="industrial"] :is(.welcome-label,.welcome-skip){background:#2437
 @keyframes welcome-reveal{0%,75%{opacity:0;transform:translateY(10px)}100%{opacity:1;transform:translateY(0)}}
 @media(max-height:650px){.welcome-inner{padding-top:10px}.welcome-choice{min-height:160px}.welcome-scene{transform:scale(.8);height:115px}.welcome-choices{gap:12px}}
 @media(prefers-reduced-motion:reduce){.welcome-gate *{animation:none!important}.welcome-label{opacity:1;transform:none}.welcome-flash{opacity:0}}
+
+/* Elementos ilustrados de la marca en la entrada. */
+.welcome-inner #welcomeTitle{font-family:'Barlow Condensed',Impact,sans-serif;font-weight:900;font-size:clamp(2.2rem,6.5vw,4.5rem);letter-spacing:-.03em;line-height:.98;margin:14px 0}
+.welcome-logo{position:absolute;left:14px;bottom:0;width:140px;height:140px;object-fit:contain;border-radius:50%}
+.welcome-procession{width:min(350px,100%);height:150px;overflow:hidden;isolation:isolate}
+.welcome-belt{position:absolute;inset:0;z-index:2;pointer-events:none}
+.welcome-object{position:absolute;width:70px;height:100px;bottom:8px;left:50%;margin-left:-35px;opacity:0;animation:welcome-object-pass 5s linear both}
+.welcome-object svg{display:block;width:100%;height:100%;filter:drop-shadow(0 3px 1px #45241122)}
+.object-books{animation-name:welcome-books-pass}.object-plant{animation-name:welcome-plant-pass}.object-plan{animation-name:welcome-plan-pass}
+.welcome-procession .welcome-camera{z-index:1;width:100px;height:85px;left:50%;right:auto;margin-left:-50px;top:0;animation:none}
+.welcome-procession .welcome-flash{z-index:3;right:calc(50% - 64px);top:0;animation-name:welcome-four-flashes}
+@keyframes welcome-object-pass{0%{opacity:0;transform:translateX(-170px)}5%{opacity:1}18%{opacity:1;transform:translateX(0)}30%{opacity:0;transform:translateX(170px)}100%{opacity:0;transform:translateX(170px)}}
+@keyframes welcome-books-pass{0%,20%{opacity:0;transform:translateX(-170px)}24%{opacity:1}37%{opacity:1;transform:translateX(0)}49%{opacity:0;transform:translateX(170px)}100%{opacity:0;transform:translateX(170px)}}
+@keyframes welcome-plant-pass{0%,39%{opacity:0;transform:translateX(-170px)}43%{opacity:1}56%{opacity:1;transform:translateX(0)}68%{opacity:0;transform:translateX(170px)}100%{opacity:0;transform:translateX(170px)}}
+@keyframes welcome-plan-pass{0%,58%{opacity:0;transform:translateX(-170px)}62%{opacity:1}75%{opacity:1;transform:translateX(0)}87%,100%{opacity:0;transform:translateX(170px)}}
+@keyframes welcome-four-flashes{0%,16%,21%,35%,40%,54%,59%,73%,78%,100%{opacity:0;transform:scale(.5)}18%,37%,56%,75%{opacity:1;transform:scale(1)}}
+.welcome-gate.animation-finished .welcome-object{opacity:1;transform:none;left:auto;margin:0;width:52px;height:80px;bottom:0}
+.welcome-gate.animation-finished .object-lamp{left:calc(50% - 118px)}.welcome-gate.animation-finished .object-books{left:calc(50% - 58px)}.welcome-gate.animation-finished .object-plant{left:calc(50% + 2px)}.welcome-gate.animation-finished .object-plan{left:calc(50% + 62px)}
+@media(prefers-reduced-motion:reduce){.welcome-object{opacity:1;transform:none;left:auto;margin:0;width:52px;height:80px;bottom:0}.object-lamp{left:calc(50% - 118px)}.object-books{left:calc(50% - 58px)}.object-plant{left:calc(50% + 2px)}.object-plan{left:calc(50% + 62px)}}

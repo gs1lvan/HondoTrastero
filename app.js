@@ -1101,7 +1101,7 @@ function setWelcomeVisible(visible){
  if(visible&&!wasVisible){
   gate.classList.remove('animation-finished');
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)finishWelcomeAnimation();
-  else welcomeTimer=setTimeout(finishWelcomeAnimation,3200);
+  else welcomeTimer=setTimeout(finishWelcomeAnimation,5000);
   $('welcomeTitle').focus({preventScroll:true});
  }
  if(!visible)clearTimeout(welcomeTimer);
