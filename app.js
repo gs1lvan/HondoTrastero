@@ -485,6 +485,7 @@ function subspaceIconField(initial){
   const button=elem('button','subspace-icon-choice');button.type='button';button.title=label;button.setAttribute('aria-label',label);
   button.dataset.icon=icon?.[0]||'';button.setAttribute('aria-pressed',String(button.dataset.icon===input.dataset.subspaceIcon));
   if(icon)button.append(subspaceIcon(icon));else button.append(elem('span','','×'));
+  button.append(elem('small','subspace-icon-caption',label));
   button.addEventListener('click',()=>{
    input.dataset.subspaceIcon=button.dataset.icon;
    for(const peer of cloud.children)peer.setAttribute('aria-pressed',String(peer===button));
