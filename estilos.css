@@ -1641,3 +1641,6 @@ html:is([data-style="carton"],:not([data-style])) .parcel-shell .brand-title{fon
 html:is([data-style="carton"],:not([data-style])) .parcel-shell .brand-hondo{color:#85603d}
 html:is([data-style="carton"],:not([data-style])) .parcel-shell .brand-trastero{color:#352819}
 html:is([data-style="carton"],:not([data-style])) .parcel-shell .brand-rule{display:none}
+
+/* Objetos laterales más legibles sin ampliar el móvil ni el rótulo. */
+#newItem .add-object-art-carton .add-art-objects>span{transform:scale(1.35);transform-origin:center bottom}
