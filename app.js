@@ -147,6 +147,7 @@ let inventoryOrder='az';
 try{const saved=localStorage.getItem('hondotrastero:orden');if(['az','za','categorias','fecha-desc','fecha-asc'].includes(saved))inventoryOrder=saved}catch{}
 let administrationOpen=false;
 let boxSpace='';
+const expandedSubspaces=new Set();
 let sessionObjectSpace='';
 let tab='objetos', editing=null, user=null, selectedPhoto=null, photoPreviewUrl=null;
 let removePhoto=false;
@@ -924,7 +925,44 @@ function render(){
    const buttons=elem('div','space-edit-controls');
    buttons.append(edit,del);actions.append(buttons);
   }else actions.append(edit,del);
-  line.append(main,actions);root.append(line);
+  line.append(main,actions);
+  if(tab==='cajas'){
+   line.classList.add('subspace-record');
+   const objects=data.objetos.filter(obj=>obj.caja_id===item.id)
+    .sort((a,b)=>(a.nombre||'').localeCompare(b.nombre||'','es',{sensitivity:'base',numeric:true}));
+   if(!objects.length)line.append(elem('p','subspace-empty','Sin objetos guardados'));
+   else{
+    const disclosure=elem('details','subspace-contents');
+    disclosure.open=expandedSubspaces.has(item.id);
+    disclosure.append(elem('summary','subspace-contents-summary','Ver objetos · '+objects.length));
+    const list=elem('div','subspace-object-list');let loaded=false;
+    const loadObjects=()=>{
+     if(loaded)return;loaded=true;
+     for(const object of objects){
+      const row=elem('button','subspace-object');row.type='button';
+      row.setAttribute('aria-label','Abrir ficha de '+object.nombre);
+      if(object.foto_path){
+       const image=elem('img','subspace-object-photo');image.alt='';image.loading='lazy';
+       signedPhoto(object.foto_path).then(url=>{image.src=url}).catch(()=>image.remove());row.append(image);
+      }
+      const text=elem('span','subspace-object-text');text.append(elem('span','subspace-object-name',object.nombre));
+      const categories=itemCategories(object).map(id=>CATEGORIES_BY_ID.get(id)?.name).filter(Boolean);
+      if(categories.length)text.append(elem('small','subspace-object-category',categories.join(' · ')));
+      row.append(text);
+      const arrow=elem('span','subspace-object-arrow','›');arrow.setAttribute('aria-hidden','true');row.append(arrow);
+      row.addEventListener('click',event=>{event.stopPropagation();openForm('objetos',object)});
+      list.append(row);
+     }
+    };
+    disclosure.addEventListener('click',event=>event.stopPropagation());
+    disclosure.addEventListener('toggle',()=>{
+     if(disclosure.open){expandedSubspaces.add(item.id);loadObjects()}else expandedSubspaces.delete(item.id);
+    });
+    disclosure.append(list);line.append(disclosure);
+    if(disclosure.open)loadObjects();
+   }
+  }
+  root.append(line);
  }
 }
 async function removeItem(type,item){

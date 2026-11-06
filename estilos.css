@@ -1610,3 +1610,17 @@ html .parcel-shell #appView:has(.parcel-tab[data-tab="ubicaciones"].active) #sec
 
 /* Subespacios: conservar solo el botón ilustrado sobre el listado. */
 html .parcel-shell #appView:has(.parcel-tab[data-tab="cajas"].active) #sectionTitle{display:none!important}
+
+/* Contenido plegable de cada subespacio. */
+html .parcel-shell #appView .record.subspace-record{flex-wrap:wrap}
+html .parcel-shell .subspace-contents,html .parcel-shell .subspace-empty{flex:1 1 100%;min-width:0;width:100%;margin:8px 0 0;padding-top:8px;border-top:1px solid currentColor}
+html .parcel-shell .subspace-contents-summary{padding:8px 0;font:inherit;font-size:1rem;cursor:pointer}
+html .parcel-shell .subspace-object-list{display:grid;gap:0;margin-top:4px}
+html .parcel-shell .subspace-object{display:flex;align-items:center;gap:10px;width:100%;min-height:52px;padding:10px 0;border:0;border-top:1px solid currentColor;background:transparent;color:inherit;text-align:left;font:inherit;white-space:normal}
+html .parcel-shell .subspace-object-photo{width:42px;height:46px;flex:none;object-fit:cover;border-radius:5px}
+html .parcel-shell .subspace-object-text{display:block;flex:1;min-width:0;overflow-wrap:anywhere}
+html .parcel-shell .subspace-object-name{display:block;font-weight:600}
+html .parcel-shell .subspace-object-category{display:block;font-size:.8em;opacity:.8;margin-top:3px}
+html .parcel-shell .subspace-object-arrow{font-size:1.4em}
+html .parcel-shell .subspace-empty{font-size:.9rem;opacity:.75}
+html .parcel-shell #appView.listing-compact .subspace-contents-summary{font-size:.9rem}
