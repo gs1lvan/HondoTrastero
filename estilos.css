@@ -1660,3 +1660,6 @@ html:is([data-style="carton"],:not([data-style])) .parcel-shell #appView:has(.pa
  display:block;width:145px;height:auto;flex:0 0 145px;object-fit:contain;border:0;border-radius:0;box-shadow:none;
 }
 html:is([data-style="carton"],:not([data-style])) .parcel-shell #appView.listing-compact:has(.parcel-tab[data-tab="objetos"].active) #newItem .add-object-exact-carton{width:94px;flex-basis:94px}
+
+/* Caja de bienvenida: otro diez por ciento y un pequeño desplazamiento superior. */
+html:is([data-style="carton"],:not([data-style])) .welcome-gate #welcomeInventory .welcome-logo-carton{width:193.6px;height:193.6px;left:-2.8px;bottom:8px}
