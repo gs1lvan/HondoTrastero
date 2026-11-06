@@ -1086,3 +1086,6 @@ html[data-style="industrial"] :is(.welcome-label,.welcome-skip){background:#2437
 .welcome-gate.animation-finished .welcome-object{opacity:1;transform:none;left:auto;margin:0;width:52px;height:80px;bottom:0}
 .welcome-gate.animation-finished .object-lamp{left:calc(50% - 118px)}.welcome-gate.animation-finished .object-books{left:calc(50% - 58px)}.welcome-gate.animation-finished .object-plant{left:calc(50% + 2px)}.welcome-gate.animation-finished .object-plan{left:calc(50% + 62px)}
 @media(prefers-reduced-motion:reduce){.welcome-object{opacity:1;transform:none;left:auto;margin:0;width:52px;height:80px;bottom:0}.object-lamp{left:calc(50% - 118px)}.object-books{left:calc(50% - 58px)}.object-plant{left:calc(50% + 2px)}.object-plan{left:calc(50% + 62px)}}
+
+/* El título recibe foco al entrar, sin contorno visual. */
+.welcome-inner #welcomeTitle:focus{outline:none;box-shadow:none}
