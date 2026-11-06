@@ -1604,3 +1604,6 @@ html:is([data-style="carton"],:not([data-style])) #appView.listing-compact:has(.
 html:is([data-style="carton"],:not([data-style])) #appView.listing-compact:has(.parcel-tab[data-tab="cajas"].active) #newItem .add-subspace-art{width:74px;height:55px;flex-basis:74px}
 html:is([data-style="carton"],:not([data-style])) #appView.listing-compact:has(.parcel-tab[data-tab="cajas"].active) #newItem .add-stamp-noun{font-size:25px}
 @media(max-width:360px){html:is([data-style="carton"],:not([data-style])) #appView:has(.parcel-tab[data-tab="cajas"].active) #newItem{gap:8px}html:is([data-style="carton"],:not([data-style])) #appView:has(.parcel-tab[data-tab="cajas"].active) #newItem .add-subspace-art{width:94px;flex-basis:94px}}
+
+/* La pestaña Espacios conserva únicamente el botón de alta ilustrado. */
+html .parcel-shell #appView:has(.parcel-tab[data-tab="ubicaciones"].active) #sectionTitle{display:none!important}
