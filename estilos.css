@@ -1089,3 +1089,6 @@ html[data-style="industrial"] :is(.welcome-label,.welcome-skip){background:#2437
 
 /* El título recibe foco al entrar, sin contorno visual. */
 .welcome-inner #welcomeTitle:focus{outline:none;box-shadow:none}
+
+/* Entrada abierta: ilustraciones sobre el fondo, sin paneles. */
+html .welcome-gate .welcome-choice{background:transparent;border-color:transparent;border-radius:0;box-shadow:none}
