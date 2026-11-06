@@ -740,7 +740,7 @@ function render(){
  if(administrationOpen){refreshDefaultSpace();renderCategoryAdmin()}
  const managingSpaces=tab==='ubicaciones';
  show('inventoryToolbar',tab==='objetos'||tab==='cajas');
- $('newItem').lastChild.textContent=' Añadir '+names[tab];
+ $('newItem').querySelector('.add-button-label').textContent='＋ Añadir '+names[tab];
  show('newItem',true);
  refreshInventoryFilters();
  $('countObjects').textContent=data.objetos.length;
