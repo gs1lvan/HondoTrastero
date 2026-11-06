@@ -1251,3 +1251,10 @@ html:not([data-style]) .welcome-cardboard-tear{
 .welcome-cardboard-tear .tear-fibres{
  clip-path:polygon(0 33%,3% 27%,7% 44%,12% 35%,17% 48%,21% 38%,27% 45%,32% 30%,36% 34%,40% 8%,44% 17%,49% 6%,54% 20%,60% 12%,65% 27%,70% 16%,76% 22%,81% 5%,86% 17%,91% 4%,95% 20%,100% 14%,100% 23%,95% 30%,91% 13%,86% 26%,81% 14%,76% 31%,70% 25%,65% 36%,60% 21%,54% 29%,49% 15%,44% 26%,40% 17%,36% 43%,32% 39%,27% 54%,21% 47%,17% 57%,12% 44%,7% 53%,3% 36%,0 42%);
 }
+
+/* Ilustraciones volumétricas de Azul oscuro, recortadas del mismo recurso transparente. */
+.welcome-camera-blue{display:none}
+html[data-style="azul-oscuro"] .welcome-procession .welcome-camera-carton{display:none}
+html[data-style="azul-oscuro"] .welcome-procession .welcome-camera-blue{display:block;filter:drop-shadow(0 2px 2px #0003)}
+html[data-style="azul-oscuro"] .welcome-blue-object{stroke:none}
+html[data-style="azul-oscuro"] .add-object-art-blue svg{stroke:none}
