@@ -1031,7 +1031,7 @@ html .parcel-shell #adminStyleTools > section[aria-labelledby="adminInventoryTit
 
 /* Entrada animada, aislada del inventario y de Administración. */
 html.welcome-open{overflow:hidden}
-.welcome-gate{position:fixed;inset:0;z-index:10000;overflow:auto;background:#e6bc82;color:#452411;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+.welcome-gate{position:fixed;inset:0;z-index:10000;overflow:auto;background:#d9a362 url("kraft-textura.webp") repeat;color:#452411;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
 .welcome-inner{max-width:620px;min-height:100dvh;margin:auto;padding:max(20px,env(safe-area-inset-top)) 24px calc(85px + env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:stretch}
 .welcome-inner h1{font:800 clamp(1.6rem,5vw,2.2rem)/1.2 system-ui;margin:12px 0 4px;text-align:center;color:inherit}
 .welcome-intro{text-align:center;margin:8px 0 14px;font-size:1rem}
