@@ -1126,3 +1126,8 @@ html .parcel-shell #appView.listing-compact #newItem .add-art-camera{width:40px;
 html .parcel-shell #appView.listing-compact #newItem .add-art-objects{width:68px;gap:2px}
 html .parcel-shell #appView.listing-compact #newItem .add-art-objects>span{width:15px;height:20px}
 html .parcel-shell #appView.listing-compact #newItem .add-button-label{font-size:1rem}
+
+/* La bienvenida utiliza el logotipo correspondiente al estilo seleccionado. */
+.welcome-logo-blue{display:none}
+html[data-style="azul-oscuro"] .welcome-logo-carton{display:none}
+html[data-style="azul-oscuro"] .welcome-logo-blue{display:block;border-radius:0;object-fit:contain}
