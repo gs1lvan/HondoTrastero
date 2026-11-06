@@ -1393,3 +1393,6 @@ html:is([data-style="carton"],:not([data-style])) .welcome-procession .object-pl
  .carton-preview-0{opacity:1}
  .carton-preview-0 .carton-phone-motion{transform:none}
 }
+
+/* Saltar animación: texto discreto centrado en todos los estilos. */
+html .welcome-gate .welcome-skip{left:50%;right:auto;transform:translateX(-50%);background:transparent;border:0;border-radius:0;box-shadow:none;color:inherit;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:.95rem;font-weight:400;white-space:nowrap}
