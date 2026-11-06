@@ -1529,3 +1529,22 @@ html .parcel-shell #appView.listing-compact #newItem .add-object-art-carton .add
 html .parcel-shell #appView.listing-compact #newItem .add-object-art-carton .add-art-objects>span:nth-child(2){left:13px}
 html .parcel-shell #appView.listing-compact #newItem .add-object-art-carton .add-art-objects>span:nth-child(4){left:48px}
 html .parcel-shell #appView.listing-compact #newItem .add-object-art-carton .add-art-objects>span:nth-child(5){left:61px;width:10px}
+
+/* Rótulo estampado aprobado para el botón ilustrado de Cartón. */
+#newItem .add-label-stamp{display:none}
+html:is([data-style="carton"],:not([data-style])) #newItem .add-label-plain{
+ position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;
+}
+html:is([data-style="carton"],:not([data-style])) #newItem .add-label-stamp{
+ display:inline-flex;flex-direction:column;align-items:center;font-family:'Anton',Impact,sans-serif;font-weight:400;line-height:1;transform:rotate(-2deg);padding:4px 6px 7px;
+}
+html:is([data-style="carton"],:not([data-style])) #newItem .add-label-stamp>span{
+ display:block;position:relative;
+ -webkit-mask-image:radial-gradient(ellipse 1px .55px at 9px 11px,transparent 98%,#000 100%);
+ mask-image:radial-gradient(ellipse 1px .55px at 9px 11px,transparent 98%,#000 100%);
+ -webkit-mask-size:57px 43px;mask-size:57px 43px;
+}
+html:is([data-style="carton"],:not([data-style])) #newItem .add-stamp-verb{font-size:clamp(26px,7vw,42px);color:#85603d;z-index:1;margin-left:-8%}
+html:is([data-style="carton"],:not([data-style])) #newItem .add-stamp-noun{font-size:clamp(34px,9vw,54px);color:#392619;z-index:2;margin-top:-.16em;margin-left:8%;-webkit-text-stroke:2px #f4d39f;paint-order:stroke fill}
+html:is([data-style="carton"],:not([data-style])) #appView.listing-compact #newItem .add-stamp-verb{font-size:23px}
+html:is([data-style="carton"],:not([data-style])) #appView.listing-compact #newItem .add-stamp-noun{font-size:29px}
