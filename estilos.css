@@ -1275,3 +1275,29 @@ html[data-style="azul-oscuro"] .welcome-procession .welcome-phone>path{fill:none
 @keyframes phone-capture-mat{0%{opacity:0}47%{opacity:1}66%,100%{opacity:0}}
 @keyframes phone-capture-light{0%{opacity:0}66%,100%{opacity:1}}
 html[data-style="azul-oscuro"] .welcome-procession .welcome-flash{right:calc(50% - 52px);top:-20px}
+
+/* Cartón: cinco objetos, con bote de pinceles y plano enrollado. */
+.object-brushes{display:none}
+html:is([data-style="carton"],:not([data-style])) .welcome-procession .object-brushes{display:block}
+html:is([data-style="carton"],:not([data-style])) .welcome-procession .object-lamp{animation-name:carton-lamp-pass}
+@keyframes carton-lamp-pass{0%,0%{opacity:0;transform:translateX(-170px)}4%{opacity:1}15%{opacity:1;transform:translateX(0)}27%,100%{opacity:0;transform:translateX(170px)}}
+html:is([data-style="carton"],:not([data-style])) .welcome-procession .object-books{animation-name:carton-books-pass}
+@keyframes carton-books-pass{0%,16%{opacity:0;transform:translateX(-170px)}20%{opacity:1}31%{opacity:1;transform:translateX(0)}43%,100%{opacity:0;transform:translateX(170px)}}
+html:is([data-style="carton"],:not([data-style])) .welcome-procession .object-plant{animation-name:carton-plant-pass}
+@keyframes carton-plant-pass{0%,32%{opacity:0;transform:translateX(-170px)}36%{opacity:1}47%{opacity:1;transform:translateX(0)}59%,100%{opacity:0;transform:translateX(170px)}}
+html:is([data-style="carton"],:not([data-style])) .welcome-procession .object-brushes{animation-name:carton-brushes-pass}
+@keyframes carton-brushes-pass{0%,48%{opacity:0;transform:translateX(-170px)}52%{opacity:1}63%{opacity:1;transform:translateX(0)}75%,100%{opacity:0;transform:translateX(170px)}}
+html:is([data-style="carton"],:not([data-style])) .welcome-procession .object-plan{animation-name:carton-plan-pass}
+@keyframes carton-plan-pass{0%,64%{opacity:0;transform:translateX(-170px)}68%{opacity:1}79%{opacity:1;transform:translateX(0)}92%,100%{opacity:0;transform:translateX(170px)}}
+html:is([data-style="carton"],:not([data-style])) .welcome-procession .welcome-flash{animation-name:carton-five-flashes}
+@keyframes carton-five-flashes{0%,13%,18%,29%,34%,45%,50%,61%,66%,77%,82%,100%{opacity:0;transform:scale(.5)}15%,31%,47%,63%,79%{opacity:1;transform:scale(1)}}
+html:is([data-style="carton"],:not([data-style])) .welcome-gate.animation-finished .object-lamp{left:calc(50% - 129px);width:42px;height:78px}
+@media(prefers-reduced-motion:reduce){html:is([data-style="carton"],:not([data-style])) .welcome-procession .object-lamp{left:calc(50% - 129px);width:42px;height:78px}}
+html:is([data-style="carton"],:not([data-style])) .welcome-gate.animation-finished .object-books{left:calc(50% - 75px);width:42px;height:78px}
+@media(prefers-reduced-motion:reduce){html:is([data-style="carton"],:not([data-style])) .welcome-procession .object-books{left:calc(50% - 75px);width:42px;height:78px}}
+html:is([data-style="carton"],:not([data-style])) .welcome-gate.animation-finished .object-plant{left:calc(50% - 21px);width:42px;height:78px}
+@media(prefers-reduced-motion:reduce){html:is([data-style="carton"],:not([data-style])) .welcome-procession .object-plant{left:calc(50% - 21px);width:42px;height:78px}}
+html:is([data-style="carton"],:not([data-style])) .welcome-gate.animation-finished .object-brushes{left:calc(50% + 33px);width:42px;height:78px}
+@media(prefers-reduced-motion:reduce){html:is([data-style="carton"],:not([data-style])) .welcome-procession .object-brushes{left:calc(50% + 33px);width:42px;height:78px}}
+html:is([data-style="carton"],:not([data-style])) .welcome-gate.animation-finished .object-plan{left:calc(50% + 87px);width:42px;height:78px}
+@media(prefers-reduced-motion:reduce){html:is([data-style="carton"],:not([data-style])) .welcome-procession .object-plan{left:calc(50% + 87px);width:42px;height:78px}}
