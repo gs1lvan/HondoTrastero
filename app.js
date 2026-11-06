@@ -216,7 +216,7 @@ function photoField(item,onSelected=null){
  const preview=elem('img','photo-preview d-none');preview.id='photoPreview';preview.alt='Vista previa de la fotografía';
  const buttons=elem('div','d-flex flex-wrap gap-2');
  const cameraButton=elem('button','btn btn-outline-primary flex-grow-1','Hacer foto');cameraButton.type='button';
- const removeButton=elem('button','btn btn-outline-danger d-none','Eliminar foto');removeButton.type='button';removeButton.id='removePhotoBtn';
+ const removeButton=elem('button','photo-remove-corner d-none','×');removeButton.type='button';removeButton.id='removePhotoBtn';removeButton.setAttribute('aria-label','Eliminar foto');removeButton.title='Eliminar foto';
  const attachButton=elem('button','btn btn-outline-primary flex-grow-1','Adjuntar foto');attachButton.type='button';
  const cameraInput=elem('input','visually-hidden');cameraInput.type='file';cameraInput.id='fieldCamera';cameraInput.accept='image/*';cameraInput.setAttribute('capture','environment');
  const galleryInput=elem('input','visually-hidden');galleryInput.type='file';galleryInput.id='fieldPhoto';galleryInput.accept='image/*';
@@ -243,9 +243,10 @@ function photoField(item,onSelected=null){
   cameraInput.value='';galleryInput.value='';removeButton.classList.add('d-none');
  });
  wrap.openQuickCamera=()=>openInventoryCamera(acceptPhoto,()=>cameraButton.click());
- buttons.append(cameraButton,attachButton,removeButton);
+ buttons.append(cameraButton,attachButton);
  if(item?.foto_path)removeButton.classList.remove('d-none');
- wrap.append(lab,preview,buttons,cameraInput,galleryInput);
+ const frame=elem('div','photo-preview-frame');frame.append(preview,removeButton);
+ wrap.append(lab,frame,buttons,cameraInput,galleryInput);
  if(item?.foto_path)signedPhoto(item.foto_path).then(url=>{
   if(!selectedPhoto&&!removePhoto){preview.src=url;preview.classList.remove('d-none')}
  }).catch(()=>{});
@@ -276,12 +277,8 @@ function itemCategories(item){
 function categoryField(item){
  const selected=new Set(itemCategories(item));
  const field=elem('fieldset','category-field');
- const legend=elem('legend','form-label','Categorías (puedes seleccionar varias)');
- field.append(legend);
- const tip=elem('p','category-tip','Marca todas las categorías que correspondan al objeto.');field.append(tip);
+ field.setAttribute('aria-label','Categorías');
  const counter=elem('p','category-counter');counter.id='categoryCount';
- const search=elem('input','form-control category-search');search.type='search';
- search.id='categorySearch';search.placeholder='Buscar categoría…';search.setAttribute('aria-label','Buscar entre las categorías disponibles');
  const list=elem('div','category-grid');list.id='categoryGrid';
  const rows=[];
  for(const cat of CATEGORIES){
@@ -303,11 +300,7 @@ function categoryField(item){
   const n=list.querySelectorAll('input:checked').length;
   counter.textContent=`${n} ${n===1?'categoría seleccionada':'categorías seleccionadas'}`;
  }
- search.addEventListener('input',()=>{
-  const query=search.value.trim().toLocaleLowerCase('es');
-  for(const {label,cat} of rows)label.hidden=!cat.name.toLocaleLowerCase('es').includes(query);
- });
- updateCount();field.append(counter,search,list);
+ updateCount();field.append(counter,list);
  if(item?.categoria?.trim()&&!selected.size){
   const legacy=elem('p','category-legacy',`Categoría anterior: «${item.categoria.trim()}». Asígnale una o varias de las categorías actuales.`);
   field.append(legacy);
@@ -499,7 +492,10 @@ function subspaceIconField(initial){
  input.addEventListener('input',refresh);refresh();field.append(preview);return field;
 }
 
+const editorActionHome=$('saveBtn').parentElement;
 function openForm(type=tab,item=null){
+ // Recuperar los mismos controles antes de reconstruir los campos.
+ editorActionHome.append($('deleteObjectBtn'),$('saveBtn'));
  $('editPage').classList.toggle('editor-compact',listMode==='reducido');
  closeCategoryFilter();
  $('spaceAddBoxBtn')?.remove();
@@ -508,7 +504,13 @@ function openForm(type=tab,item=null){
  show('deleteObjectBtn',type==='objetos'&&!!item?.id);
  if(photoPreviewUrl){URL.revokeObjectURL(photoPreviewUrl);photoPreviewUrl=null}
  const root=$('modalFields');root.replaceChildren();
- if(type==='objetos')root.append(photoField(item));
+ if(type==='objetos'){
+  const photo=photoField(item);
+  const actions=elem('div','object-photo-actions');
+  $('deleteObjectBtn').textContent='Eliminar objeto';
+  actions.append($('deleteObjectBtn'),$('saveBtn'));
+  photo.append(actions);root.append(photo);
+ }
  $('modalTitle').textContent=(item?'Editar ':'Añadir ')+names[type];
  root.append(inputField('fieldName','Nombre',type==='cajas'?splitSubspaceName(item?.nombre).name:item?.nombre,'text',type!=='objetos'||!!item?.id));
  if(type==='objetos'){
@@ -603,7 +605,7 @@ function openForm(type=tab,item=null){
   categoryFields.addEventListener('change',refreshCategorySummary);
   refreshCategorySummary();
   categoriesPanel.append(categoriesSummary,categoryFields);
-  root.append(categoriesPanel);
+  root.append(categoriesPanel,extra);
   const wrap=elem('div');
   const initialBox=data.cajas.find(b=>b.id===item?.caja_id);
   const initialSpace=initialBox?.ubicacion_id||item?.ubicacion_id||(!item?(data.ubicaciones.some(space=>space.id===sessionObjectSpace)?sessionObjectSpace:defaultObjectSpace()):'')||localStorage.getItem(lastLocationKey())||'';
