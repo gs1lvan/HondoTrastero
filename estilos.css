@@ -1301,3 +1301,22 @@ html:is([data-style="carton"],:not([data-style])) .welcome-gate.animation-finish
 @media(prefers-reduced-motion:reduce){html:is([data-style="carton"],:not([data-style])) .welcome-procession .object-brushes{left:calc(50% + 33px);width:42px;height:78px}}
 html:is([data-style="carton"],:not([data-style])) .welcome-gate.animation-finished .object-plan{left:calc(50% + 87px);width:42px;height:78px}
 @media(prefers-reduced-motion:reduce){html:is([data-style="carton"],:not([data-style])) .welcome-procession .object-plan{left:calc(50% + 87px);width:42px;height:78px}}
+
+/* Móvil completo en primer plano; objetos detrás, frente a la cámara trasera. */
+html[data-style="azul-oscuro"] .welcome-procession{height:176px}
+html[data-style="azul-oscuro"] .welcome-procession .welcome-phone{
+ top:16px;width:82px;height:124px;z-index:3;
+ transform:rotate(-6deg);transform-origin:center;
+}
+html[data-style="azul-oscuro"] .welcome-procession .welcome-belt{
+ z-index:1;bottom:35px;
+}
+html[data-style="azul-oscuro"] .welcome-procession .welcome-flash{
+ z-index:4;top:8px;right:calc(50% - 52px);
+}
+html[data-style="azul-oscuro"] .welcome-procession .welcome-camera.welcome-phone>path{
+ fill:none;stroke:#adc5d4;
+}
+@media(max-height:650px){
+ html[data-style="azul-oscuro"] .welcome-procession{height:176px}
+}
