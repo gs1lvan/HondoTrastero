@@ -865,13 +865,13 @@ function render(){
   }
   const item=entry.item;
   const line=elem('div','list-group-item record');
-  if(tab==='objetos'||tab==='ubicaciones'||listMode==='reducido'){
+  {
    const recordType=tab;
    line.style.cursor='pointer';
    line.tabIndex=0;
    line.setAttribute('aria-label','Editar '+names[recordType]+' '+item.nombre);
    line.addEventListener('click',event=>{
-    if(event.target.closest('button,a,input,select,textarea,summary'))return;
+    if(event.target.closest('button,a,input,select,textarea,details,summary'))return;
     openForm(recordType,item);
    });
    line.addEventListener('keydown',event=>{
@@ -966,7 +966,6 @@ function render(){
    }
   }
   const actions=elem('div','record-actions');
-  const edit=elem('button','btn btn-sm btn-outline-primary','Editar');edit.type='button';edit.addEventListener('click',()=>openForm(tab,item));
   const del=elem('button','btn btn-sm btn-outline-danger','Eliminar');del.type='button';del.addEventListener('click',()=>removeItem(tab,item));
   if(tab==='ubicaciones'){
    line.classList.add('space-record');
@@ -990,8 +989,8 @@ function render(){
    if(tab!=='objetos')actions.append(del);
   }else if(tab==='ubicaciones'){
    const buttons=elem('div','space-edit-controls');
-   buttons.append(edit,del);actions.append(buttons);
-  }else actions.append(edit,del);
+   buttons.append(del);actions.append(buttons);
+  }else actions.append(del);
   line.append(main,actions);
   if(tab==='cajas'){
    line.classList.add('subspace-record');
