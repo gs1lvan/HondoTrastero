@@ -144,7 +144,7 @@ function subscribeCategories(){
 let listMode='ampliado';
 try{if(localStorage.getItem('hondotrastero:listado')==='reducido')listMode='reducido'}catch{}
 let inventoryOrder='az';
-try{const saved=localStorage.getItem('hondotrastero:orden');if(['az','za','categorias','fecha-desc','fecha-asc'].includes(saved))inventoryOrder=saved}catch{}
+try{const saved=localStorage.getItem('hondotrastero:orden');if(['az','za','categorias','espacios','fecha-desc','fecha-asc'].includes(saved))inventoryOrder=saved}catch{}
 let administrationOpen=false;
 let boxSpace='';
 const expandedSubspaces=new Set();
@@ -776,6 +776,22 @@ function inventoryEntries(rows,order){
   }).map(item=>({item}));
  }
  const sorted=[...rows].sort(compare);
+ if(order==='espacios'){
+  const spaces=new Map(data.ubicaciones.map(space=>[space.id,space]));
+  const groups=new Map();
+  for(const item of sorted){
+   const id=objectSpace(item);
+   const key=spaces.has(id)?id:null;
+   if(!groups.has(key))groups.set(key,[]);
+   groups.get(key).push({item});
+  }
+  const entries=[];
+  for(const space of [...spaces.values()].sort(compare)){
+   if(groups.has(space.id))entries.push({heading:space.nombre},...groups.get(space.id));
+  }
+  if(groups.has(null))entries.push({heading:'Sin espacio'},...groups.get(null));
+  return entries;
+ }
  if(order!=='categorias')return (order==='za'?sorted.reverse():sorted).map(item=>({item}));
  const groups=[...CATEGORIES].sort((a,b)=>a.name.localeCompare(b.name,'es',{sensitivity:'base'}));
  const entries=[];
