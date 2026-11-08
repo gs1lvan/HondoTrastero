@@ -242,7 +242,10 @@ function photoField(item,onSelected=null){
   preview.removeAttribute('src');preview.classList.add('d-none');
   cameraInput.value='';galleryInput.value='';removeButton.classList.add('d-none');
  });
- wrap.openQuickCamera=()=>openInventoryCamera(acceptPhoto,()=>cameraButton.click());
+ wrap.openQuickCamera=()=>openInventoryCamera(acceptPhoto,()=>{
+  const hint=elem('p','mb-0','Toca «Hacer foto» para abrir la cámara del móvil.');
+  hint.setAttribute('role','status');wrap.append(hint);
+ });
  buttons.append(cameraButton,attachButton);
  if(item?.foto_path)removeButton.classList.remove('d-none');
  const frame=elem('div','photo-preview-frame');frame.append(preview,removeButton);
@@ -392,10 +395,11 @@ async function openInventoryCamera(onPhoto,fallback){
  controls.append(shoot,accept,retry,cancel);overlay.append(video,preview,controls);document.body.append(overlay);
  let stream=null,blob=null,url=null,closed=false;
  const close=()=>{
-  if(closed)return;closed=true;stream?.getTracks().forEach(t=>t.stop());
+  if(closed)return;closed=true;clearTimeout(cameraTimeout);stream?.getTracks().forEach(t=>t.stop());
   video.srcObject=null;if(url)URL.revokeObjectURL(url);overlay.remove();
   if(closeQuickCamera===close)closeQuickCamera=null;
  };
+ const cameraTimeout=setTimeout(()=>{close();fallback()},10000);
  closeQuickCamera=close;
  cancel.addEventListener('click',close);
  retry.addEventListener('click',()=>{preview.hidden=true;video.hidden=false;shoot.hidden=false;accept.hidden=true;retry.hidden=true});
@@ -414,7 +418,7 @@ async function openInventoryCamera(onPhoto,fallback){
  try{
   stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});
   if(closed){stream.getTracks().forEach(t=>t.stop());return}
-  video.srcObject=stream;await video.play();
+  video.srcObject=stream;await video.play();clearTimeout(cameraTimeout);
  }catch(error){if(closed)return;close();fallback()}
 }
 
@@ -1136,8 +1140,13 @@ $('editForm').addEventListener('submit',async e=>{
   const box=data.cajas.find(x=>x.id===payload.caja_id);
   if(box)localStorage.setItem(lastLocationKey(),box.ubicacion_id);
  }
+ if(inventoryQuickMode&&type==='objetos'&&!id){
+  startObjectPhoto();
+  try{await load()}catch(err){alertMsg('Objeto guardado. No se pudo actualizar el inventario: '+err.message)}
+  return;
+ }
  page.hide();
- try{await load();clearMsg();if(inventoryQuickMode&&type==='objetos'&&!id)startObjectPhoto()}catch(err){alertMsg(err.message)}
+ try{await load();clearMsg()}catch(err){alertMsg(err.message)}
 });
 document.querySelector('.parcel-nav').addEventListener('click',e=>{
  const b=e.target.closest('[data-tab]');if(!b)return;
