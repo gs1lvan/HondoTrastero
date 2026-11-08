@@ -189,6 +189,15 @@ function alertMsg(message,kind='danger'){
  const el=$('notice');el.textContent=message;el.className=`alert alert-${kind}`;el.scrollIntoView({block:'nearest'});
 }
 function elem(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e}
+function trashIcon(){
+ const library=window.lucide;
+ const icon=library?.icons?.Trash2&&library.createElement?.(library.icons.Trash2);
+ if(!icon)return document.createTextNode('🗑');
+ icon.setAttribute('aria-hidden','true');
+ icon.setAttribute('width','1em');
+ icon.setAttribute('height','1em');
+ return icon;
+}
 function categoryIcon(id,fallback,className){
  const wrapper=elem('span',className);
  const library=window.lucide;
@@ -260,7 +269,7 @@ function photoField(item,onSelected=null){
  const preview=elem('img','photo-preview d-none');preview.id='photoPreview';preview.alt='Vista previa de la fotografía';
  const buttons=elem('div','d-flex flex-wrap gap-2');
  const cameraButton=elem('button','btn btn-outline-primary flex-grow-1','Hacer foto');cameraButton.type='button';
- const removeButton=elem('button','photo-remove-corner d-none','×');removeButton.type='button';removeButton.id='removePhotoBtn';removeButton.setAttribute('aria-label','Eliminar foto');removeButton.title='Eliminar foto';
+ const removeButton=elem('button','photo-remove-corner d-none');removeButton.append(trashIcon());removeButton.type='button';removeButton.id='removePhotoBtn';removeButton.setAttribute('aria-label','Eliminar foto');removeButton.title='Eliminar foto';
  const attachButton=elem('button','btn btn-outline-primary flex-grow-1','Adjuntar foto');attachButton.type='button';
  const cameraInput=elem('input','visually-hidden');cameraInput.type='file';cameraInput.id='fieldCamera';cameraInput.accept='image/*';cameraInput.setAttribute('capture','environment');
  const galleryInput=elem('input','visually-hidden');galleryInput.type='file';galleryInput.id='fieldPhoto';galleryInput.accept='image/*';
@@ -281,6 +290,7 @@ function photoField(item,onSelected=null){
  cameraInput.addEventListener('change',()=>choosePhoto(cameraInput));
  galleryInput.addEventListener('change',()=>choosePhoto(galleryInput));
  removeButton.addEventListener('click',()=>{
+  if(!confirm('¿Quitar la fotografía del objeto?'))return;
   selectedPhoto=null;removePhoto=true;
   if(photoPreviewUrl){URL.revokeObjectURL(photoPreviewUrl);photoPreviewUrl=null}
   preview.removeAttribute('src');preview.classList.add('d-none');
@@ -607,13 +617,14 @@ function openForm(type=tab,item=null){
   const input=$('fieldName');
   const control=elem('div','object-name-control');
   input.before(control);control.append(input);
-  const clear=elem('button','object-name-clear','×');
+  const clear=elem('button','object-name-clear');clear.append(trashIcon());
   clear.type='button';clear.setAttribute('aria-label','Borrar nombre');clear.title='Borrar nombre';
   control.append(clear);
   let edited=false;
   const syncClear=()=>{clear.hidden=!input.value};
   input.addEventListener('input',()=>{edited=true;syncClear()});
   clear.addEventListener('click',()=>{
+   if(!confirm('¿Borrar el nombre del objeto?'))return;
    input.value='';input.dispatchEvent(new Event('input',{bubbles:true}));input.focus();
   });
   if(!item?.id){
