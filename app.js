@@ -422,6 +422,7 @@ async function openInventoryCamera(onPhoto,fallback){
  }catch(error){if(closed)return;close();fallback()}
 }
 
+const editorActionHome=$('saveBtn').parentElement;
 function startObjectPhoto(){
  closeCategoryFilter();clearMsg();
  editing=null;selectedPhoto=null;removePhoto=false;
@@ -429,6 +430,7 @@ function startObjectPhoto(){
  $('spaceAddBoxBtn')?.remove();
  $('editPage').classList.toggle('editor-compact',listMode==='reducido');
  $('modalTitle').textContent='Añadir objeto · Fotografía';
+ editorActionHome.append($('deleteObjectBtn'),$('saveBtn'));
  show('saveBtn',false);show('deleteObjectBtn',false);
  const root=$('modalFields');root.replaceChildren();
  const field=photoField(null,file=>{
@@ -507,7 +509,6 @@ function subspaceIconField(initial){
  input.addEventListener('input',refresh);refresh();field.append(preview);return field;
 }
 
-const editorActionHome=$('saveBtn').parentElement;
 function openForm(type=tab,item=null){
  // Recuperar los mismos controles antes de reconstruir los campos.
  editorActionHome.append($('deleteObjectBtn'),$('saveBtn'));
