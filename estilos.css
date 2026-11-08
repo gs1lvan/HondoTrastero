@@ -1693,3 +1693,17 @@ html .parcel-shell .subspace-icon-title .subspace-type-icon,
 html .parcel-shell .subspace-icon-preview .subspace-type-icon{width:44px;height:44px}
 html .parcel-shell .listing-compact .subspace-icon-title .subspace-type-icon{width:32px;height:32px}
 html .parcel-shell .subspace-icon-choice:focus-visible{outline:3px solid currentColor;outline-offset:3px}
+
+/* Espacios: nombre y acciones en la primera fila, desplegables a todo el ancho. */
+html .parcel-shell #appView #records > .space-record{
+ display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;
+}
+html .parcel-shell #appView #records > .space-record > .record-main{
+ min-width:0;width:auto;padding-right:0;
+}
+html .parcel-shell #appView #records > .space-record .record-title{overflow-wrap:anywhere}
+html .parcel-shell #appView #records > .space-record > .space-order-actions{
+ width:auto;justify-self:end;justify-content:flex-end;flex-wrap:nowrap;
+ padding-top:0;margin:0;gap:.35rem;
+}
+html .parcel-shell #appView #records > .space-record > .subspace-contents{grid-column:1/-1}
