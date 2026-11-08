@@ -100,7 +100,7 @@
   </section>
   </div>
  </details>
- <details id="inventoryOrderPanel" class="mb-3 d-none"><summary class="form-label" style="cursor:pointer;padding:.5rem 0">Ordenar inventario<span id="inventoryOrderSummary" style="font-size:inherit;font-weight:400"></span></summary><label for="inventoryOrder" class="visually-hidden">Orden del inventario</label><select id="inventoryOrder" class="form-select"><option value="az">Objetos A–Z</option><option value="za">Objetos Z–A</option><option value="categorias">Por categorías A–Z</option><option value="espacios">Por espacios A–Z</option><option value="fecha-desc">Fecha de alta · Más recientes primero</option><option value="fecha-asc">Fecha de alta · Más antiguos primero</option></select></details>
+ <details id="inventoryOrderPanel" class="mb-3 d-none"><summary class="form-label" style="cursor:pointer;padding:.5rem 0">Ordenar inventario<span id="inventoryOrderSummary" style="font-size:inherit;font-weight:400"></span></summary><label for="inventoryOrder" class="visually-hidden">Orden del inventario</label><select id="inventoryOrder" class="form-select"><option value="az">Objetos A–Z</option><option value="za">Objetos Z–A</option><option value="categorias">Por categorías A–Z</option><option value="espacios">Por espacios</option><option value="fecha-desc">Fecha de alta · Más recientes primero</option><option value="fecha-asc">Fecha de alta · Más antiguos primero</option></select></details>
  <div id="inventoryToolbar" class="inventory-toolbar"><div class="search-field object-name-control"><span aria-hidden="true">⌕</span><input id="search" type="text" inputmode="search" style="padding-right:3rem" placeholder="Buscar en el inventario…" aria-label="Buscar por nombre o descripción"><button id="clearSearch" type="button" class="object-name-clear d-none" aria-label="Borrar búsqueda">×</button></div></div>
  <div id="records" class="records-list"></div><p id="empty" class="empty-state d-none">Todavía no hay registros en esta sección.</p>
 </section>
@@ -114,7 +114,7 @@
 </main>
 <footer class="parcel-footer"><div class="handling-icons" aria-hidden="true"><span>↑↑</span><span>♜</span><span>☂</span><span>♻</span></div><div class="footer-barcode" aria-hidden="true"></div></footer>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script><script src="config.js?v=kraft3"></script><script defer src="app.js?v=espacios-desplegables-20261108"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script><script src="config.js?v=kraft3"></script><script defer src="app.js?v=orden-personalizado-espacios-20261108"></script>
 <script>
 // Registro necesario para que Chrome Android reconozca HondoTrastero como PWA.
 // No se almacenan contraseñas ni respuestas de Supabase en caché.
