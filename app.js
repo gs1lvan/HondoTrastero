@@ -35,6 +35,34 @@ const DEFAULT_CATEGORIES = Object.freeze([
  {"id": "mascotas", "icon": "🐕", "name": "Mascotas"},
  {"id": "recuerdos-colecciones", "icon": "🏺", "name": "Recuerdos y colecciones"}
 ]);
+const CATEGORY_ICONS = new Map([
+ ['herramientas-bricolaje','Hammer'],
+ ['ferreteria-repuestos','Nut'],
+ ['electricidad-iluminacion','Lightbulb'],
+ ['informatica-electronica','Laptop'],
+ ['fotografia-video-sonido','Camera'],
+ ['electrodomesticos','Plug'],
+ ['cocina-menaje','Utensils'],
+ ['muebles-hogar','Armchair'],
+ ['decoracion','Image'],
+ ['navidad-celebraciones','TreePine'],
+ ['ropa-calzado','Shirt'],
+ ['textiles-hogar','BedDouble'],
+ ['deporte-ejercicio','Dumbbell'],
+ ['playa-piscina-camping','Tent'],
+ ['viajes-equipaje','Luggage'],
+ ['jardineria-exterior','Sprout'],
+ ['vehiculos-accesorios','Car'],
+ ['juegos-juguetes-ocio','Gamepad2'],
+ ['libros-publicaciones','LibraryBig'],
+ ['documentos-papeleria','Folder'],
+ ['arte-manualidades-modelismo','Palette'],
+ ['limpieza-mantenimiento','BrushCleaning'],
+ ['mascotas','PawPrint'],
+ ['recuerdos-colecciones','Trophy'],
+ ['','Box'],
+ ['__sin_categoria__','Tag']
+]);
 let CATEGORIES = [...DEFAULT_CATEGORIES];
 let CATEGORIES_BY_ID = new Map(CATEGORIES.map(cat=>[cat.id,cat]));
 let categoryCatalogReady=false;
@@ -87,7 +115,8 @@ function renderCategoryAdmin(){
    cancel.addEventListener('click',()=>cancelCategoryEdit(cat.id));
    form.addEventListener('submit',event=>saveCategory(event,cat.id));form.append(input,save,cancel);row.append(form);
   }else{
-   const name=elem('button','category-admin-name',(cat.icon?cat.icon+' ':'')+cat.name);name.type='button';
+   const name=elem('button','category-admin-name');name.type='button';
+   const icon=categoryIcon(cat.id,cat.icon);icon.setAttribute('aria-hidden','true');name.append(icon,' '+cat.name);
    name.id='categoryEdit-'+cat.id;name.title=cat.name;name.setAttribute('aria-label','Editar categoría: '+cat.name);
    name.disabled=!categoryCatalogReady||categoryBusy;
    name.addEventListener('click',()=>{
@@ -160,6 +189,20 @@ function alertMsg(message,kind='danger'){
  const el=$('notice');el.textContent=message;el.className=`alert alert-${kind}`;el.scrollIntoView({block:'nearest'});
 }
 function elem(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e}
+function categoryIcon(id,fallback,className){
+ const wrapper=elem('span',className);
+ const library=window.lucide;
+ const node=library?.icons?.[CATEGORY_ICONS.get(id)||'Tag'];
+ if(node&&library.createElement){
+  const icon=library.createElement(node);
+  icon.setAttribute('width','1em');
+  icon.setAttribute('height','1em');
+  icon.setAttribute('stroke-width','2.4');
+  icon.style.verticalAlign='-.125em';
+  wrapper.append(icon);
+ }else wrapper.textContent=fallback;
+ return wrapper;
+}
 const page={
  show(){show('appView',false);show('editPage',true);window.scrollTo(0,0)},
  hide(){show('editPage',false);if(user)show('appView',true);window.scrollTo(0,0)}
@@ -288,7 +331,9 @@ function categoryField(item){
  for(const cat of CATEGORIES){
   const label=elem('label','category-choice');
   const checkbox=elem('input','form-check-input');checkbox.type='checkbox';checkbox.name='fieldCategories';checkbox.value=cat.id;checkbox.checked=selected.has(cat.id);
-  label.append(checkbox,elem('span','category-choice-label',`${cat.icon} ${cat.name}`));
+  const text=elem('span','category-choice-label');
+  const icon=categoryIcon(cat.id,cat.icon);icon.setAttribute('aria-hidden','true');text.append(icon,' '+cat.name);
+  label.append(checkbox,text);
   const refresh=()=>{label.classList.toggle('selected',checkbox.checked);updateCount()};
   checkbox.addEventListener('change',refresh);
   label.classList.toggle('selected',checkbox.checked);
@@ -757,7 +802,7 @@ function refreshInventoryFilters(){
   row.dataset.value=option.value;
   row.setAttribute('aria-pressed',String(option.value===selectedCategoryFilter));
   if(option.value===selectedCategoryFilter)row.classList.add('selected');
-  const icon=elem('span','category-option-icon',option.icon);icon.setAttribute('aria-hidden','true');
+  const icon=categoryIcon(option.value,option.icon,'category-option-icon');icon.setAttribute('aria-hidden','true');
   const name=elem('span','category-option-name',option.name);
   const count=elem('span','category-option-count',String(option.count));
   const tick=elem('span','category-option-check',option.value===selectedCategoryFilter?'✓':'');tick.setAttribute('aria-hidden','true');
@@ -976,7 +1021,7 @@ function render(){
    detail=[`×${item.cantidad}`,item.caja_id?`${locationLabel(objectSpace(item))} | ${boxLabel(item.caja_id)}`:locationLabel(item.ubicacion_id),detail].filter(Boolean).join(' · ');
    const group=elem('div','record-categories');
    for(const cat of cats){
-    const badge=elem('span','record-category',cat.icon);
+    const badge=categoryIcon(cat.id,cat.icon,'record-category');
     badge.title=cat.name;
     badge.setAttribute('role','img');
     badge.setAttribute('aria-label',cat.name);
@@ -1022,7 +1067,7 @@ function render(){
     titleLine.append(elem('span','object-category-separator',' | '));
     const icons=elem('span','object-category-icons');
     for(const cat of cats){
-     const icon=elem('span','record-category',cat.icon);
+     const icon=categoryIcon(cat.id,cat.icon,'record-category');
      icon.title=cat.name;icon.setAttribute('role','img');icon.setAttribute('aria-label',cat.name);
      icons.append(icon);
     }
