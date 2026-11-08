@@ -777,16 +777,17 @@ function inventoryEntries(rows,order){
  }
  const sorted=[...rows].sort(compare);
  if(order==='espacios'){
-  const spaces=new Map(data.ubicaciones.map(space=>[space.id,space]));
+  const spaces=orderedSpaces();
+  const spaceIds=new Set(spaces.map(space=>space.id));
   const groups=new Map();
   for(const item of sorted){
    const id=objectSpace(item);
-   const key=spaces.has(id)?id:null;
+   const key=spaceIds.has(id)?id:null;
    if(!groups.has(key))groups.set(key,[]);
    groups.get(key).push({item});
   }
   const entries=[];
-  for(const space of [...spaces.values()].sort(compare)){
+  for(const space of spaces){
    if(groups.has(space.id))entries.push({heading:space.nombre},...groups.get(space.id));
   }
   if(groups.has(null))entries.push({heading:'Sin espacio'},...groups.get(null));
