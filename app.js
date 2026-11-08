@@ -969,7 +969,7 @@ function render(){
   const selected=button.dataset.inventoryOrder===inventoryOrder;
   button.setAttribute('aria-pressed',String(selected));
   button.classList.toggle('selected',selected);
-  const check=button.querySelector('.category-option-check');
+  const check=button.querySelector('.category-option-check:not([data-order-direction])');
   if(check)check.textContent=selected?'✓':'';
  }
  const orderLabel=inventoryOrderButtons.find(button=>button.dataset.inventoryOrder===inventoryOrder)||orderSelect?.selectedOptions[0];
