@@ -101,16 +101,16 @@
   </dialog>
   <div class="filter-field category-filter-wrap" id="filterCategoryWrap">
    <span id="categoryFilterLabel">Categoría</span>
-   <button id="filterCategoryButton" class="category-filter-trigger" type="button" aria-expanded="false" aria-controls="filterCategoryPanel" aria-labelledby="categoryFilterLabel categoryFilterButtonText">
+   <button id="filterCategoryButton" class="category-filter-trigger" type="button" aria-haspopup="dialog" aria-controls="filterCategoryPanel" aria-labelledby="categoryFilterLabel categoryFilterButtonText">
     <span id="categoryFilterButtonText" class="category-filter-trigger-text">Todas las categorías (0)</span>
     <span class="category-filter-chevron" aria-hidden="true">⌄</span>
    </button>
   </div>
   <button id="clearFilters" type="button" class="btn btn-outline-primary filter-clear">Limpiar filtros</button>
-  <section id="filterCategoryPanel" class="category-filter-panel" aria-labelledby="categoryPanelTitle" hidden>
-   <div class="category-filter-heading"><strong id="categoryPanelTitle">Elegir categoría</strong><button id="closeCategoryFilter" class="category-filter-close" type="button" aria-label="Cerrar categorías">✕</button></div>
+  <dialog id="filterCategoryPanel" class="category-filter-panel mx-auto my-auto" style="width:min(28rem,calc(100% - 2rem));max-height:calc(100% - 2rem);overflow:auto" aria-labelledby="categoryPanelTitle">
+   <div class="category-filter-heading"><strong id="categoryPanelTitle">Elegir categoría</strong><form method="dialog"><button class="category-filter-close" type="submit" aria-label="Cerrar categorías">✕</button></form></div>
    <div id="categoryFilterOptions" class="category-filter-options" role="group" aria-label="Opciones de categoría"></div>
-  </section>
+  </dialog>
   </div>
  </details>
  <div id="inventoryOrderPanel" class="mb-3 d-none">
@@ -143,7 +143,7 @@
 </main>
 <footer class="parcel-footer"><div class="handling-icons" aria-hidden="true"><span>↑↑</span><span>♜</span><span>☂</span><span>♻</span></div><div class="footer-barcode" aria-hidden="true"></div></footer>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script><script src="config.js?v=kraft3"></script><script defer src="app.js?v=filtro-espacios-modal-20261108"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script><script src="config.js?v=kraft3"></script><script defer src="app.js?v=filtro-categorias-modal-20261108"></script>
 <script>
 // Registro necesario para que Chrome Android reconozca HondoTrastero como PWA.
 // No se almacenan contraseñas ni respuestas de Supabase en caché.
