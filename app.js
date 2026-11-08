@@ -57,7 +57,7 @@ const CATEGORY_ICONS = new Map([
  ['libros-publicaciones','LibraryBig'],
  ['documentos-papeleria','Folder'],
  ['arte-manualidades-modelismo','Palette'],
- ['limpieza-mantenimiento','BrushCleaning'],
+ ['limpieza-mantenimiento','Brush'],
  ['mascotas','PawPrint'],
  ['recuerdos-colecciones','Trophy'],
  ['','Box'],
