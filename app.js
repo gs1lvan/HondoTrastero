@@ -231,7 +231,7 @@ function inputField(id,label,value='',type='text',required=true){
  if(type==='number')input.min='1';wrap.append(lab,input);return wrap;
 }
 function locationLabel(id){return data.ubicaciones.find(x=>x.id===id)?.nombre||'Sin espacio'}
-function boxLabel(id){return data.cajas.find(x=>x.id===id)?.nombre||'Sin subespacio'}
+function boxLabel(id){return splitSubspaceName(data.cajas.find(x=>x.id===id)?.nombre).name||'Sin subespacio'}
 function defaultSpaceKey(){return 'hondotrastero:espacio-defecto:'+user.id}
 function defaultObjectSpace(){
  try{const id=localStorage.getItem(defaultSpaceKey());return data.ubicaciones.some(space=>space.id===id)?id:''}catch{return ''}
