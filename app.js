@@ -1017,18 +1017,7 @@ function render(){
   const main=elem('div','record-main');main.append(elem('div','record-title',item.nombre));
   let detail=item.descripcion||'';
   if(tab==='objetos'){
-   const cats=itemCategories(item).map(id=>CATEGORIES_BY_ID.get(id));
    detail=[`×${item.cantidad}`,item.caja_id?`${locationLabel(objectSpace(item))} | ${boxLabel(item.caja_id)}`:locationLabel(item.ubicacion_id),detail].filter(Boolean).join(' · ');
-   const group=elem('div','record-categories');
-   for(const cat of cats){
-    const badge=categoryIcon(cat.id,cat.icon,'record-category');
-    badge.title=cat.name;
-    badge.setAttribute('role','img');
-    badge.setAttribute('aria-label',cat.name);
-    group.append(badge);
-   }
-   if(!cats.length&&item.categoria?.trim())group.append(elem('span','record-category-legacy',`Pendiente de clasificar (antes: ${item.categoria.trim()})`));
-   if(group.childElementCount)main.append(group);
   }
   if(tab==='cajas')detail=[locationLabel(item.ubicacion_id),detail].filter(Boolean).join(' · ');
   if(tab==='ubicaciones'&&item.ubicacion_padre_id)detail=[`Dentro de ${locationLabel(item.ubicacion_padre_id)}`,detail].filter(Boolean).join(' · ');
@@ -1063,16 +1052,6 @@ function render(){
    const title=elem('span',listMode==='reducido'?'object-name-badge':'record-title',item.nombre);
    titleLine.append(title);
    const cats=itemCategories(item).map(id=>CATEGORIES_BY_ID.get(id));
-   if(cats.length){
-    titleLine.append(elem('span','object-category-separator',' | '));
-    const icons=elem('span','object-category-icons');
-    for(const cat of cats){
-     const icon=categoryIcon(cat.id,cat.icon,'record-category');
-     icon.title=cat.name;icon.setAttribute('role','img');icon.setAttribute('aria-label',cat.name);
-     icons.append(icon);
-    }
-    titleLine.append(icons);
-   }
    const place=[locationLabel(objectSpace(item)),item.caja_id?boxLabel(item.caja_id):''].filter(Boolean).join(' | ');
    main.replaceChildren(titleLine,elem('div','record-detail object-place-line',place));
    if(item.descripcion)main.append(elem('div','record-detail',item.descripcion));
