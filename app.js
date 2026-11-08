@@ -143,6 +143,7 @@ function subscribeCategories(){
 
 let listMode='ampliado';
 try{if(localStorage.getItem('hondotrastero:listado')==='reducido')listMode='reducido'}catch{}
+const inventoryOrderButtons=[...document.querySelectorAll('[data-inventory-order]')];
 let inventoryOrder='az';
 try{const saved=localStorage.getItem('hondotrastero:orden');if(['az','za','categorias','espacios','fecha-desc','fecha-asc'].includes(saved))inventoryOrder=saved}catch{}
 let administrationOpen=false;
@@ -897,8 +898,15 @@ function render(){
  document.querySelector('.section-heading').classList.toggle('d-none',administrationOpen);
  show('records',!administrationOpen);
  show('inventoryOrderPanel',!administrationOpen&&tab==='objetos');
- $('inventoryOrder').value=inventoryOrder;
- $('inventoryOrderSummary').textContent=' | '+$('inventoryOrder').selectedOptions[0].textContent;
+ const orderSelect=$('inventoryOrder');
+ if(orderSelect)orderSelect.value=inventoryOrder;
+ for(const button of inventoryOrderButtons){
+  const selected=button.dataset.inventoryOrder===inventoryOrder;
+  button.setAttribute('aria-pressed',String(selected));
+  button.classList.toggle('active',selected);
+ }
+ const orderLabel=inventoryOrderButtons.find(button=>button.dataset.inventoryOrder===inventoryOrder)||orderSelect?.selectedOptions[0];
+ $('inventoryOrderSummary').textContent=orderLabel?' | '+orderLabel.textContent:'';
  if(administrationOpen){
   for(const id of ['boxSpacePanel','inventoryToolbar','inventoryFilters','empty'])show(id,false);
   closeCategoryFilter();
@@ -1203,10 +1211,24 @@ document.querySelectorAll('[data-list-mode]').forEach(button=>button.addEventLis
  syncListChoices();render();
 }));
 syncListChoices();
-$('inventoryOrder').addEventListener('change',()=>{
- inventoryOrder=$('inventoryOrder').value;
+const inventoryOrderDialog=$('inventoryOrderDialog');
+function setInventoryOrder(value){
+ inventoryOrder=value;
  try{localStorage.setItem('hondotrastero:orden',inventoryOrder)}catch{}
  render();
+}
+$('openInventoryOrder')?.addEventListener('click',()=>{
+ inventoryOrderDialog.showModal();
+ inventoryOrderButtons.find(button=>button.dataset.inventoryOrder===inventoryOrder)?.focus();
+});
+for(const button of inventoryOrderButtons){
+ button.addEventListener('click',()=>{
+  setInventoryOrder(button.dataset.inventoryOrder);
+  inventoryOrderDialog.close();
+ });
+}
+$('inventoryOrder')?.addEventListener('change',event=>{
+ setInventoryOrder(event.target.value);
  $('inventoryOrderPanel').open=false;
  $('inventoryOrderPanel').querySelector('summary').focus({preventScroll:true});
 });
