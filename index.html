@@ -85,7 +85,20 @@
  <details id="inventoryFilters" class="inventory-filter-fold mb-3">
   <summary class="form-label" style="cursor:pointer;padding:.5rem 0">Filtros</summary>
   <div class="inventory-filters" role="group" aria-label="Filtros del inventario">
-  <label class="filter-field" for="filterSpace"><span>Espacios</span><select id="filterSpace" class="form-select"><option value="">Todos los espacios</option></select></label>
+  <div class="filter-field">
+   <span id="spaceFilterLabel">Espacios</span>
+   <select id="filterSpace" hidden aria-label="Espacios"><option value="">Todos los espacios</option></select>
+   <button id="openSpaceFilter" class="category-filter-trigger" type="button" aria-haspopup="dialog" aria-labelledby="spaceFilterLabel spaceFilterButtonText">
+    <span id="spaceFilterButtonText" class="category-filter-trigger-text">Todos los espacios</span><span aria-hidden="true">▾</span>
+   </button>
+  </div>
+  <dialog id="spaceFilterDialog" class="category-filter-panel mx-auto my-auto" style="width:min(28rem,calc(100% - 2rem));max-height:calc(100% - 2rem);overflow:auto" aria-labelledby="spaceFilterTitle">
+   <div class="category-filter-heading">
+    <strong id="spaceFilterTitle">Elegir espacio</strong>
+    <form method="dialog"><button type="submit" class="category-filter-close" aria-label="Cerrar espacios">✕</button></form>
+   </div>
+   <div id="spaceFilterOptions" class="category-filter-options"></div>
+  </dialog>
   <div class="filter-field category-filter-wrap" id="filterCategoryWrap">
    <span id="categoryFilterLabel">Categoría</span>
    <button id="filterCategoryButton" class="category-filter-trigger" type="button" aria-expanded="false" aria-controls="filterCategoryPanel" aria-labelledby="categoryFilterLabel categoryFilterButtonText">
@@ -130,7 +143,7 @@
 </main>
 <footer class="parcel-footer"><div class="handling-icons" aria-hidden="true"><span>↑↑</span><span>♜</span><span>☂</span><span>♻</span></div><div class="footer-barcode" aria-hidden="true"></div></footer>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script><script src="config.js?v=kraft3"></script><script defer src="app.js?v=modal-orden-estilo-categorias-20261108"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script><script src="config.js?v=kraft3"></script><script defer src="app.js?v=filtro-espacios-modal-20261108"></script>
 <script>
 // Registro necesario para que Chrome Android reconozca HondoTrastero como PWA.
 // No se almacenan contraseñas ni respuestas de Supabase en caché.
