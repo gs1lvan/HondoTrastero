@@ -833,6 +833,7 @@ function moveSpace(id,direction){
  $('spaceMove'+(direction<0?'Up':'Down')+id)?.focus({preventScroll:true});
 }
 function render(){
+ $('clearSearch')?.classList.toggle('d-none',!$('search').value);
  $('records').classList.toggle('records-reduced',listMode==='reducido');
  $('appView').classList.toggle('listing-compact',listMode==='reducido');
  refreshBoxSpaces();
@@ -1210,6 +1211,10 @@ $('inventoryOrder').addEventListener('change',()=>{
  $('inventoryOrderPanel').querySelector('summary').focus({preventScroll:true});
 });
 $('search').addEventListener('input',render);
+$('clearSearch')?.addEventListener('click',()=>{
+ const search=$('search');
+ search.value='';search.focus();render();
+});
 $('filterSpace').addEventListener('change',render);
 $('filterCategoryButton').addEventListener('click',toggleCategoryFilter);
 $('closeCategoryFilter').addEventListener('click',()=>closeCategoryFilter(true));
