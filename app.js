@@ -903,10 +903,12 @@ function render(){
  for(const button of inventoryOrderButtons){
   const selected=button.dataset.inventoryOrder===inventoryOrder;
   button.setAttribute('aria-pressed',String(selected));
-  button.classList.toggle('active',selected);
+  button.classList.toggle('selected',selected);
+  const check=button.querySelector('.category-option-check');
+  if(check)check.textContent=selected?'✓':'';
  }
  const orderLabel=inventoryOrderButtons.find(button=>button.dataset.inventoryOrder===inventoryOrder)||orderSelect?.selectedOptions[0];
- $('inventoryOrderSummary').textContent=orderLabel?' | '+orderLabel.textContent:'';
+ $('inventoryOrderSummary').textContent=orderLabel?' | '+(orderLabel.querySelector('.category-option-name')||orderLabel).textContent:'';
  if(administrationOpen){
   for(const id of ['boxSpacePanel','inventoryToolbar','inventoryFilters','empty'])show(id,false);
   closeCategoryFilter();
