@@ -721,11 +721,34 @@ function refreshInventoryFilters(){
    visited.add(id);spaceCounts.set(id,(spaceCounts.get(id)||0)+1);id=parents.get(id);
   }
  }
- space.replaceChildren(new Option(`Todos los espacios (${total})`,''));
- for(const item of [...data.ubicaciones].sort((a,b)=>a.nombre.localeCompare(b.nombre,'es'))){
-  space.add(new Option(`${item.nombre} (${spaceCounts.get(item.id)||0})`,item.id));
- }
+ const spaces=[
+  {id:'',nombre:'Todos los espacios',count:total},
+  ...[...data.ubicaciones].sort((a,b)=>a.nombre.localeCompare(b.nombre,'es'))
+   .map(({id,nombre})=>({id,nombre,count:spaceCounts.get(id)||0}))
+ ];
+ space.replaceChildren(...spaces.map(({id,nombre,count})=>new Option(`${nombre} (${count})`,id)));
  space.value=[...space.options].some(o=>o.value===oldSpace)?oldSpace:'';
+ const spaceList=$('spaceFilterOptions');
+ if(spaceList){
+  $('spaceFilterButtonText').textContent=space.selectedOptions[0].textContent;
+  spaceList.replaceChildren();
+  for(const {id,nombre,count} of spaces){
+   const selected=id===space.value;
+   const row=elem('button','category-filter-option');
+   row.type='button';
+   row.classList.toggle('selected',selected);
+   row.setAttribute('aria-pressed',String(selected));
+   const check=elem('span','category-option-check',selected?'✓':'');
+   check.setAttribute('aria-hidden','true');
+   row.append(elem('span','category-option-name',nombre),elem('span','category-option-count',String(count)),check);
+   row.addEventListener('click',()=>{
+    space.value=id;
+    $('spaceFilterDialog').close();
+    render();
+   });
+   spaceList.append(row);
+  }
+ }
  // El catálogo es fijo: todas las opciones se muestran, incluso con cero objetos.
  const categoryOptions=[
   {value:'',name:'Todas las categorías',icon:'📦',count:total},
@@ -1240,6 +1263,11 @@ $('clearSearch')?.addEventListener('click',()=>{
  search.value='';search.focus();render();
 });
 $('filterSpace').addEventListener('change',render);
+$('openSpaceFilter')?.addEventListener('click',()=>{
+ const dialog=$('spaceFilterDialog');
+ dialog.showModal();
+ dialog.querySelector('.category-filter-option.selected')?.focus();
+});
 $('filterCategoryButton').addEventListener('click',toggleCategoryFilter);
 $('closeCategoryFilter').addEventListener('click',()=>closeCategoryFilter(true));
 $('filterCategoryPanel').addEventListener('keydown',event=>{
