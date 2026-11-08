@@ -102,18 +102,18 @@
  </details>
  <div id="inventoryOrderPanel" class="mb-3 d-none">
   <button id="openInventoryOrder" type="button" class="btn btn-outline-primary text-start w-100" aria-haspopup="dialog">Ordenar inventario<span id="inventoryOrderSummary" class="fw-normal"></span></button>
-  <dialog id="inventoryOrderDialog" class="paper-card mx-auto my-auto p-3" style="width:min(28rem,calc(100% - 2rem));max-height:calc(100% - 2rem);overflow:auto" aria-labelledby="inventoryOrderTitle">
-   <div class="d-flex align-items-center justify-content-between gap-2 mb-3">
-    <h2 id="inventoryOrderTitle" class="h5 mb-0">Ordenar inventario</h2>
-    <form method="dialog"><button type="submit" class="btn btn-outline-primary" aria-label="Cerrar ordenación">×</button></form>
+  <dialog id="inventoryOrderDialog" class="category-filter-panel mx-auto my-auto" style="width:min(28rem,calc(100% - 2rem));max-height:calc(100% - 2rem);overflow:auto" aria-labelledby="inventoryOrderTitle">
+   <div class="category-filter-heading">
+    <strong id="inventoryOrderTitle">Ordenar inventario</strong>
+    <form method="dialog"><button type="submit" class="category-filter-close" aria-label="Cerrar ordenación">✕</button></form>
    </div>
-   <div class="d-grid gap-2">
-    <button type="button" class="btn btn-outline-primary text-start" data-inventory-order="az" aria-pressed="false">Objetos A–Z</button>
-    <button type="button" class="btn btn-outline-primary text-start" data-inventory-order="za" aria-pressed="false">Objetos Z–A</button>
-    <button type="button" class="btn btn-outline-primary text-start" data-inventory-order="categorias" aria-pressed="false">Por categorías A–Z</button>
-    <button type="button" class="btn btn-outline-primary text-start" data-inventory-order="espacios" aria-pressed="false">Por espacios</button>
-    <button type="button" class="btn btn-outline-primary text-start" data-inventory-order="fecha-desc" aria-pressed="false">Fecha de alta · Más recientes primero</button>
-    <button type="button" class="btn btn-outline-primary text-start" data-inventory-order="fecha-asc" aria-pressed="false">Fecha de alta · Más antiguos primero</button>
+   <div class="category-filter-options">
+    <button type="button" class="category-filter-option" data-inventory-order="az" aria-pressed="false"><span class="category-option-name">Objetos A–Z</span><span class="category-option-check" aria-hidden="true"></span></button>
+    <button type="button" class="category-filter-option" data-inventory-order="za" aria-pressed="false"><span class="category-option-name">Objetos Z–A</span><span class="category-option-check" aria-hidden="true"></span></button>
+    <button type="button" class="category-filter-option" data-inventory-order="categorias" aria-pressed="false"><span class="category-option-name">Por categorías A–Z</span><span class="category-option-check" aria-hidden="true"></span></button>
+    <button type="button" class="category-filter-option" data-inventory-order="espacios" aria-pressed="false"><span class="category-option-name">Por espacios</span><span class="category-option-check" aria-hidden="true"></span></button>
+    <button type="button" class="category-filter-option" data-inventory-order="fecha-desc" aria-pressed="false"><span class="category-option-name">Fecha de alta · Más recientes primero</span><span class="category-option-check" aria-hidden="true"></span></button>
+    <button type="button" class="category-filter-option" data-inventory-order="fecha-asc" aria-pressed="false"><span class="category-option-name">Fecha de alta · Más antiguos primero</span><span class="category-option-check" aria-hidden="true"></span></button>
    </div>
   </dialog>
  </div>
@@ -130,7 +130,7 @@
 </main>
 <footer class="parcel-footer"><div class="handling-icons" aria-hidden="true"><span>↑↑</span><span>♜</span><span>☂</span><span>♻</span></div><div class="footer-barcode" aria-hidden="true"></div></footer>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script><script src="config.js?v=kraft3"></script><script defer src="app.js?v=modal-orden-20261108"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script><script src="config.js?v=kraft3"></script><script defer src="app.js?v=modal-orden-estilo-categorias-20261108"></script>
 <script>
 // Registro necesario para que Chrome Android reconozca HondoTrastero como PWA.
 // No se almacenan contraseñas ni respuestas de Supabase en caché.
