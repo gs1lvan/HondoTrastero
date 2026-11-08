@@ -554,6 +554,7 @@ const SUBSPACE_ICONS=[
  ['zapatero','Zapatero','👞',[735,1220,245,250]],
  ['mesa-elevable','Mesa elevable','🪟',[50,230,730,600],'extra'],
  ['reposapies','Reposapiés','🛋',[915,225,500,610],'extra'],
+ ['kallax','Estantería KALLAX','🟫',[0,0,256,256],'kallax'],
  ['sofa-dos-plazas','Sillón de dos plazas','🛌',[0,0,768,512],'sofa']
 ];
 function splitSubspaceName(name=''){
@@ -565,9 +566,9 @@ function subspaceIcon(icon){
  const svg=document.createElementNS(ns,'svg');
  svg.setAttribute('viewBox',icon[3].join(' '));svg.setAttribute('aria-hidden','true');svg.setAttribute('focusable','false');svg.classList.add('subspace-type-icon');
  const image=document.createElementNS(ns,'image');
- const extra=icon[4]==='extra',sofa=icon[4]==='sofa';
- image.setAttribute('href',sofa?'assets/subespacio-sofa-dos-plazas.webp':extra?'assets/subespacios-mesa-reposapies.webp':'assets/subespacios-ilustrados.webp');
- image.setAttribute('width',sofa?'768':extra?'1536':'1024');image.setAttribute('height',sofa?'512':extra?'1024':'1536');
+ const extra=icon[4]==='extra',sofa=icon[4]==='sofa',kallax=icon[4]==='kallax';
+ image.setAttribute('href',kallax?'assets/subespacio-kallax.webp':sofa?'assets/subespacio-sofa-dos-plazas.webp':extra?'assets/subespacios-mesa-reposapies.webp':'assets/subespacios-ilustrados.webp');
+ image.setAttribute('width',kallax?'256':sofa?'768':extra?'1536':'1024');image.setAttribute('height',kallax?'256':sofa?'512':extra?'1024':'1536');
  svg.append(image);return svg;
 }
 function subspaceIconField(initial){
