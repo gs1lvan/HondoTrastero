@@ -121,8 +121,7 @@
     <form method="dialog"><button type="submit" class="category-filter-close" aria-label="Cerrar ordenación">✕</button></form>
    </div>
    <div class="category-filter-options">
-    <button type="button" class="category-filter-option" data-inventory-order="az" aria-pressed="false"><span class="category-option-name">Objetos A–Z</span><span class="category-option-check" aria-hidden="true"></span></button>
-    <button type="button" class="category-filter-option" data-inventory-order="za" aria-pressed="false"><span class="category-option-name">Objetos Z–A</span><span class="category-option-check" aria-hidden="true"></span></button>
+    <button type="button" class="category-filter-option" data-inventory-order="az" data-order-toggle aria-pressed="false"><span class="category-option-name">Objetos</span><span class="category-option-check" data-order-direction aria-hidden="true">↑</span><span class="category-option-check" aria-hidden="true"></span></button>
     <button type="button" class="category-filter-option" data-inventory-order="categorias" aria-pressed="false"><span class="category-option-name">Por categorías A–Z</span><span class="category-option-check" aria-hidden="true"></span></button>
     <button type="button" class="category-filter-option" data-inventory-order="espacios" aria-pressed="false"><span class="category-option-name">Por espacios</span><span class="category-option-check" aria-hidden="true"></span></button>
     <button type="button" class="category-filter-option" data-inventory-order="fecha-desc" aria-pressed="false"><span class="category-option-name">Fecha de alta · Más recientes primero</span><span class="category-option-check" aria-hidden="true"></span></button>
@@ -143,7 +142,7 @@
 </main>
 <footer class="parcel-footer"><div class="handling-icons" aria-hidden="true"><span>↑↑</span><span>♜</span><span>☂</span><span>♻</span></div><div class="footer-barcode" aria-hidden="true"></div></footer>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script><script src="config.js?v=kraft3"></script><script defer src="https://cdn.jsdelivr.net/npm/lucide@0.468.0/dist/umd/lucide.js"></script><script defer src="app.js?v=listado-sin-iconos-categoria-20261108"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script><script src="config.js?v=kraft3"></script><script defer src="https://cdn.jsdelivr.net/npm/lucide@0.468.0/dist/umd/lucide.js"></script><script defer src="app.js?v=orden-objetos-flechas-20261108"></script>
 <script>
 // Registro necesario para que Chrome Android reconozca HondoTrastero como PWA.
 // No se almacenan contraseñas ni respuestas de Supabase en caché.
