@@ -173,8 +173,8 @@ function subscribeCategories(){
 let listMode='ampliado';
 try{if(localStorage.getItem('hondotrastero:listado')==='reducido')listMode='reducido'}catch{}
 const inventoryOrderButtons=[...document.querySelectorAll('[data-inventory-order]')];
-let inventoryOrder='az';
-try{const saved=localStorage.getItem('hondotrastero:orden');if(['az','za','categorias','espacios','fecha-desc','fecha-asc'].includes(saved))inventoryOrder=saved}catch{}
+let inventoryOrder='categorias';
+try{const saved=localStorage.getItem('hondotrastero:orden');if(['categorias','categorias-desc','espacios','fecha-desc','fecha-asc'].includes(saved))inventoryOrder=saved}catch{}
 let administrationOpen=false;
 let boxSpace='';
 const expandedSubspaces=new Set();
@@ -852,8 +852,9 @@ function inventoryEntries(rows,order){
   if(groups.has(null))entries.push({heading:'Sin espacio'},...groups.get(null));
   return entries;
  }
- if(order!=='categorias')return (order==='za'?sorted.reverse():sorted).map(item=>({item}));
+ if(order!=='categorias'&&order!=='categorias-desc')return sorted.map(item=>({item}));
  const groups=[...CATEGORIES].sort((a,b)=>a.name.localeCompare(b.name,'es',{sensitivity:'base'}));
+ if(order==='categorias-desc')groups.reverse();
  const entries=[];
  for(const category of groups){
   const members=sorted.filter(item=>itemCategories(item).includes(category.id));
@@ -961,10 +962,10 @@ function render(){
  for(const button of inventoryOrderButtons){
   const direction=button.querySelector('[data-order-direction]');
   if(direction){
-   const descending=inventoryOrder==='za';
-   button.dataset.inventoryOrder=descending?'za':'az';
-   direction.textContent=descending?'↓':'↑';
-   button.setAttribute('aria-label',descending?'Objetos de Z a A. Cambiar a A–Z':'Objetos de A a Z. '+(inventoryOrder==='az'?'Cambiar a Z–A':'Aplicar orden'));
+   const descending=inventoryOrder==='categorias-desc';
+   button.dataset.inventoryOrder=descending?'categorias-desc':'categorias';
+   direction.textContent=descending?'↓ Z–A':'↑ A–Z';
+   button.setAttribute('aria-label',descending?'Por categorías de Z a A. Cambiar a A–Z':'Por categorías de A a Z. '+(inventoryOrder==='categorias'?'Cambiar a Z–A':'Aplicar orden'));
   }
   const selected=button.dataset.inventoryOrder===inventoryOrder;
   button.setAttribute('aria-pressed',String(selected));
@@ -973,7 +974,7 @@ function render(){
   if(check)check.textContent=selected?'✓':'';
  }
  const orderLabel=inventoryOrderButtons.find(button=>button.dataset.inventoryOrder===inventoryOrder)||orderSelect?.selectedOptions[0];
- $('inventoryOrderSummary').textContent=orderLabel?' | '+(orderLabel.querySelector('.category-option-name')||orderLabel).textContent+(orderLabel.hasAttribute('data-order-toggle')?(inventoryOrder==='za'?' ↓':' ↑'):''):'';
+ $('inventoryOrderSummary').textContent=orderLabel?' | '+(orderLabel.querySelector('.category-option-name')||orderLabel).textContent+(orderLabel.hasAttribute('data-order-toggle')?(inventoryOrder==='categorias-desc'?' ↓ Z–A':' ↑ A–Z'):''):'';
  if(administrationOpen){
   for(const id of ['boxSpacePanel','inventoryToolbar','inventoryFilters','empty'])show(id,false);
   closeCategoryFilter();
@@ -1270,7 +1271,7 @@ $('openInventoryOrder')?.addEventListener('click',()=>{
 for(const button of inventoryOrderButtons){
  button.addEventListener('click',()=>{
   const value=button.hasAttribute('data-order-toggle')
-   ? (inventoryOrder==='az'?'za':'az')
+   ? (inventoryOrder==='categorias'?'categorias-desc':'categorias')
    : button.dataset.inventoryOrder;
   setInventoryOrder(value);
   inventoryOrderDialog.close();
