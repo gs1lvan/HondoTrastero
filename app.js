@@ -134,7 +134,7 @@ async function saveCategory(event,editingId=null){
  event.preventDefault();if(categoryBusy||!categoryCatalogReady)return;
  const nombre=(editingId?categoryEditDraft:$('categoryName').value).trim();
  if(!nombre||nombre.length>80){categoryMessage('Escribe un nombre de entre 1 y 80 caracteres.',true);return}
- if(CATEGORIES.some(cat=>cat.id!==editingId&&normalizarCategoria(cat.name.trim())===normalizarCategoria(nombre))){categoryMessage('Ya existe una categoría con ese nombre.',true);return}
+ if(CATEGORIES.some(cat=>cat.id!==editingId&&normalizarBusqueda(cat.name.trim())===normalizarBusqueda(nombre))){categoryMessage('Ya existe una categoría con ese nombre.',true);return}
  categoryBusy=true;renderCategoryAdmin();
  try{
   const result=editingId
@@ -613,7 +613,8 @@ function openForm(type=tab,item=null){
   photo.append(actions);root.append(photo);
  }
  $('modalTitle').textContent=(item?'Editar ':'Añadir ')+names[type];
- root.append(inputField('fieldName','Nombre',type==='cajas'?splitSubspaceName(item?.nombre).name:item?.nombre,'text',type!=='objetos'||!!item?.id));
+ const nameField=inputField('fieldName','Nombre',type==='cajas'?splitSubspaceName(item?.nombre).name:item?.nombre,'text',type!=='objetos'||!!item?.id);
+ root.append(nameField);
  if(type==='objetos'){
   const input=$('fieldName');
   const control=elem('div','object-name-control');
@@ -714,7 +715,9 @@ function openForm(type=tab,item=null){
   wrap.append(selectField('fieldLocation','Espacio',data.ubicaciones,false,initialSpace));
   wrap.append(selectField('fieldBox','Subespacio',[],true));
   wrap.className='vstack gap-2 object-location-fields';
-  $('fieldName').parentElement.after(wrap);
+  const keywords=inputField('fieldKeywords','Palabras clave',item?.palabras_clave?.join(', '),'text',false);
+  keywords.querySelector('input').placeholder='Separadas por comas: alicates, metro, cúter';
+  nameField.after(keywords,wrap);
   const loc=$('fieldLocation'),box=$('fieldBox');
   function refreshBoxes(selected=''){
    box.replaceChildren(new Option('Sin subespacio', ''));
@@ -761,7 +764,7 @@ function belongsToSpace(item,spaceId,parents){
  return false;
 }
 // Selector integrado en la página: nunca invoca el menú blanco nativo de Android.
-function normalizarCategoria(texto){
+function normalizarBusqueda(texto){
  return String(texto||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('es');
 }
 function closeCategoryFilter(){
@@ -1023,12 +1026,17 @@ function render(){
   return;
  }
  const heading=$('sectionTitle');heading.textContent=tab==='objetos'?'📦 Inventario':tab==='cajas'?'▤ Subespacios':'▥ Espacios';
- const q=tab==='cajas'?'':$('search').value.trim().toLocaleLowerCase('es');
+ const search=$('search').value.trim();
+ const q=tab==='objetos'?normalizarBusqueda(search):tab==='cajas'?'':search.toLocaleLowerCase('es');
  const selectedSpace=$('filterSpace').value,selectedCategory=selectedCategoryFilter;
  const parents=spaceParents();
  const source=tab==='ubicaciones'?orderedSpaces():data[tab];
  const rows=source.filter(item=>{
-  if(!`${item.nombre} ${item.descripcion||''}`.toLocaleLowerCase('es').includes(q))return false;
+  const text=`${item.nombre} ${item.descripcion||''}`;
+  const matches=tab==='objetos'
+   ?normalizarBusqueda(text).includes(q)||(item.palabras_clave||[]).some(word=>normalizarBusqueda(word).includes(q))
+   :text.toLocaleLowerCase('es').includes(q);
+  if(!matches)return false;
   if(tab==='cajas')return true;
   if(tab!=='objetos')return true;
   if(selectedSpace&&!belongsToSpace(item,selectedSpace,parents))return false;
@@ -1210,6 +1218,7 @@ $('editForm').addEventListener('submit',async e=>{
   if(icon)payload.nombre=icon[2]+'\uFE0E '+name;
  }
  if(type==='objetos'){
+  payload.palabras_clave=$('fieldKeywords').value.split(',').map(word=>word.trim()).filter(Boolean);
   payload.cantidad=$('fieldQty').value.trim()===''?1:Number($('fieldQty').value);
   payload.ubicacion_id=$('fieldLocation').value||null;
   payload.caja_id=$('fieldBox').value||null;
