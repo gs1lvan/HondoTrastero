@@ -1717,11 +1717,6 @@ html .parcel-shell #appView #records .space-toggle-indicator{flex:none;font-fami
 html .parcel-shell #appView #records .space-toggle:focus-visible{outline:2px solid currentColor;outline-offset:3px}
 
 /* Vista de inventario por fotografías. */
-html .parcel-shell #inventoryToolbar{flex-direction:column}
-.inventory-view-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.45rem;padding:2px}
-html .parcel-shell .inventory-view-options .style-choice{
- justify-content:center;min-width:0;min-height:44px;padding:.38rem .2rem;font-size:.86rem;text-align:center
-}
 html .parcel-shell #appView #records.records-tiles{
  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem
 }
