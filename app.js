@@ -178,6 +178,7 @@ try{const saved=localStorage.getItem('hondotrastero:orden');if(['categorias','ca
 let administrationOpen=false;
 let boxSpace='';
 const expandedSubspaces=new Set();
+const expandedSpaces=new Set();
 let sessionObjectSpace='';
 let tab='objetos', editing=null, user=null, selectedPhoto=null, photoPreviewUrl=null;
 let removePhoto=false;
@@ -1156,11 +1157,28 @@ function render(){
    line.append(subspaceContents(item));
   }
   if(tab==='ubicaciones'){
+   const contents=elem('div','space-contents');contents.id='spaceContents-'+item.id;
+   contents.hidden=!expandedSpaces.has(item.id);
+   const toggle=elem('button','space-toggle');toggle.type='button';
+   toggle.setAttribute('aria-expanded',String(!contents.hidden));
+   toggle.setAttribute('aria-controls',contents.id);
+   const indicator=elem('span','space-toggle-indicator',contents.hidden?'▸':'▾');
+   indicator.setAttribute('aria-hidden','true');
+   const heading=main.querySelector('.record-title,.space-record-name');
+   heading.before(toggle);toggle.append(indicator,heading);
+   toggle.addEventListener('click',()=>{
+    contents.hidden=!contents.hidden;
+    toggle.setAttribute('aria-expanded',String(!contents.hidden));
+    indicator.textContent=contents.hidden?'▸':'▾';
+    if(contents.hidden)expandedSpaces.delete(item.id);else expandedSpaces.add(item.id);
+   });
    const boxes=data.cajas.filter(box=>box.ubicacion_id===item.id)
     .sort((a,b)=>a.nombre.localeCompare(b.nombre,'es'));
-   for(const box of boxes)line.append(subspaceContents(box,splitSubspaceName(box.nombre).name));
+   for(const box of boxes)contents.append(subspaceContents(box,splitSubspaceName(box.nombre).name));
    const directObjects=data.objetos.filter(obj=>obj.ubicacion_id===item.id&&!obj.caja_id);
-   if(directObjects.length)line.append(objectContents('sin-subespacio:'+item.id,directObjects,'Sin subespacio'));
+   if(directObjects.length)contents.append(objectContents('sin-subespacio:'+item.id,directObjects,'Sin subespacio'));
+   if(!contents.childElementCount)contents.append(elem('p','subspace-empty','Sin objetos guardados'));
+   line.append(contents);
   }
   root.append(line);
  }

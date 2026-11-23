@@ -1706,4 +1706,12 @@ html .parcel-shell #appView #records > .space-record > .space-order-actions{
  width:auto;justify-self:end;justify-content:flex-end;flex-wrap:nowrap;
  padding-top:0;margin:0;gap:.35rem;
 }
-html .parcel-shell #appView #records > .space-record > .subspace-contents{grid-column:1/-1}
+html .parcel-shell #appView #records > .space-record > .space-contents{grid-column:1/-1;min-width:0}
+html .parcel-shell #appView #records > .space-record > .space-contents[hidden]{display:none}
+html .parcel-shell #appView #records .space-toggle{
+ display:flex;align-items:center;gap:.35rem;width:100%;min-height:44px;
+ padding:0;border:0;border-radius:.2rem;background:transparent;box-shadow:none;
+ color:inherit;font:inherit;text-align:left;cursor:pointer;
+}
+html .parcel-shell #appView #records .space-toggle-indicator{flex:none;font-family:system-ui,sans-serif;font-size:1rem}
+html .parcel-shell #appView #records .space-toggle:focus-visible{outline:2px solid currentColor;outline-offset:3px}
