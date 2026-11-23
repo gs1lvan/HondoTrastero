@@ -1717,16 +1717,16 @@ html .parcel-shell #appView #records .space-toggle-indicator{flex:none;font-fami
 html .parcel-shell #appView #records .space-toggle:focus-visible{outline:2px solid currentColor;outline-offset:3px}
 
 /* Vista de inventario por fotografías. */
-html .parcel-shell #appView #records.records-tiles{
+html .parcel-shell #appView :is(#records,.subspace-object-list).records-tiles{
  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem
 }
 .records-tiles > h2{grid-column:1/-1}
-html .parcel-shell #appView #records > .inventory-tile{
+html .parcel-shell #appView :is(#records,.subspace-object-list) > .inventory-tile{
  display:flex;flex-direction:column;align-items:stretch;gap:0;min-width:0;width:100%;
  padding:0;overflow:hidden;clip-path:none;text-align:left;cursor:pointer
 }
-html .parcel-shell #appView #records > .inventory-tile::before,
-html .parcel-shell #appView #records > .inventory-tile::after{display:none}
+html .parcel-shell #appView :is(#records,.subspace-object-list) > .inventory-tile::before,
+html .parcel-shell #appView :is(#records,.subspace-object-list) > .inventory-tile::after{display:none}
 .inventory-tile:focus-visible{outline:3px solid var(--brown);outline-offset:2px}
 .inventory-tile-media{
  position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.3rem;aspect-ratio:4/3;
@@ -1740,10 +1740,10 @@ html .parcel-shell #appView #records > .inventory-tile::after{display:none}
 .inventory-tile-name{font-size:.93rem;font-weight:750;line-height:1.2}
 .inventory-tile-place{font-size:.81rem;font-weight:500;line-height:1.25}
 @media(min-width:650px){
- html .parcel-shell #appView #records.records-tiles{grid-template-columns:repeat(3,minmax(0,1fr))}
+ html .parcel-shell #appView :is(#records,.subspace-object-list).records-tiles{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 @media(min-width:960px){
- html .parcel-shell #appView #records.records-tiles{grid-template-columns:repeat(4,minmax(0,1fr))}
+ html .parcel-shell #appView :is(#records,.subspace-object-list).records-tiles{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
 
 .photo-adjuster{
