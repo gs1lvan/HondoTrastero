@@ -171,7 +171,10 @@ function subscribeCategories(){
 
 
 let listMode='ampliado';
-try{if(localStorage.getItem('hondotrastero:listado')==='reducido')listMode='reducido'}catch{}
+try{
+ const saved=localStorage.getItem('hondotrastero:listado');
+ if(['ampliado','reducido','teselas'].includes(saved))listMode=saved;
+}catch{}
 const inventoryOrderButtons=[...document.querySelectorAll('[data-inventory-order]')];
 let inventoryOrder='categorias';
 try{const saved=localStorage.getItem('hondotrastero:orden');if(['categorias','categorias-desc','espacios','fecha-desc','fecha-asc'].includes(saved))inventoryOrder=saved}catch{}
@@ -974,7 +977,29 @@ function objectContents(groupId,objects,label){
  if(disclosure.open)loadObjects();
  return disclosure;
 }
+function inventoryTile(item){
+ const tile=elem('button','record inventory-tile');tile.type='button';
+ const media=elem('span','inventory-tile-media');
+ const placeholder=elem('span','inventory-tile-placeholder','📦');
+ placeholder.setAttribute('aria-hidden','true');
+ media.append(placeholder);
+ if(item.foto_path){
+  const photo=elem('img','inventory-tile-photo');photo.alt='';photo.loading='lazy';
+  photo.addEventListener('load',()=>{placeholder.hidden=true;photo.classList.add('loaded')},{once:true});
+  photo.addEventListener('error',()=>photo.remove(),{once:true});
+  media.append(photo);
+  signedPhoto(item.foto_path).then(url=>{photo.src=url}).catch(()=>photo.remove());
+ }
+ const place=[locationLabel(objectSpace(item)),item.caja_id?boxLabel(item.caja_id):''].filter(Boolean).join(' · ');
+ const caption=elem('span','inventory-tile-caption');
+ caption.append(elem('span','inventory-tile-name',item.nombre),elem('span','inventory-tile-place',place));
+ tile.append(media,caption);
+ tile.addEventListener('click',()=>openForm('objetos',item));
+ return tile;
+}
 function render(){
+ const showTiles=tab==='objetos'&&listMode==='teselas';
+ $('records').classList.toggle('records-tiles',showTiles);
  $('clearSearch')?.classList.toggle('d-none',!$('search').value);
  $('records').classList.toggle('records-reduced',listMode==='reducido');
  $('appView').classList.toggle('listing-compact',listMode==='reducido');
@@ -1054,6 +1079,7 @@ function render(){
    root.append(title);continue;
   }
   const item=entry.item;
+  if(showTiles){root.append(inventoryTile(item));continue}
   const line=elem('div','list-group-item record');
   {
    const recordType=tab;
