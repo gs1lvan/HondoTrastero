@@ -270,6 +270,107 @@ async function signedPhoto(path){
  const {data:result,error}=await client.storage.from(BUCKET).createSignedUrl(path,3600);
  if(error)throw error;return result.signedUrl;
 }
+function openPhotoAdjuster(source,onApply){
+ const dialog=elem('dialog','photo-adjuster');
+ dialog.setAttribute('aria-labelledby','photoAdjustTitle');
+ const title=elem('h2','','Ajustar foto');title.id='photoAdjustTitle';
+ const status=elem('p','photo-adjust-status','Cargando foto…');status.setAttribute('role','status');
+ const canvas=elem('canvas','photo-adjust-canvas');canvas.tabIndex=0;canvas.hidden=true;
+ canvas.setAttribute('aria-label','Encuadre de la foto. Usa las flechas para moverla con zoom.');
+ const tools=elem('div','photo-adjust-tools');tools.hidden=true;
+ const actions=elem('div','photo-adjust-actions');
+ const button=(label,style='outline-primary')=>{
+  const control=elem('button','btn btn-'+style,label);control.type='button';return control;
+ };
+ const rotateLeft=button('↶ Izquierda'),rotateRight=button('↷ Derecha'),reset=button('Restablecer');
+ rotateLeft.setAttribute('aria-label','Girar 90 grados a la izquierda');
+ rotateRight.setAttribute('aria-label','Girar 90 grados a la derecha');
+ const zoomLabel=elem('label','photo-adjust-zoom');
+ const zoom=elem('input','form-range');zoom.type='range';zoom.min='1';zoom.max='4';zoom.step='.05';zoom.value='1';
+ const zoomValue=elem('span','','Zoom · 1×');
+ zoomLabel.append(zoomValue,zoom);
+ const hint=elem('p','photo-adjust-hint','Acerca la foto y arrástrala para encuadrarla.');
+ const cancel=button('Cancelar'),apply=button('Aplicar ajuste','primary');apply.disabled=true;
+ tools.append(rotateLeft,rotateRight,reset,zoomLabel,hint);
+ actions.append(cancel,apply);
+ dialog.append(title,status,canvas,tools,actions);
+ document.body.append(dialog);
+ const abort=new AbortController();
+ let bitmap,turn=0,x=0,y=0,drag;
+ const ctx=canvas.getContext('2d');
+ function draw(){
+  if(!bitmap)return;
+  const level=Number(zoom.value),sideways=turn%2!==0;
+  const width=sideways?bitmap.height:bitmap.width;
+  const height=sideways?bitmap.width:bitmap.height;
+  const scale=Math.min(1,1200/Math.max(width,height));
+  const w=Math.max(1,Math.round(width*scale)),h=Math.max(1,Math.round(height*scale));
+  if(canvas.width!==w)canvas.width=w;
+  if(canvas.height!==h)canvas.height=h;
+  canvas.style.width='min(100%, '+(46*w/h)+'dvh)';
+  const limit=(level-1)/2;
+  x=Math.min(limit,Math.max(-limit,x));
+  y=Math.min(limit,Math.max(-limit,y));
+  ctx.clearRect(0,0,w,h);
+  ctx.save();
+  ctx.translate(w*(.5+x),h*(.5+y));
+  ctx.rotate(turn*Math.PI/2);
+  // La vista previa y el archivo salen del mismo lienzo.
+  const imageWidth=(sideways?h:w)*level,imageHeight=(sideways?w:h)*level;
+  ctx.drawImage(bitmap,-imageWidth/2,-imageHeight/2,imageWidth,imageHeight);
+  ctx.restore();
+  zoomValue.textContent='Zoom · '+level.toLocaleString('es')+'×';
+  apply.disabled=turn===0&&level===1;
+ }
+ function rotate(delta){turn=(turn+delta+4)%4;x=0;y=0;draw()}
+ rotateLeft.addEventListener('click',()=>rotate(-1));
+ rotateRight.addEventListener('click',()=>rotate(1));
+ zoom.addEventListener('input',draw);
+ reset.addEventListener('click',()=>{turn=0;zoom.value='1';x=0;y=0;draw()});
+ canvas.addEventListener('pointerdown',event=>{
+  if(Number(zoom.value)===1||drag||event.button!==0)return;
+  canvas.setPointerCapture(event.pointerId);
+  drag={id:event.pointerId,x:event.clientX,y:event.clientY};
+ });
+ canvas.addEventListener('pointermove',event=>{
+  if(drag?.id!==event.pointerId)return;
+  const bounds=canvas.getBoundingClientRect();
+  x+=(event.clientX-drag.x)/bounds.width;y+=(event.clientY-drag.y)/bounds.height;
+  drag.x=event.clientX;drag.y=event.clientY;draw();
+ });
+ canvas.addEventListener('lostpointercapture',()=>{drag=null});
+ canvas.addEventListener('keydown',event=>{
+  const movement={ArrowLeft:[-.035,0],ArrowRight:[.035,0],ArrowUp:[0,-.035],ArrowDown:[0,.035]}[event.key];
+  if(!movement||Number(zoom.value)===1)return;
+  event.preventDefault();x+=movement[0];y+=movement[1];draw();
+ });
+ cancel.addEventListener('click',()=>dialog.close());
+ dialog.addEventListener('close',()=>{
+  abort.abort();bitmap?.close();dialog.remove();
+ },{once:true});
+ apply.addEventListener('click',()=>{
+  apply.disabled=true;
+  canvas.toBlob(blob=>{
+   if(!dialog.open)return;
+   if(!blob){status.hidden=false;status.textContent='No se pudo aplicar el ajuste.';apply.disabled=false;return}
+   dialog.close();
+   onApply(new File([blob],'foto-ajustada.png',{type:blob.type}));
+  },'image/png');
+ });
+ dialog.showModal();
+ (async()=>{
+  try{
+   const response=await fetch(source,{signal:abort.signal});
+   if(!response.ok)throw new Error('No se pudo abrir la foto');
+   const image=await createImageBitmap(await response.blob());
+   if(!dialog.open){image.close();return}
+   bitmap=image;
+   draw();status.hidden=true;canvas.hidden=false;tools.hidden=false;
+  }catch{
+   if(dialog.open)status.textContent='No se pudo abrir la foto para ajustarla. Cierra y vuelve a intentarlo.';
+  }
+ })();
+}
 function photoField(item,onSelected=null){
  const wrap=elem('div','photo-field'),lab=elem('label','form-label fw-semibold','Fotografía');
  const preview=elem('img','photo-preview d-none');preview.id='photoPreview';preview.alt='Vista previa de la fotografía';
@@ -277,6 +378,15 @@ function photoField(item,onSelected=null){
  const cameraButton=elem('button','btn btn-outline-primary flex-grow-1','Hacer foto');cameraButton.type='button';
  const removeButton=elem('button','photo-remove-corner d-none');removeButton.append(trashIcon());removeButton.type='button';removeButton.id='removePhotoBtn';removeButton.setAttribute('aria-label','Eliminar foto');removeButton.title='Eliminar foto';
  const attachButton=elem('button','btn btn-outline-primary flex-grow-1','Adjuntar foto');attachButton.type='button';
+ const adjustButton=elem('button','btn btn-outline-primary w-100 d-none','Ajustar foto');adjustButton.type='button';
+ adjustButton.setAttribute('aria-haspopup','dialog');
+ preview.addEventListener('load',()=>adjustButton.classList.remove('d-none'));
+ preview.addEventListener('error',()=>adjustButton.classList.add('d-none'));
+ adjustButton.addEventListener('click',()=>{
+  if(preview.naturalWidth&&preview.complete&&!$('saveBtn').disabled){
+   openPhotoAdjuster(preview.currentSrc,acceptPhoto);
+  }
+ });
  const cameraInput=elem('input','visually-hidden');cameraInput.type='file';cameraInput.id='fieldCamera';cameraInput.accept='image/*';cameraInput.setAttribute('capture','environment');
  const galleryInput=elem('input','visually-hidden');galleryInput.type='file';galleryInput.id='fieldPhoto';galleryInput.accept='image/*';
  function choosePhoto(input){acceptPhoto(input.files?.[0])}
@@ -285,6 +395,7 @@ function photoField(item,onSelected=null){
   if(!file.type.startsWith('image/')){alertMsg('Selecciona un archivo de imagen.');return}
   if(onSelected){onSelected(file);return}
   selectedPhoto=file;removePhoto=false;removeButton.classList.remove('d-none');
+  adjustButton.classList.add('d-none');
   if(photoPreviewUrl){URL.revokeObjectURL(photoPreviewUrl);photoPreviewUrl=null}
   photoPreviewUrl=URL.createObjectURL(file);preview.src=photoPreviewUrl;preview.classList.remove('d-none');
  }
@@ -300,6 +411,7 @@ function photoField(item,onSelected=null){
   selectedPhoto=null;removePhoto=true;
   if(photoPreviewUrl){URL.revokeObjectURL(photoPreviewUrl);photoPreviewUrl=null}
   preview.removeAttribute('src');preview.classList.add('d-none');
+  adjustButton.classList.add('d-none');
   cameraInput.value='';galleryInput.value='';removeButton.classList.add('d-none');
  });
  wrap.openQuickCamera=()=>openInventoryCamera(acceptPhoto,()=>{
@@ -307,6 +419,7 @@ function photoField(item,onSelected=null){
   hint.setAttribute('role','status');wrap.append(hint);
  });
  buttons.append(cameraButton,attachButton);
+ if(!onSelected)buttons.append(adjustButton);
  if(item?.foto_path)removeButton.classList.remove('d-none');
  const frame=elem('div','photo-preview-frame');frame.append(preview,removeButton);
  wrap.append(lab,frame,buttons,cameraInput,galleryInput);
