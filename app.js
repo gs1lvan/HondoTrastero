@@ -1067,6 +1067,12 @@ function objectContents(groupId,objects,label){
  const list=elem('div','subspace-object-list');let loaded=false;
  const loadObjects=()=>{
   if(loaded)return;loaded=true;
+  if(listMode==='teselas'&&objects.length){
+   list.classList.add('records-tiles');
+   list.append(...objects.map(inventoryTile));
+   queueMicrotask(()=>{if(list.isConnected)observeTilePhotos(list)});
+   return;
+  }
   if(!objects.length)list.append(elem('p','subspace-empty','Sin objetos guardados'));
   for(const object of objects){
    const row=elem('button','subspace-object');row.type='button';
@@ -1143,6 +1149,17 @@ async function loadTilePhotos(tiles){
   status.before(photo);
   photo.src=url;
  }
+}
+function observeTilePhotos(container){
+ const tiles=[...container.querySelectorAll('.inventory-tile[data-photo-path]')];
+ if(!tiles.length)return;
+ if(!('IntersectionObserver' in window)){loadTilePhotos(tiles);return}
+ tilePhotoObserver??=new IntersectionObserver((entries,observer)=>{
+  const nearby=entries.filter(entry=>entry.isIntersecting&&entry.target.isConnected).map(entry=>entry.target);
+  for(const tile of nearby)observer.unobserve(tile);
+  if(nearby.length)loadTilePhotos(nearby);
+ },{rootMargin:'300px'});
+ for(const tile of tiles)tilePhotoObserver.observe(tile);
 }
 function inventoryTile(item){
  const tile=elem('button','record inventory-tile');tile.type='button';
@@ -1374,17 +1391,7 @@ function render(){
   }
   root.append(line);
  }
- if(showTiles){
-  const tiles=root.querySelectorAll('.inventory-tile[data-photo-path]');
-  if('IntersectionObserver' in window){
-   tilePhotoObserver=new IntersectionObserver((entries,observer)=>{
-    const nearby=entries.filter(entry=>entry.isIntersecting&&entry.target.isConnected).map(entry=>entry.target);
-    for(const tile of nearby)observer.unobserve(tile);
-    if(nearby.length)loadTilePhotos(nearby);
-   },{rootMargin:'300px'});
-   for(const tile of tiles)tilePhotoObserver.observe(tile);
-  }else if(tiles.length)loadTilePhotos([...tiles]);
- }
+ if(showTiles)observeTilePhotos(root);
 }
 async function removeItem(type,item){
  if(type==='cajas'&&data.objetos.some(obj=>obj.caja_id===item.id)){alertMsg('Este subespacio contiene objetos. Muévelos a otro espacio o subespacio antes de eliminarlo.','warning');return}
