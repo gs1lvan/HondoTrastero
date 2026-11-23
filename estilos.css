@@ -1729,10 +1729,11 @@ html .parcel-shell #appView #records > .inventory-tile::before,
 html .parcel-shell #appView #records > .inventory-tile::after{display:none}
 .inventory-tile:focus-visible{outline:3px solid var(--brown);outline-offset:2px}
 .inventory-tile-media{
- position:relative;display:grid;place-items:center;aspect-ratio:4/3;
+ position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.3rem;aspect-ratio:4/3;
  background:color-mix(in srgb,currentColor 10%,transparent);overflow:hidden
 }
 .inventory-tile-placeholder{font-size:2rem;line-height:1}
+.inventory-tile-photo-status{padding:0 .4rem;font-size:.8rem;line-height:1.2;text-align:center}
 .inventory-tile-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0}
 .inventory-tile-photo.loaded{opacity:1}
 .inventory-tile-caption{display:grid;gap:.16rem;padding:.45rem .55rem;overflow-wrap:anywhere}
