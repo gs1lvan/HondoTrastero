@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&display=swap">
 <link rel="stylesheet" href="styles.css?v=sinletras2-kraft3">
 <link rel="stylesheet" href="filtros.css?v=selector-carton-20261103">
-<link rel="stylesheet" href="estilos.css?v=teselas-subespacios-20261123">
+<link rel="stylesheet" href="estilos.css?v=copias-20261123">
 <script src="estilos.js?v=industrial-20261105"></script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap">
 </head><body>
@@ -42,6 +42,11 @@
 <section id="appView" class="d-none">
  <nav class="parcel-nav" aria-label="Secciones"><button type="button" class="parcel-tab active" data-tab="objetos"><span>Objetos <span id="countObjects">0</span></span></button><button type="button" class="parcel-tab" data-tab="ubicaciones"><span>Espacios <span id="countLocations">0</span></span></button><button type="button" class="parcel-tab" data-tab="cajas"><span>Subespacios <span id="countBoxes">0</span></span></button></nav>
  <div id="adminStyleTools" class="d-none admin-settings">
+ <section aria-labelledby="adminBackupTitle" class="backup-admin">
+ <h2 id="adminBackupTitle">Copias de seguridad</h2>
+ <p>Guarda el inventario y sus fotografías en un ZIP que puedas recuperar después.</p>
+ <button id="backupOpen" type="button" class="btn btn-outline-primary">Copias de seguridad</button>
+ </section>
  <section aria-labelledby="adminInventoryTitle"><h2 id="adminInventoryTitle">Inventariar</h2><label class="d-flex align-items-center gap-2"><input id="inventoryQuickMode" type="checkbox" class="form-check-input m-0"> Inventariar</label></section>
  <section aria-labelledby="adminSkipAnimationTitle"><h2 id="adminSkipAnimationTitle">Entrada</h2><label class="d-flex align-items-center gap-2"><input id="skipWelcomeAnimation" type="checkbox" class="form-check-input m-0"> Saltar animación e ir al inventario</label></section>
  <section aria-labelledby="adminStylesTitle"><h2 id="adminStylesTitle">Estilos</h2><div id="styleOptions" class="style-options" role="group" aria-label="Estilos disponibles"></div>
@@ -141,7 +146,28 @@
 </main>
 <footer class="parcel-footer"><div class="handling-icons" aria-hidden="true"><span>↑↑</span><span>♜</span><span>☂</span><span>♻</span></div><div class="footer-barcode" aria-hidden="true"></div></footer>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script><script src="config.js?v=kraft3"></script><script defer src="https://cdn.jsdelivr.net/npm/lucide@0.468.0/dist/umd/lucide.js"></script><script defer src="app.js?v=teselas-subespacios-20261123"></script>
+
+<dialog id="backupDialog" class="backup-dialog" aria-labelledby="backupTitle" aria-describedby="backupIntro">
+ <div class="backup-heading"><h2 id="backupTitle">Copias de seguridad</h2><button id="backupClose" type="button" class="btn btn-outline-primary" aria-label="Cerrar copias de seguridad">Cerrar</button></div>
+ <p id="backupIntro">Guarda los datos accesibles a tu cuenta, sus fotografías y las preferencias de este dispositivo. Para restaurar, utiliza la misma cuenta y servidor.</p>
+ <div class="backup-actions"><button id="backupCreate" type="button" class="btn btn-primary">Crear copia completa</button><button id="backupChoose" type="button" class="btn btn-outline-primary">Comprobar o restaurar un ZIP</button></div>
+ <input id="backupFile" type="file" accept=".zip,application/zip" hidden>
+ <p class="backup-hint">Mantén esta ventana abierta durante el proceso y evita editar desde otros dispositivos. No incluye usuarios, contraseñas ni la configuración interna del servicio. Límite por copia: 512 MB.</p>
+ <progress id="backupProgress" max="100" value="0" hidden aria-label="Progreso de la copia o restauración"></progress>
+ <p id="backupStatus" role="status" aria-live="polite" aria-atomic="true"></p>
+ <button id="backupDownload" type="button" class="btn btn-primary" hidden>Descargar copia completa</button>
+ <section id="backupSummary" hidden aria-labelledby="backupCopyDate"><h3 id="backupCopyDate"></h3><div class="backup-table-wrap"><table class="table"><thead><tr><th scope="col">Contenido</th><th scope="col">Actual</th><th scope="col">Copia</th></tr></thead><tbody id="backupSummaryBody"></tbody></table></div>
+ <p>La restauración sustituye el inventario accesible a esta cuenta. El catálogo de categorías es compartido: se añaden las que falten y se conservan las categorías y nombres existentes.</p></section>
+ <section id="backupSetup" hidden><p>Para activar la restauración, ejecuta una vez el archivo de activación en el editor SQL del proyecto de HondoTrastero: <code>zdohjcvmhluhalwbrphn</code>. Después, vuelve a seleccionar el ZIP.</p><a href="04_copias_seguridad.sql" download>Descargar SQL de activación</a></section>
+ <section id="backupRestoreControls" hidden><button id="backupBefore" type="button" class="btn btn-outline-primary">Preparar copia del estado actual</button>
+ <div id="backupConfirmControls" hidden>
+ <label class="backup-confirm"><input id="backupConfirmSaved" type="checkbox"> He descargado y guardado la copia del estado actual.</label>
+ <label for="backupConfirmText">Escribe RESTAURAR para sustituir el inventario actual:</label><input id="backupConfirmText" class="form-control" type="text" autocomplete="off" spellcheck="false">
+ <button id="backupRestore" type="button" class="btn btn-danger" disabled>Restaurar y sustituir inventario</button>
+ </div></section>
+ <section id="backupRecovery" hidden><p id="backupRecoveryText"></p><button id="backupCheckRecovery" type="button" class="btn btn-outline-primary">Comprobar resultado pendiente</button><button id="backupDismissRecovery" type="button" class="btn btn-outline-primary" hidden>He revisado el inventario; cerrar comprobación</button></section>
+</dialog>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script><script src="config.js?v=kraft3"></script><script defer src="https://cdn.jsdelivr.net/npm/lucide@0.468.0/dist/umd/lucide.js"></script><script defer src="vendor/jszip.min.js?v=3.10.1"></script><script defer src="backup.js?v=copias-20261123"></script><script defer src="backup-ui.js?v=copias-20261123"></script><script defer src="app.js?v=copias-20261123"></script>
 <script>
 // Registro necesario para que Chrome Android reconozca HondoTrastero como PWA.
 // No se almacenan contraseñas ni respuestas de Supabase en caché.

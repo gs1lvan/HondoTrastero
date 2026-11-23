@@ -9,6 +9,10 @@ let inventoryQuickMode=false;
 let closeQuickCamera=null;
 const names = {objetos:'objeto', cajas:'subespacio', ubicaciones:'espacio'};
 const BUCKET = 'objetos';
+const backupUI=window.HondoBackupUI?.install({
+ client,getUser:()=>user,project:config.supabaseUrl?.replace(/\/$/,''),
+ onRestored:async()=>{tilePhotoUrls.clear();sessionObjectSpace='';await load()}
+});
 const tilePhotoUrls=new Map();
 let tilePhotoObserver;
 const DEFAULT_CATEGORIES = Object.freeze([
@@ -161,6 +165,7 @@ async function deleteCategory(cat){
  finally{categoryBusy=false;renderCategoryAdmin()}
 }
 async function refreshSharedCategories(){
+ if(backupUI?.isBusy())return;
  if(!user||categoryBusy||categoryEditingId||categoryRefreshPending||document.hidden)return;
  categoryRefreshPending=true;
  try{await load()}catch{}finally{categoryRefreshPending=false}
@@ -1664,6 +1669,7 @@ async function sessionChanged(session){
  }
  const changedUser=user?.id!==session?.user?.id;
  user=session?.user||null;
+ backupUI?.sessionChanged();
  if(changedUser){welcomeEntered=false;welcomeDataReady=false;$('welcomeInventory').disabled=true;$('welcomeCreate').disabled=true;categoryEditingId=null;categoryBusy=false;categoryCatalogReady=false;subscribeCategories();CATEGORIES=[...DEFAULT_CATEGORIES];CATEGORIES_BY_ID=new Map(CATEGORIES.map(cat=>[cat.id,cat]))}
  show('account',!!user);$('account').style.display=user?'flex':'none';
  show('appView',!!user&&$('editPage').classList.contains('d-none'));
@@ -1673,6 +1679,7 @@ async function sessionChanged(session){
  setWelcomeVisible(!!user&&!welcomeEntered);
  if(!user){inventoryQuickMode=false;closeQuickCamera?.();$('inventoryQuickMode').checked=false;administrationOpen=false;show('adminStyleTools',false);$('userEmail').textContent='';return}
  $('userEmail').textContent=user.email||'';
+ if(backupUI?.isBusy())return;
  try{await load();welcomeDataReady=true;$('welcomeInventory').disabled=false;$('welcomeCreate').disabled=false;$('welcomeStatus').textContent='';$('welcomeRetry').hidden=true;clearMsg()}catch(e){$('welcomeStatus').textContent='No se pudo cargar el inventario. Vuelve a intentarlo.';$('welcomeRetry').hidden=false;alertMsg(`Error al cargar el inventario: ${e.message}`)}
 }
 if(!ready){show('setup',true);return}

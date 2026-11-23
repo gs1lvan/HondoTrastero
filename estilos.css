@@ -1764,3 +1764,28 @@ html[data-style="industrial"] .photo-adjuster{background:#eef0f2;color:#18212b}
 .photo-adjuster [hidden]{display:none!important}
 .photo-adjust-zoom{display:grid;gap:.15rem;width:100%;margin-top:.25rem;font-weight:600}
 .photo-adjust-hint{margin:0;font-size:.85rem}
+
+
+/* Copias de seguridad: diálogo de pasos, adaptado a los temas existentes. */
+.backup-admin p{margin-bottom:.75rem}
+.backup-dialog{width:min(44rem,calc(100% - 1.5rem));max-height:calc(100dvh - 2rem);overflow:auto;border:1px solid currentColor;border-radius:1rem;padding:1.25rem;background:var(--bs-body-bg,#fff);color:var(--bs-body-color,#272727);font-size:1rem}
+.backup-dialog::backdrop{background:#000a}
+.backup-heading{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1rem}
+.backup-heading h2{font-size:1.4rem;margin:0}
+.backup-dialog h3{font-size:1.125rem;margin-top:1.25rem}
+.backup-actions{display:flex;flex-wrap:wrap;gap:.75rem}
+.backup-dialog p{line-height:1.5}
+.backup-hint{font-size:.875rem;margin-top:1rem}
+.backup-dialog progress{width:100%;height:1rem;accent-color:var(--bs-primary,#9b612f)}
+.backup-table-wrap{overflow-x:auto}
+.backup-dialog .table{color:inherit;--bs-table-bg:transparent;--bs-table-color:inherit}
+#backupRestoreControls,#backupSetup,#backupRecovery{margin-top:1.25rem;padding-top:1rem;border-top:1px solid currentColor}
+.backup-confirm{display:flex;align-items:flex-start;gap:.65rem;margin:1rem 0}
+.backup-confirm input{margin-top:.3rem;flex-shrink:0}
+#backupConfirmText{margin:.5rem 0 1rem;max-width:22rem}
+#backupStatus{min-height:1.5rem;margin:1rem 0;overflow-wrap:anywhere}
+#backupDismissRecovery{margin-top:.75rem}
+:root[data-style="azul-oscuro"] .backup-dialog,:root[data-style="industrial"] .backup-dialog{background:#182735;color:#edf3f7}
+:root[data-style="terminal"] .backup-dialog{background:var(--terminal-surface,#07110d);color:var(--terminal-text,#76ff91);border-radius:.25rem;font-family:var(--terminal-font,monospace)}
+:root[data-style="carton"] .backup-dialog{background:#fff2d5;color:#452411}
+@media(max-width:480px){.backup-dialog{padding:1rem}.backup-actions .btn{width:100%}.backup-heading h2{font-size:1.2rem}}
