@@ -9,6 +9,8 @@ let inventoryQuickMode=false;
 let closeQuickCamera=null;
 const names = {objetos:'objeto', cajas:'subespacio', ubicaciones:'espacio'};
 const BUCKET = 'objetos';
+const tilePhotoUrls=new Map();
+let tilePhotoObserver;
 const DEFAULT_CATEGORIES = Object.freeze([
  {"id": "herramientas-bricolaje", "icon": "🔧", "name": "Herramientas y bricolaje"},
  {"id": "ferreteria-repuestos", "icon": "🔩", "name": "Ferretería y repuestos"},
@@ -977,18 +979,68 @@ function objectContents(groupId,objects,label){
  if(disclosure.open)loadObjects();
  return disclosure;
 }
+async function loadTilePhotos(tiles){
+ const accountId=user?.id;
+ const paths=[...new Set(tiles.map(tile=>tile.dataset.photoPath))];
+ const urls=new Map();
+ const missing=paths.filter(path=>{
+  const cached=tilePhotoUrls.get(path);
+  if(!cached||cached.expires<=Date.now())return true;
+  urls.set(path,cached.url);
+  return false;
+ });
+ const slow=setTimeout(()=>{
+  for(const tile of tiles)tile.querySelector('.inventory-tile-photo-status').textContent='La foto está tardando…';
+ },12000);
+ const expiredAt=Date.now()+55*60*1000;
+ try{
+  if(missing.length){
+   const {data:links,error}=await client.storage.from(BUCKET).createSignedUrls(missing,3600);
+   if(error)throw error;
+   if(user?.id!==accountId)return;
+   for(const link of links||[]){
+    if(link.error||!link.path||!link.signedUrl)continue;
+    urls.set(link.path,link.signedUrl);
+    tilePhotoUrls.set(link.path,{url:link.signedUrl,expires:expiredAt});
+   }
+  }
+ }catch{/* Cada tesela muestra su estado, incluso si falla la petición conjunta. */}
+ finally{clearTimeout(slow)}
+ if(user?.id!==accountId)return;
+ for(const tile of tiles){
+  if(!tile.isConnected)continue;
+  const status=tile.querySelector('.inventory-tile-photo-status');
+  const path=tile.dataset.photoPath;
+  const url=urls.get(path);
+  if(!url){status.textContent='No se pudo cargar la foto';continue}
+  const photo=elem('img','inventory-tile-photo');photo.alt='';
+  status.textContent='Cargando foto…';
+  const slowImage=setTimeout(()=>{status.textContent='La foto está tardando…'},12000);
+  photo.addEventListener('load',()=>{
+   clearTimeout(slowImage);
+   status.textContent='Foto cargada';
+   status.classList.add('visually-hidden');
+   photo.classList.add('loaded');
+  },{once:true});
+  photo.addEventListener('error',()=>{
+   clearTimeout(slowImage);
+   if(tilePhotoUrls.get(path)?.url===url)tilePhotoUrls.delete(path);
+   photo.remove();status.textContent='No se pudo cargar la foto';
+  },{once:true});
+  status.before(photo);
+  photo.src=url;
+ }
+}
 function inventoryTile(item){
  const tile=elem('button','record inventory-tile');tile.type='button';
  const media=elem('span','inventory-tile-media');
- const placeholder=elem('span','inventory-tile-placeholder','📦');
- placeholder.setAttribute('aria-hidden','true');
- media.append(placeholder);
  if(item.foto_path){
-  const photo=elem('img','inventory-tile-photo');photo.alt='';photo.loading='lazy';
-  photo.addEventListener('load',()=>{placeholder.hidden=true;photo.classList.add('loaded')},{once:true});
-  photo.addEventListener('error',()=>photo.remove(),{once:true});
-  media.append(photo);
-  signedPhoto(item.foto_path).then(url=>{photo.src=url}).catch(()=>photo.remove());
+  tile.dataset.photoPath=item.foto_path;
+  media.append(elem('span','inventory-tile-photo-status','Cargando foto…'));
+ }else{
+  const placeholder=elem('span','inventory-tile-placeholder','📦');
+  placeholder.setAttribute('aria-hidden','true');
+  media.append(placeholder,elem('span','inventory-tile-photo-status','Sin foto'));
  }
  const place=[locationLabel(objectSpace(item)),item.caja_id?boxLabel(item.caja_id):''].filter(Boolean).join(' · ');
  const caption=elem('span','inventory-tile-caption');
@@ -998,6 +1050,7 @@ function inventoryTile(item){
  return tile;
 }
 function render(){
+ tilePhotoObserver?.disconnect();
  const showTiles=tab==='objetos'&&listMode==='teselas';
  $('records').classList.toggle('records-tiles',showTiles);
  $('clearSearch')?.classList.toggle('d-none',!$('search').value);
@@ -1208,6 +1261,17 @@ function render(){
   }
   root.append(line);
  }
+ if(showTiles){
+  const tiles=root.querySelectorAll('.inventory-tile[data-photo-path]');
+  if('IntersectionObserver' in window){
+   tilePhotoObserver=new IntersectionObserver((entries,observer)=>{
+    const nearby=entries.filter(entry=>entry.isIntersecting&&entry.target.isConnected).map(entry=>entry.target);
+    for(const tile of nearby)observer.unobserve(tile);
+    if(nearby.length)loadTilePhotos(nearby);
+   },{rootMargin:'300px'});
+   for(const tile of tiles)tilePhotoObserver.observe(tile);
+  }else if(tiles.length)loadTilePhotos([...tiles]);
+ }
 }
 async function removeItem(type,item){
  if(type==='cajas'&&data.objetos.some(obj=>obj.caja_id===item.id)){alertMsg('Este subespacio contiene objetos. Muévelos a otro espacio o subespacio antes de eliminarlo.','warning');return}
@@ -1283,6 +1347,7 @@ $('editForm').addEventListener('submit',async e=>{
  }
  if(type==='cajas'&&!payload.ubicacion_id){alertMsg('Selecciona un espacio.');return}
  $('saveBtn').disabled=true;let newPhotoPath=null;
+ if(type==='objetos'&&selectedPhoto)alertMsg('Subiendo foto…','info');
  try{
   if(automaticName)payload.nombre=await nextAutomaticObjectName();
   if(type==='objetos'&&removePhoto)payload.foto_path=null;
@@ -1297,7 +1362,7 @@ $('editForm').addEventListener('submit',async e=>{
    }
   }
  }catch(err){
-  if(newPhotoPath)await client.storage.from(BUCKET).remove([newPhotoPath]);
+  if(newPhotoPath)await client.storage.from(BUCKET).remove([newPhotoPath]).catch(()=>{});
   $('saveBtn').disabled=false;
   alertMsg('No se pudo guardar: '+err.message);
   return;
@@ -1312,11 +1377,12 @@ $('editForm').addEventListener('submit',async e=>{
  }
  if(inventoryQuickMode&&type==='objetos'&&!id){
   startObjectPhoto();
-  try{await load()}catch(err){alertMsg('Objeto guardado. No se pudo actualizar el inventario: '+err.message)}
+  try{await load();if(newPhotoPath)alertMsg('Objeto guardado con foto.','success')}catch(err){alertMsg((newPhotoPath?'Objeto guardado con foto.':'Objeto guardado.')+' No se pudo actualizar el inventario: '+err.message,'warning')}
   return;
  }
  page.hide();
- try{await load();clearMsg()}catch(err){alertMsg(err.message)}
+ try{await load();if(newPhotoPath)alertMsg('Objeto guardado con foto.','success');else clearMsg()}
+ catch(err){alertMsg(newPhotoPath?'Objeto guardado con foto. No se pudo actualizar el inventario: '+err.message:err.message,'warning')}
 });
 document.querySelector('.parcel-nav').addEventListener('click',e=>{
  const b=e.target.closest('[data-tab]');if(!b)return;
@@ -1471,7 +1537,11 @@ $('welcomeGate').addEventListener('keydown',event=>{
 });
 
 async function sessionChanged(session){
- if(user?.id!==session?.user?.id)sessionObjectSpace='';
+ if(user?.id!==session?.user?.id){
+  sessionObjectSpace='';
+  tilePhotoUrls.clear();
+  tilePhotoObserver?.disconnect();
+ }
  const changedUser=user?.id!==session?.user?.id;
  user=session?.user||null;
  if(changedUser){welcomeEntered=false;welcomeDataReady=false;$('welcomeInventory').disabled=true;$('welcomeCreate').disabled=true;categoryEditingId=null;categoryBusy=false;categoryCatalogReady=false;subscribeCategories();CATEGORIES=[...DEFAULT_CATEGORIES];CATEGORIES_BY_ID=new Map(CATEGORIES.map(cat=>[cat.id,cat]))}
