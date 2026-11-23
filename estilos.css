@@ -1715,3 +1715,37 @@ html .parcel-shell #appView #records .space-toggle{
 }
 html .parcel-shell #appView #records .space-toggle-indicator{flex:none;font-family:system-ui,sans-serif;font-size:1rem}
 html .parcel-shell #appView #records .space-toggle:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+
+/* Vista de inventario por fotografías. */
+html .parcel-shell #inventoryToolbar{flex-direction:column}
+.inventory-view-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.45rem;padding:2px}
+html .parcel-shell .inventory-view-options .style-choice{
+ justify-content:center;min-width:0;min-height:44px;padding:.38rem .2rem;font-size:.86rem;text-align:center
+}
+html .parcel-shell #appView #records.records-tiles{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem
+}
+.records-tiles > h2{grid-column:1/-1}
+html .parcel-shell #appView #records > .inventory-tile{
+ display:flex;flex-direction:column;align-items:stretch;gap:0;min-width:0;width:100%;
+ padding:0;overflow:hidden;clip-path:none;text-align:left;cursor:pointer
+}
+html .parcel-shell #appView #records > .inventory-tile::before,
+html .parcel-shell #appView #records > .inventory-tile::after{display:none}
+.inventory-tile:focus-visible{outline:3px solid var(--brown);outline-offset:2px}
+.inventory-tile-media{
+ position:relative;display:grid;place-items:center;aspect-ratio:4/3;
+ background:color-mix(in srgb,currentColor 10%,transparent);overflow:hidden
+}
+.inventory-tile-placeholder{font-size:2rem;line-height:1}
+.inventory-tile-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0}
+.inventory-tile-photo.loaded{opacity:1}
+.inventory-tile-caption{display:grid;gap:.16rem;padding:.45rem .55rem;overflow-wrap:anywhere}
+.inventory-tile-name{font-size:.93rem;font-weight:750;line-height:1.2}
+.inventory-tile-place{font-size:.81rem;font-weight:500;line-height:1.25}
+@media(min-width:650px){
+ html .parcel-shell #appView #records.records-tiles{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(min-width:960px){
+ html .parcel-shell #appView #records.records-tiles{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
