@@ -22,8 +22,10 @@
  function photoType(bytes){
   if(bytes[0]===255&&bytes[1]===216&&bytes[2]===255)return {mime:'image/jpeg',ext:'jpg'};
   if(bytes[0]===137&&bytes[1]===80&&bytes[2]===78&&bytes[3]===71&&bytes[4]===13&&bytes[5]===10&&bytes[6]===26&&bytes[7]===10)return {mime:'image/png',ext:'png'};
-  const signature=new TextDecoder().decode(bytes.subarray(0,12));
-  if(signature.startsWith('RIFF')&&signature.slice(8)==='WEBP')return {mime:'image/webp',ext:'webp'};
+  // Los bytes 4–7 son un tamaño binario, no texto. Decodificar todo como UTF-8
+  // puede acortarlos y desplazar WEBP aunque la fotografía sea válida.
+  if(bytes.length>=12&&bytes[0]===82&&bytes[1]===73&&bytes[2]===70&&bytes[3]===70
+   &&bytes[8]===87&&bytes[9]===69&&bytes[10]===66&&bytes[11]===80)return {mime:'image/webp',ext:'webp'};
   throw new Error('Una fotografía no tiene un formato compatible (JPG, PNG o WebP).');
  }
  function missingFunction(error){return ['PGRST202','42883'].includes(error?.code)}
@@ -134,10 +136,15 @@
   for(let i=0;i<photoPaths.length;i++){
    assertSession();onProgress('Descargando fotografías: '+(i+1)+' de '+photoPaths.length+'…',photoPaths.length?5+80*i/photoPaths.length:85);
    const path=photoPaths[i];
-   const blob=await retry(async()=>{const {data,error}=await client.storage.from('objetos').download(path);if(error)throw new Error('No se pudo descargar una fotografía. Reintenta la copia. '+error.message);assert(data?.size>0,'Una fotografía está vacía.');return data});
-   assert(blob.size<=MAX_PHOTO_BYTES,'Una fotografía supera 20 MB.');
-   const bytes=new Uint8Array(await blob.arrayBuffer()),type=photoType(bytes);
-   await add('fotografias/'+String(i+1).padStart(6,'0')+'.'+type.ext,bytes,{originalPath:path,mime:type.mime});
+   try{
+    const blob=await retry(async()=>{const {data,error}=await client.storage.from('objetos').download(path);if(error)throw new Error('No se pudo descargar una fotografía. Reintenta la copia. '+error.message);assert(data?.size>0,'Una fotografía está vacía.');return data});
+    assert(blob.size<=MAX_PHOTO_BYTES,'Una fotografía supera 20 MB.');
+    const bytes=new Uint8Array(await blob.arrayBuffer()),type=photoType(bytes);
+    await add('fotografias/'+String(i+1).padStart(6,'0')+'.'+type.ext,bytes,{originalPath:path,mime:type.mime});
+   }catch(error){
+    const object=tables.objetos.find(row=>row.foto_path===path);
+    throw new Error('No se pudo incluir la foto de «'+object.nombre+'» ('+path+'): '+error.message);
+   }
   }
   assertSession();onProgress('Comprobando que el inventario no ha cambiado…',87);
   assert(same(tables,await readSnapshot(client)),'El inventario ha cambiado durante la copia. Vuelve a intentarlo.');

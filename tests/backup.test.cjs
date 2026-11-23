@@ -82,3 +82,19 @@ test('copia vacía se comprueba y conserva recuentos cero',async()=>{
  const result=await backup.createArchive(clientFor(empty),context,{JSZip});
  assert.deepEqual((await backup.readArchive(result.archive,context,{JSZip})).tables,empty);
 });
+test('WebP con bytes de tamaño que forman UTF-8 conserva los bytes al crear y comprobar la copia',async()=>{
+ // RIFF guarda un entero binario antes de WEBP. C2 A9 se decodifica como
+ // un solo carácter UTF-8: no se puede buscar WEBP por posición en texto.
+ const webp=new Uint8Array([82,73,70,70,0xc2,0xa9,0,0,87,69,66,80]);
+ const rows=tables();rows.objetos[0].foto_path='original/foto.webp';
+ const client=clientFor(rows);client.storage.from=()=>({download:async()=>({data:new Blob([webp],{type:'image/webp'})})});
+ const result=await backup.createArchive(client,context,{JSZip});
+ const copy=await backup.readArchive(result.archive,context,{JSZip});
+ assert.equal(copy.photos.get('original/foto.webp').mime,'image/webp');
+ assert.deepEqual(copy.photos.get('original/foto.webp').bytes,webp);
+});
+test('un RIFF que no es WebP se rechaza aunque el servidor lo etiquete como imagen',async()=>{
+ const wave=new Uint8Array([82,73,70,70,0xc2,0xa9,0,0,87,65,86,69]);
+ const client=clientFor(tables());client.storage.from=()=>({download:async()=>({data:new Blob([wave],{type:'image/webp'})})});
+ await assert.rejects(backup.createArchive(client,context,{JSZip}),/Caja de herramientas/);
+});
